@@ -1,27 +1,11 @@
-export interface Servicio {
-  id: string;
-  nombre: string;
-  precioPorDefecto: number | null;
-  presets: number[];
-  unidad: string;
-  activo: boolean;
-  creadoEn: string;
-}
+import type { Tables } from "./supabase/database.types";
 
-export interface Registro {
-  id: string;
-  servicioId: string;
-  cantidad: number;
-  precioUnitario: number;
-  total: number;
-  nota: string | null;
-  creadoEn: string;
-}
-
-export interface DatosNuevoRegistro {
+export type Servicio = Tables<"servicios">;
+export type Registro = Tables<"registros">;
+export type DatosNuevoRegistro = {
   servicioId: string;
   cantidad: number;
   precioUnitario: number;
   total: number;
   nota?: string | null;
-}
+};
