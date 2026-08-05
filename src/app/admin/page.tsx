@@ -1,4 +1,6 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import CerrarSesionAdmin from "@/components/admin/CerrarSesionAdmin";
 import { esAdmin } from "@/lib/admin/acciones";
 import {
   obtenerTotalesDeHoy,
@@ -12,7 +14,6 @@ import TarjetaTotal from "@/components/admin/TarjetaTotal";
 import DesgloseServicios from "@/components/admin/DesgloseServicios";
 import HistorialRegistros from "@/components/admin/HistorialRegistros";
 import ListaServicios from "@/components/admin/ListaServicios";
-import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -44,12 +45,15 @@ export default async function PaginaAdmin() {
         <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
           Panel
         </h1>
-        <Link
-          href="/"
-          className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-600"
-        >
-          Volver
-        </Link>
+        <div className="flex gap-2">
+          <CerrarSesionAdmin />
+          <Link
+            href="/"
+            className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-600"
+          >
+            Volver
+          </Link>
+        </div>
       </div>
 
       <section className="grid w-full max-w-2xl grid-cols-3 gap-3">
