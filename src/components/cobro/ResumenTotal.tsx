@@ -4,7 +4,6 @@ interface Props {
   precioUnitario: number | null;
   cantidad: number;
   guardando: boolean;
-  mensaje: string | null;
   onGuardar: () => void;
 }
 
@@ -12,7 +11,6 @@ export default function ResumenTotal({
   precioUnitario,
   cantidad,
   guardando,
-  mensaje,
   onGuardar,
 }: Props) {
   const precioValido = precioUnitario !== null && precioUnitario > 0;
@@ -42,11 +40,6 @@ export default function ResumenTotal({
       {!precioValido && (
         <p className="text-center text-xs text-zinc-400">
           Elegí un precio para poder guardar
-        </p>
-      )}
-      {mensaje && (
-        <p className="text-center text-sm font-medium text-emerald-400">
-          {mensaje}
         </p>
       )}
     </div>

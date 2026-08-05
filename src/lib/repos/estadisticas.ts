@@ -54,6 +54,42 @@ export async function obtenerTotales(desde: Date): Promise<Totales> {
   return sumaDeRegistros(data ?? []);
 }
 
+export async function obtenerTotalesCombinados(): Promise<{
+  hoy: Totales;
+  semana: Totales;
+  mes: Totales;
+}> {
+  const supabase = await crearClienteServidor();
+
+  const { data, error } = await supabase
+    .from("registros")
+    .select("total, creado_en");
+
+  if (error) {
+    throw new Error(`No se pudieron obtener los totales: ${error.message}`);
+  }
+
+  const registros = data ?? [];
+
+  return {
+    hoy: sumaDeRegistros(
+      registros.filter(
+        (registro) => new Date(registro.creado_en) >= inicioDelDia()
+      )
+    ),
+    semana: sumaDeRegistros(
+      registros.filter(
+        (registro) => new Date(registro.creado_en) >= inicioDeSemana()
+      )
+    ),
+    mes: sumaDeRegistros(
+      registros.filter(
+        (registro) => new Date(registro.creado_en) >= inicioDelMes()
+      )
+    ),
+  };
+}
+
 export async function obtenerTotalesDeHoy(): Promise<Totales> {
   return obtenerTotales(inicioDelDia());
 }

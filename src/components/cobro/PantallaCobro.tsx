@@ -7,11 +7,14 @@ import SelectorServicio from "./SelectorServicio";
 import SelectorPrecio from "./SelectorPrecio";
 import ContadorCantidad from "./ContadorCantidad";
 import ResumenTotal from "./ResumenTotal";
+import Toast, { type TipoToast } from "@/components/ui/Toast";
 
 interface Props {
   servicios: Servicio[];
   servicioInicialId: string | null;
 }
+
+type EstadoToast = { tipo: TipoToast; mensaje: string } | null;
 
 export default function PantallaCobro({
   servicios,
@@ -22,7 +25,7 @@ export default function PantallaCobro({
   const [cantidad, setCantidad] = useState(1);
   const [nota, setNota] = useState("");
   const [guardando, setGuardando] = useState(false);
-  const [mensaje, setMensaje] = useState<string | null>(null);
+  const [toast, setToast] = useState<EstadoToast>(null);
   const servicioInicialAplicado = useRef(false);
 
   useEffect(() => {
@@ -42,7 +45,7 @@ export default function PantallaCobro({
     setPrecioUnitario(nuevoServicio.precio_por_defecto);
     setCantidad(1);
     setNota("");
-    setMensaje(null);
+    setToast(null);
   }
 
   function seleccionarPrecio(precio: number): void {
@@ -65,7 +68,7 @@ export default function PantallaCobro({
     }
 
     setGuardando(true);
-    setMensaje(null);
+    setToast(null);
 
     try {
       await crearRegistro({
@@ -75,14 +78,15 @@ export default function PantallaCobro({
         total: precioUnitario * cantidad,
         nota: nota.trim() === "" ? null : nota.trim(),
       });
-      setMensaje("Venta registrada");
+      setToast({ tipo: "exito", mensaje: "Venta registrada" });
       setPrecioUnitario(servicio.precio_por_defecto);
       setCantidad(1);
       setNota("");
     } catch (error) {
-      setMensaje(
-        `No se pudo guardar: ${error instanceof Error ? error.message : "error de conexión"}`
-      );
+      setToast({
+        tipo: "error",
+        mensaje: `No se pudo guardar: ${error instanceof Error ? error.message : "error de conexión"}`,
+      });
     } finally {
       setGuardando(false);
     }
@@ -138,10 +142,17 @@ export default function PantallaCobro({
             precioUnitario={precioUnitario}
             cantidad={cantidad}
             guardando={guardando}
-            mensaje={mensaje}
             onGuardar={guardarVenta}
           />
         </>
+      )}
+
+      {toast && (
+        <Toast
+          mensaje={toast.mensaje}
+          tipo={toast.tipo}
+          onCerrar={() => setToast(null)}
+        />
       )}
     </div>
   );

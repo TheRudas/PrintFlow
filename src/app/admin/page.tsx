@@ -3,9 +3,7 @@ import Link from "next/link";
 import CerrarSesion from "@/components/auth/CerrarSesion";
 import { esAdmin, listarPerfiles } from "@/lib/auth/acciones";
 import {
-  obtenerTotalesDeHoy,
-  obtenerTotalesDeLaSemana,
-  obtenerTotalesDelMes,
+  obtenerTotalesCombinados,
   obtenerDesglosePorServicio,
   obtenerHistorialPaginado,
 } from "@/lib/repos/estadisticas";
@@ -25,17 +23,13 @@ export default async function PaginaAdmin() {
   }
 
   const [
-    totalesHoy,
-    totalesSemana,
-    totalesMes,
+    totales,
     desglose,
     historial,
     servicios,
     perfiles,
   ] = await Promise.all([
-    obtenerTotalesDeHoy(),
-    obtenerTotalesDeLaSemana(),
-    obtenerTotalesDelMes(),
+    obtenerTotalesCombinados(),
     obtenerDesglosePorServicio(),
     obtenerHistorialPaginado(0),
     obtenerTodosLosServicios(),
@@ -60,9 +54,9 @@ export default async function PaginaAdmin() {
       </div>
 
       <section className="grid w-full max-w-2xl grid-cols-3 gap-3">
-        <TarjetaTotal etiqueta="Hoy" {...totalesHoy} />
-        <TarjetaTotal etiqueta="Semana" {...totalesSemana} />
-        <TarjetaTotal etiqueta="Mes" {...totalesMes} />
+        <TarjetaTotal etiqueta="Hoy" {...totales.hoy} />
+        <TarjetaTotal etiqueta="Semana" {...totales.semana} />
+        <TarjetaTotal etiqueta="Mes" {...totales.mes} />
       </section>
 
       <section className="w-full max-w-2xl">
