@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import CerrarSesionAdmin from "@/components/admin/CerrarSesionAdmin";
-import { esAdmin } from "@/lib/admin/acciones";
+import CerrarSesion from "@/components/auth/CerrarSesion";
+import { esAdmin, listarPerfiles } from "@/lib/auth/acciones";
 import {
   obtenerTotalesDeHoy,
   obtenerTotalesDeLaSemana,
@@ -15,6 +15,7 @@ import DesgloseServicios from "@/components/admin/DesgloseServicios";
 import HistorialRegistros from "@/components/admin/HistorialRegistros";
 import ListaServicios from "@/components/admin/ListaServicios";
 import InstructivoStickers from "@/components/admin/InstructivoStickers";
+import GestionCuentas from "@/components/admin/GestionCuentas";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,7 @@ export default async function PaginaAdmin() {
     desglose,
     historial,
     servicios,
+    perfiles,
   ] = await Promise.all([
     obtenerTotalesDeHoy(),
     obtenerTotalesDeLaSemana(),
@@ -38,6 +40,7 @@ export default async function PaginaAdmin() {
     obtenerDesglosePorServicio(),
     obtenerHistorialPaginado(0),
     obtenerTodosLosServicios(),
+    listarPerfiles(),
   ]);
 
   return (
@@ -47,7 +50,7 @@ export default async function PaginaAdmin() {
           Panel
         </h1>
         <div className="flex gap-2">
-          <CerrarSesionAdmin />
+          <CerrarSesion />
           <Link
             href="/"
             className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-600"
@@ -72,6 +75,10 @@ export default async function PaginaAdmin() {
           historialInicial={historial}
           servicios={servicios}
         />
+      </section>
+
+      <section className="w-full max-w-2xl">
+        <GestionCuentas perfiles={perfiles} />
       </section>
 
       <section className="w-full max-w-2xl">

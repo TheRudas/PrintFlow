@@ -1,8 +1,8 @@
-import { crearClienteSupabase } from "../supabase/client";
+import { crearClienteServidor } from "../supabase/server";
 import type { DatosServicio, Servicio } from "../types";
 
 export async function obtenerServiciosActivos(): Promise<Servicio[]> {
-  const supabase = crearClienteSupabase();
+  const supabase = await crearClienteServidor();
 
   const { data, error } = await supabase
     .from("servicios")
@@ -20,7 +20,7 @@ export async function obtenerServiciosActivos(): Promise<Servicio[]> {
 export async function obtenerServicioPorSlug(
   slug: string
 ): Promise<Servicio | null> {
-  const supabase = crearClienteSupabase();
+  const supabase = await crearClienteServidor();
 
   const { data, error } = await supabase
     .from("servicios")
@@ -37,7 +37,7 @@ export async function obtenerServicioPorSlug(
 }
 
 export async function obtenerTodosLosServicios(): Promise<Servicio[]> {
-  const supabase = crearClienteSupabase();
+  const supabase = await crearClienteServidor();
 
   const { data, error } = await supabase
     .from("servicios")
@@ -54,7 +54,7 @@ export async function obtenerTodosLosServicios(): Promise<Servicio[]> {
 export async function crearServicio(
   datos: DatosServicio
 ): Promise<Servicio> {
-  const supabase = crearClienteSupabase();
+  const supabase = await crearClienteServidor();
 
   const { data, error } = await supabase
     .from("servicios")
@@ -80,7 +80,7 @@ export async function actualizarServicio(
   id: string,
   datos: Partial<DatosServicio>
 ): Promise<Servicio> {
-  const supabase = crearClienteSupabase();
+  const supabase = await crearClienteServidor();
 
   const { data, error } = await supabase
     .from("servicios")

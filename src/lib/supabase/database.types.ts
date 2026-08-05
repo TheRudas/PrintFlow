@@ -29,6 +29,27 @@ export type Database = {
         }
         Relationships: []
       }
+      perfiles: {
+        Row: {
+          creado_en: string
+          id: string
+          nombre: string
+          rol: string
+        }
+        Insert: {
+          creado_en?: string
+          id: string
+          nombre?: string
+          rol?: string
+        }
+        Update: {
+          creado_en?: string
+          id?: string
+          nombre?: string
+          rol?: string
+        }
+        Relationships: []
+      }
       registros: {
         Row: {
           cantidad: number

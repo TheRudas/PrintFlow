@@ -1,11 +1,19 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import PantallaCobro from "@/components/cobro/PantallaCobro";
-import { esAdmin } from "@/lib/admin/acciones";
+import { esAdmin, obtenerUsuarioActual } from "@/lib/auth/acciones";
 import { obtenerServiciosActivos } from "@/lib/repos/servicios";
+import CerrarSesion from "@/components/auth/CerrarSesion";
 
 export default async function Inicio(props: PageProps<"/">) {
   const searchParams = await props.searchParams;
   const servicioId = searchParams.servicio;
+  const { usuarioId } = await obtenerUsuarioActual();
+
+  if (!usuarioId) {
+    redirect("/ingresar");
+  }
+
   const [servicios, sesionAdmin] = await Promise.all([
     obtenerServiciosActivos(),
     esAdmin(),
@@ -32,6 +40,7 @@ export default async function Inicio(props: PageProps<"/">) {
           >
             Ayuda
           </Link>
+          <CerrarSesion />
         </div>
       </header>
 

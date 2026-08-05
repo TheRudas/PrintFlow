@@ -1,4 +1,4 @@
-import { createBrowserClient } from "@supabase/ssr";
+import { createClient } from "@supabase/supabase-js";
 import type { Database } from "./database.types";
 
 function obtenerVariable(nombre: string): string {
@@ -9,9 +9,15 @@ function obtenerVariable(nombre: string): string {
   return valor;
 }
 
-export function crearClienteSupabase() {
-  return createBrowserClient<Database>(
+export function crearClienteAdmin() {
+  return createClient<Database>(
     obtenerVariable("NEXT_PUBLIC_SUPABASE_URL"),
-    obtenerVariable("NEXT_PUBLIC_SUPABASE_ANON_KEY")
+    obtenerVariable("SUPABASE_SERVICE_ROLE_KEY"),
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    }
   );
 }

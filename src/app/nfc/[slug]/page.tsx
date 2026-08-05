@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { obtenerUsuarioActual } from "@/lib/auth/acciones";
 import { obtenerServicioPorSlug } from "@/lib/repos/servicios";
 
 export const dynamic = "force-dynamic";
@@ -10,6 +11,12 @@ export default async function PaginaNfc({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const { usuarioId } = await obtenerUsuarioActual();
+
+  if (!usuarioId) {
+    redirect(`/ingresar?servicio=${slug}`);
+  }
+
   const servicio = await obtenerServicioPorSlug(slug);
 
   if (servicio) {

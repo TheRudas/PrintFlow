@@ -1,4 +1,4 @@
-import { crearClienteSupabase } from "../supabase/client";
+﻿import { crearClienteServidor } from "../supabase/server";
 import type {
   DesgloseServicio,
   HistorialPaginado,
@@ -40,7 +40,7 @@ function sumaDeRegistros(registros: RegistroConTotal[]): Totales {
 }
 
 export async function obtenerTotales(desde: Date): Promise<Totales> {
-  const supabase = crearClienteSupabase();
+  const supabase = await crearClienteServidor();
 
   const { data, error } = await supabase
     .from("registros")
@@ -69,7 +69,7 @@ export async function obtenerTotalesDelMes(): Promise<Totales> {
 export async function obtenerDesglosePorServicio(): Promise<
   DesgloseServicio[]
 > {
-  const supabase = crearClienteSupabase();
+  const supabase = await crearClienteServidor();
 
   const { data, error } = await supabase
     .from("servicios")
@@ -103,7 +103,7 @@ export async function obtenerHistorialPaginado(
   pagina: number,
   tamanoPagina: number = TAMANO_PAGINA_HISTORIAL
 ): Promise<HistorialPaginado> {
-  const supabase = crearClienteSupabase();
+  const supabase = await crearClienteServidor();
   const paginaInicio = pagina * tamanoPagina;
   const paginaFin = paginaInicio + tamanoPagina - 1;
 
@@ -127,3 +127,4 @@ export async function obtenerHistorialPaginado(
     tamanoPagina,
   };
 }
+

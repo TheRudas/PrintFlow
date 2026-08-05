@@ -37,3 +37,5 @@ export type DatosServicio = {
   unidad: string;
   activo: boolean;
 };
+
+export type Perfil = Tables<"perfiles">;
