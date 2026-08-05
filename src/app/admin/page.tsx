@@ -14,7 +14,6 @@ import TarjetaTotal from "@/components/admin/TarjetaTotal";
 import DesgloseServicios from "@/components/admin/DesgloseServicios";
 import HistorialRegistros from "@/components/admin/HistorialRegistros";
 import ListaServicios from "@/components/admin/ListaServicios";
-import InstructivoStickers from "@/components/admin/InstructivoStickers";
 import GestionCuentas from "@/components/admin/GestionCuentas";
 
 export const dynamic = "force-dynamic";
@@ -83,10 +82,6 @@ export default async function PaginaAdmin() {
 
       <section className="w-full max-w-2xl">
         <ListaServicios servicios={servicios} />
-      </section>
-
-      <section className="w-full max-w-2xl">
-        <InstructivoStickers servicios={servicios} />
       </section>
     </main>
   );

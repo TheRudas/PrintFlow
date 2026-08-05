@@ -1,13 +1,19 @@
 # PrintFlow
 
-App web para registrar impresiones y fotocopias de un negocio en casa, usando stickers NFC.
+App web para registrar impresiones y fotocopias de un negocio en casa, con acceso rápido mediante stickers NFC.
 
 ## Stack
 
 - **Next.js 16 + TypeScript + Tailwind** (App Router)
-- **Supabase (Postgres)** como base de datos
-- **PWA** instalable en el celular (Android con Web NFC)
+- **Supabase** (Postgres + Auth) — cuentas por correo y contraseña
+- **PWA** instalable en el celular
 - Deploy en **Vercel**
+
+## Acceso con stickers NFC
+
+Los stickers se graban con la app **NFC Tools** (Play Store) usando un enlace del tipo
+`https://{dominio}/nfc/{slug}` (ej: `/nfc/impresion-bn`). Al acercar el celular, el sticker abre la app en la
+pantalla de cobro del servicio correspondiente.
 
 ## Desarrollo
 
@@ -23,6 +29,7 @@ Copiá `.env.example` a `.env.local` y completá las credenciales de tu proyecto
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 ```
 
 ## Estructura

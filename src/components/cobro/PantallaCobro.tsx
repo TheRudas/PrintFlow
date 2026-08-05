@@ -7,7 +7,6 @@ import SelectorServicio from "./SelectorServicio";
 import SelectorPrecio from "./SelectorPrecio";
 import ContadorCantidad from "./ContadorCantidad";
 import ResumenTotal from "./ResumenTotal";
-import BotonEscanear from "./BotonEscanear";
 
 interface Props {
   servicios: Servicio[];
@@ -60,17 +59,6 @@ export default function PantallaCobro({
     }
   }
 
-  function manejarSlugLeido(slug: string): void {
-    const servicioEncontrado = servicios.find(
-      (item) => item.slug === slug
-    );
-    if (servicioEncontrado) {
-      seleccionarServicio(servicioEncontrado);
-    } else {
-      setMensaje("Este servicio ya no está disponible");
-    }
-  }
-
   async function guardarVenta(): Promise<void> {
     if (!servicio || precioUnitario === null || precioUnitario <= 0) {
       return;
@@ -106,7 +94,6 @@ export default function PantallaCobro({
         <h2 className="text-sm font-medium text-zinc-500">
           Elegí el servicio
         </h2>
-        <BotonEscanear onSlugLeido={manejarSlugLeido} />
         <SelectorServicio
           servicios={servicios}
           seleccionadoId={servicio?.id ?? null}
