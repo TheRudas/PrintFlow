@@ -75,10 +75,7 @@ export default async function PaginaAdmin() {
       </section>
 
       <section className="w-full max-w-2xl">
-        <ListaServicios
-          servicios={servicios}
-          onCambio={async () => {}}
-        />
+        <ListaServicios servicios={servicios} />
       </section>
 
       <section className="w-full max-w-2xl">

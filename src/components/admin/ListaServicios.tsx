@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { actualizarServicioComoAdmin } from "@/lib/admin/acciones";
 import { formatearMoneda } from "@/lib/formatear";
 import type { Servicio } from "@/lib/types";
@@ -9,14 +10,14 @@ import BotonGrabarSticker from "./BotonGrabarSticker";
 
 interface Props {
   servicios: Servicio[];
-  onCambio: () => void;
 }
 
-export default function ListaServicios({ servicios, onCambio }: Props) {
+export default function ListaServicios({ servicios }: Props) {
   const [servicioEnEdicion, setServicioEnEdicion] =
     useState<Servicio | null>(null);
   const [creando, setCreando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   async function alternarActivo(servicio: Servicio): Promise<void> {
     setError(null);
@@ -25,7 +26,7 @@ export default function ListaServicios({ servicios, onCambio }: Props) {
     });
 
     if (resultado.exito) {
-      onCambio();
+      router.refresh();
     } else {
       setError(resultado.error ?? "No se pudo actualizar");
     }
@@ -54,7 +55,7 @@ export default function ListaServicios({ servicios, onCambio }: Props) {
           servicio={null}
           onGuardado={() => {
             setCreando(false);
-            onCambio();
+            router.refresh();
           }}
         />
       )}
@@ -64,7 +65,7 @@ export default function ListaServicios({ servicios, onCambio }: Props) {
           servicio={servicioEnEdicion}
           onGuardado={() => {
             setServicioEnEdicion(null);
-            onCambio();
+            router.refresh();
           }}
         />
       )}
