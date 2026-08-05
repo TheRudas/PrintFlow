@@ -1,4 +1,5 @@
 import Link from "next/link";
+import EasterEggAyuda from "@/components/admin/EasterEggAyuda";
 
 export default function PaginaAyuda() {
   return (
@@ -9,6 +10,7 @@ export default function PaginaAyuda() {
         precio. Si tenés un sticker NFC, apoyá el celular sobre él y la app
         hace el resto.
       </p>
+      <EasterEggAyuda />
       <Link
         href="/"
         className="rounded-full bg-indigo-600 px-6 py-3 font-medium text-white"

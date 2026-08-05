@@ -1,11 +1,15 @@
 import Link from "next/link";
 import PantallaCobro from "@/components/cobro/PantallaCobro";
+import { esAdmin } from "@/lib/admin/acciones";
 import { obtenerServiciosActivos } from "@/lib/repos/servicios";
 
 export default async function Inicio(props: PageProps<"/">) {
   const searchParams = await props.searchParams;
   const servicioId = searchParams.servicio;
-  const servicios = await obtenerServiciosActivos();
+  const [servicios, sesionAdmin] = await Promise.all([
+    obtenerServiciosActivos(),
+    esAdmin(),
+  ]);
 
   return (
     <main className="flex flex-1 flex-col items-center gap-6 px-4 py-6">
@@ -13,12 +17,22 @@ export default async function Inicio(props: PageProps<"/">) {
         <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
           PrintFlow
         </h1>
-        <Link
-          href="/ayuda"
-          className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-600"
-        >
-          Ayuda
-        </Link>
+        <div className="flex gap-2">
+          {sesionAdmin && (
+            <Link
+              href="/admin"
+              className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-600"
+            >
+              Panel
+            </Link>
+          )}
+          <Link
+            href="/ayuda"
+            className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-600"
+          >
+            Ayuda
+          </Link>
+        </div>
       </header>
 
       <PantallaCobro

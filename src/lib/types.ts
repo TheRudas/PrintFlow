@@ -9,3 +9,31 @@ export type DatosNuevoRegistro = {
   total: number;
   nota?: string | null;
 };
+
+export type Totales = {
+  montoTotal: number;
+  cantidadRegistros: number;
+};
+
+export type DesgloseServicio = {
+  servicioId: string;
+  nombre: string;
+  montoTotal: number;
+  cantidad: number;
+};
+
+export type HistorialPaginado = {
+  registros: Registro[];
+  totalRegistros: number;
+  pagina: number;
+  tamanoPagina: number;
+};
+
+export type DatosServicio = {
+  nombre: string;
+  slug: string;
+  precioPorDefecto: number | null;
+  presets: number[];
+  unidad: string;
+  activo: boolean;
+};
