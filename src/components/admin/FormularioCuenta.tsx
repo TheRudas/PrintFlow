@@ -34,23 +34,23 @@ export default function FormularioCuenta() {
   return (
     <form
       onSubmit={manejarEnvio}
-      className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4"
+      className="flex flex-col gap-3 rounded-2xl border border-borde bg-superficie p-4"
     >
-      <h2 className="font-semibold text-zinc-900">Nueva cuenta de empleado</h2>
+      <h2 className="font-semibold text-texto">Nueva cuenta de empleado</h2>
 
-      <label className="flex flex-col gap-1 text-sm text-zinc-600">
+      <label className="flex flex-col gap-1 text-sm text-texto-suave">
         Nombre
         <input
           type="text"
           value={nombre}
           onChange={(evento) => setNombre(evento.target.value)}
           required
-          placeholder="Ej: MamÃ¡, PapÃ¡"
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
+          placeholder="Ej: Mamá, Papá"
+          className="rounded-xl border-2 border-borde px-3 py-2 text-texto focus:border-marca-500 focus:outline-none"
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-zinc-600">
+      <label className="flex flex-col gap-1 text-sm text-texto-suave">
         Correo
         <input
           type="email"
@@ -58,19 +58,19 @@ export default function FormularioCuenta() {
           onChange={(evento) => setCorreo(evento.target.value)}
           required
           placeholder="mama@correo.com"
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
+          className="rounded-xl border-2 border-borde px-3 py-2 text-texto focus:border-marca-500 focus:outline-none"
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-zinc-600">
-        ContraseÃ±a
+      <label className="flex flex-col gap-1 text-sm text-texto-suave">
+        Contraseña
         <input
           type="password"
           value={contrasena}
           onChange={(evento) => setContrasena(evento.target.value)}
           required
           minLength={6}
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
+          className="rounded-xl border-2 border-borde px-3 py-2 text-texto focus:border-marca-500 focus:outline-none"
         />
       </label>
 
@@ -86,4 +86,3 @@ export default function FormularioCuenta() {
     </form>
   );
 }
-

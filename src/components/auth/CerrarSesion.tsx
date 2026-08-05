@@ -20,7 +20,7 @@ export default function CerrarSesion() {
       type="button"
       onClick={cerrar}
       disabled={cerrando}
-      className="btn-feedback rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-50 disabled:opacity-50"
+      className="btn-feedback rounded-full border border-borde bg-superficie px-4 py-2 text-sm font-medium text-texto-suave hover:bg-superficie-alta disabled:opacity-50"
     >
       {cerrando ? "Saliendo..." : "Salir"}
     </button>

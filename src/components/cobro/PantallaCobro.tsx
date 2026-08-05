@@ -85,7 +85,7 @@ export default function PantallaCobro({
     } catch (error) {
       setToast({
         tipo: "error",
-        mensaje: `No se pudo guardar: ${error instanceof Error ? error.message : "error de conexiÃ³n"}`,
+        mensaje: `No se pudo guardar: ${error instanceof Error ? error.message : "error de conexión"}`,
       });
     } finally {
       setGuardando(false);
@@ -96,7 +96,7 @@ export default function PantallaCobro({
     <div className="flex w-full max-w-md flex-col gap-5">
       <section className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">
-          ElegÃ­ el servicio
+          Elegí el servicio
         </h2>
         <SelectorServicio
           servicios={servicios}
@@ -134,7 +134,7 @@ export default function PantallaCobro({
               value={nota}
               onChange={(evento) => setNota(evento.target.value)}
               placeholder="Ej: anillado, papel especial..."
-              className="rounded-2xl border-2 border-zinc-200 bg-white px-4 py-3 text-zinc-900 placeholder:text-zinc-400 focus:border-marca-500 focus:outline-none"
+              className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-texto placeholder:text-texto-tenue focus:border-marca-500 focus:outline-none"
             />
           </section>
 
@@ -157,4 +157,3 @@ export default function PantallaCobro({
     </div>
   );
 }
-

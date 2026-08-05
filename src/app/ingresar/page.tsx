@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import FormularioIngreso from "@/components/auth/FormularioIngreso";
+import BotonTema from "@/components/ui/BotonTema";
 import { obtenerUsuarioActual } from "@/lib/auth/acciones";
 
 export default async function PaginaIngresar(props: PageProps<"/ingresar">) {
@@ -13,10 +14,13 @@ export default async function PaginaIngresar(props: PageProps<"/ingresar">) {
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-6 px-6">
+      <div className="absolute right-4 top-4">
+        <BotonTema />
+      </div>
       <h1 className="gradiente-marca bg-clip-text text-3xl font-bold tracking-tight text-transparent">
         PrintFlow
       </h1>
-      <p className="text-center text-zinc-600">
+      <p className="text-center text-texto-suave">
         Ingresá con tu cuenta para registrar ventas.
       </p>
       <FormularioIngreso />

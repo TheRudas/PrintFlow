@@ -25,10 +25,10 @@ export default async function PaginaNfc({
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-6 px-6 text-center">
-      <h1 className="text-2xl font-bold text-zinc-900">
+      <h1 className="text-2xl font-bold text-texto">
         Este servicio ya no está disponible
       </h1>
-      <p className="text-zinc-600">
+      <p className="text-texto-suave">
         El sticker que escaneaste no corresponde a un servicio activo.
       </p>
       <Link

@@ -50,7 +50,7 @@ export default function Toast({
       />
       <div
         role="status"
-        className={`relative flex w-full max-w-xs flex-col items-center gap-4 rounded-3xl border bg-white p-8 text-center shadow-2xl transition-all duration-300 ease-out ${
+        className={`relative flex w-full max-w-xs flex-col items-center gap-4 rounded-3xl border bg-superficie p-8 text-center shadow-2xl transition-all duration-300 ease-out ${
           saliendo
             ? "scale-90 opacity-0"
             : "animate-[toast-entrar_0.25s_cubic-bezier(0.16,1,0.3,1)]"

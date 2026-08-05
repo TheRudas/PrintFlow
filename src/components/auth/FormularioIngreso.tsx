@@ -24,7 +24,7 @@ export default function FormularioIngreso() {
       router.push(slug ? `/?servicio=${slug}` : "/");
       router.refresh();
     } else {
-      setError(resultado.error ?? "No se pudo iniciar sesiÃ³n");
+      setError(resultado.error ?? "No se pudo iniciar sesión");
       setIngresando(false);
     }
   }
@@ -34,7 +34,7 @@ export default function FormularioIngreso() {
       onSubmit={manejarEnvio}
       className="flex w-full max-w-sm flex-col gap-3"
     >
-      <label className="flex flex-col gap-1 text-sm text-zinc-600">
+      <label className="flex flex-col gap-1 text-sm text-texto-suave">
         Correo
         <input
           type="email"
@@ -42,19 +42,19 @@ export default function FormularioIngreso() {
           onChange={(evento) => setCorreo(evento.target.value)}
           autoComplete="email"
           required
-          className="rounded-2xl border-2 border-zinc-200 bg-white px-4 py-3 text-zinc-900 focus:border-marca-500 focus:outline-none"
+          className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-texto focus:border-marca-500 focus:outline-none"
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-zinc-600">
-        ContraseÃ±a
+      <label className="flex flex-col gap-1 text-sm text-texto-suave">
+        Contraseña
         <input
           type="password"
           value={contrasena}
           onChange={(evento) => setContrasena(evento.target.value)}
           autoComplete="current-password"
           required
-          className="rounded-2xl border-2 border-zinc-200 bg-white px-4 py-3 text-zinc-900 focus:border-marca-500 focus:outline-none"
+          className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-texto focus:border-marca-500 focus:outline-none"
         />
       </label>
 
@@ -70,4 +70,3 @@ export default function FormularioIngreso() {
     </form>
   );
 }
-

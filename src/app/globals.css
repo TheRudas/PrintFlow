@@ -1,8 +1,29 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #faf8ff;
   --foreground: #2a2333;
+
+  --superficie: #ffffff;
+  --superficie-alta: #f6f1ff;
+  --borde: #e9e2f5;
+  --texto: #2a2333;
+  --texto-suave: #6b6478;
+  --texto-tenue: #9a93ab;
+}
+
+.dark {
+  --background: #17121f;
+  --foreground: #f1edf8;
+
+  --superficie: #241d30;
+  --superficie-alta: #2f2740;
+  --borde: #3b324c;
+  --texto: #f1edf8;
+  --texto-suave: #b7aec9;
+  --texto-tenue: #8b8299;
 }
 
 @theme inline {
@@ -26,6 +47,13 @@
   --color-acento-400: #f472b6;
   --color-acento-500: #ec4899;
   --color-acento-600: #db2777;
+
+  --color-superficie: var(--superficie);
+  --color-superficie-alta: var(--superficie-alta);
+  --color-borde: var(--borde);
+  --color-texto: var(--texto);
+  --color-texto-suave: var(--texto-suave);
+  --color-texto-tenue: var(--texto-tenue);
 }
 
 @utility btn-feedback {
@@ -38,7 +66,7 @@
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px -4px var(--color-marca-400 / 0.5);
+    box-shadow: 0 4px 14px -4px rgb(139 78 242 / 0.5);
   }
 
   &:active:not(:disabled) {

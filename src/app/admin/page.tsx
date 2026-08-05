@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import CerrarSesion from "@/components/auth/CerrarSesion";
+import BotonTema from "@/components/ui/BotonTema";
 import { esAdmin, listarPerfiles } from "@/lib/auth/acciones";
 import {
   obtenerTotalesCombinados,
@@ -43,10 +44,11 @@ export default async function PaginaAdmin() {
           Panel
         </h1>
         <div className="flex gap-2">
+          <BotonTema />
           <CerrarSesion />
           <Link
             href="/"
-            className="btn-feedback rounded-full border border-marca-200 bg-white px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50"
+            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50"
           >
             Volver
           </Link>

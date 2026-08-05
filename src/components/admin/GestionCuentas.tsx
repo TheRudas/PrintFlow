@@ -16,7 +16,7 @@ export default function GestionCuentas({ perfiles }: Props) {
     usuarioId: string
   ): Promise<void> {
     const nuevaContrasena = prompt(
-      "Nueva contraseÃ±a (mÃ­nimo 6 caracteres):"
+      "Nueva contraseña (mínimo 6 caracteres):"
     );
     if (!nuevaContrasena || nuevaContrasena.length < 6) {
       return;
@@ -24,7 +24,7 @@ export default function GestionCuentas({ perfiles }: Props) {
 
     const resultado = await cambiarContrasena(usuarioId, nuevaContrasena);
     if (!resultado.exito) {
-      alert(resultado.error ?? "No se pudo cambiar la contraseÃ±a");
+      alert(resultado.error ?? "No se pudo cambiar la contraseña");
     }
   }
 
@@ -45,17 +45,17 @@ export default function GestionCuentas({ perfiles }: Props) {
         <FormularioCuenta />
       )}
 
-      <div className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+      <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
         {perfiles.map((perfil) => (
           <div
             key={perfil.id}
-            className="flex items-center justify-between gap-3 border-b border-zinc-100 px-4 py-3 last:border-b-0"
+            className="flex items-center justify-between gap-3 border-b border-borde px-4 py-3 last:border-b-0"
           >
             <div className="min-w-0">
-              <p className="truncate font-medium text-zinc-900">
+              <p className="truncate font-medium text-texto">
                 {perfil.nombre || "Sin nombre"}
               </p>
-              <p className="truncate text-xs text-zinc-500">
+              <p className="truncate text-xs text-texto-suave">
                 {perfil.rol === "admin" ? "Administrador" : "Empleado"}
               </p>
             </div>
@@ -65,7 +65,7 @@ export default function GestionCuentas({ perfiles }: Props) {
                 onClick={() => manejarCambiarContrasena(perfil.id)}
                 className="btn-feedback shrink-0 rounded-full border border-marca-200 px-3 py-1.5 text-sm font-medium text-marca-700 hover:bg-marca-50"
               >
-                Cambiar contraseÃ±a
+                Cambiar contraseña
               </button>
             )}
           </div>
@@ -74,4 +74,3 @@ export default function GestionCuentas({ perfiles }: Props) {
     </div>
   );
 }
-

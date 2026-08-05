@@ -13,7 +13,7 @@ export default function SelectorServicio({
 }: Props) {
   if (servicios.length === 0) {
     return (
-      <p className="text-sm text-zinc-500">
+      <p className="text-sm text-texto-suave">
         No hay servicios configurados. Contactá al administrador.
       </p>
     );
@@ -31,13 +31,13 @@ export default function SelectorServicio({
             className={`btn-feedback flex min-h-24 flex-col items-center justify-center gap-1 rounded-2xl border-2 px-3 py-4 text-center ${
               seleccionado
                 ? "border-marca-500 bg-marca-50"
-                : "border-zinc-200 bg-white hover:border-marca-300"
+                : "border-borde bg-superficie hover:border-marca-300"
             }`}
           >
-            <span className="font-semibold text-zinc-900">
+            <span className="font-semibold text-texto">
               {servicio.nombre}
             </span>
-            <span className="text-xs text-zinc-500">
+            <span className="text-xs text-texto-suave">
               por {servicio.unidad}
             </span>
           </button>

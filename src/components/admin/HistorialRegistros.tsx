@@ -46,35 +46,35 @@ export default function HistorialRegistros({
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">Historial</h2>
-        <span className="text-xs text-zinc-400">
+        <span className="text-xs text-texto-tenue">
           {historial.totalRegistros} en total
         </span>
       </div>
 
       {historial.registros.length === 0 ? (
-        <p className="text-sm text-zinc-500">AÃºn no hay registros.</p>
+        <p className="text-sm text-texto-suave">Aún no hay registros.</p>
       ) : (
-        <div className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+        <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
           {historial.registros.map((registro) => (
             <div
               key={registro.id}
-              className="flex items-center justify-between gap-3 border-b border-zinc-100 px-4 py-3 last:border-b-0"
+              className="flex items-center justify-between gap-3 border-b border-borde px-4 py-3 last:border-b-0"
             >
               <div className="min-w-0">
-                <p className="truncate font-medium text-zinc-900">
+                <p className="truncate font-medium text-texto">
                   {nombreDeServicio(registro.servicio_id, servicios)}
                 </p>
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-texto-suave">
                   {new Date(registro.creado_en).toLocaleString("es-AR")}
-                  {registro.nota ? ` Â· ${registro.nota}` : ""}
+                  {registro.nota ? ` · ${registro.nota}` : ""}
                 </p>
               </div>
               <div className="text-right">
-                <p className="font-semibold text-zinc-900">
+                <p className="font-semibold text-texto">
                   {formatearMoneda(registro.total)}
                 </p>
-                <p className="text-xs text-zinc-500">
-                  {registro.cantidad} Ã—{" "}
+                <p className="text-xs text-texto-suave">
+                  {registro.cantidad} ×{" "}
                   {formatearMoneda(registro.precio_unitario)}
                 </p>
               </div>
@@ -89,27 +89,26 @@ export default function HistorialRegistros({
             type="button"
             onClick={() => irAPagina(paginaActual - 1)}
             disabled={paginaActual === 0 || cargando}
-            className="btn-feedback rounded-full border border-marca-200 bg-white px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40"
+            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40"
           >
             Anterior
           </button>
-          <span className="text-sm text-zinc-500">
+          <span className="text-sm text-texto-suave">
             {paginaActual + 1} de {totalPaginas}
           </span>
           <button
             type="button"
             onClick={() => irAPagina(paginaActual + 1)}
             disabled={paginaActual + 1 >= totalPaginas || cargando}
-            className="btn-feedback rounded-full border border-marca-200 bg-white px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40"
+            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40"
           >
             Siguiente
           </button>
         </div>
       )}
       {cargando && (
-        <p className="text-center text-xs text-zinc-400">Cargando...</p>
+        <p className="text-center text-xs text-texto-tenue">Cargando...</p>
       )}
     </div>
   );
 }
-

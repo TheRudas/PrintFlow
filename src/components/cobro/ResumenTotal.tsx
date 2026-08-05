@@ -17,15 +17,15 @@ export default function ResumenTotal({
   const total = precioValido ? precioUnitario * cantidad : 0;
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl bg-zinc-900 p-5 text-white">
+    <div className="flex flex-col gap-3 rounded-2xl bg-marca-900 p-5 text-white">
       <div className="flex items-baseline justify-between">
-        <span className="text-sm text-zinc-400">Total</span>
+        <span className="text-sm text-marca-200">Total</span>
         <span className="text-4xl font-bold">
           {formatearMoneda(total)}
         </span>
       </div>
       {precioUnitario !== null && precioValido && (
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-marca-300">
           {formatearMoneda(precioUnitario)} × {cantidad}
         </p>
       )}
@@ -38,7 +38,7 @@ export default function ResumenTotal({
         {guardando ? "Guardando..." : "Guardar venta"}
       </button>
       {!precioValido && (
-        <p className="text-center text-xs text-zinc-400">
+        <p className="text-center text-xs text-marca-300">
           Elegí un precio para poder guardar
         </p>
       )}

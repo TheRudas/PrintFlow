@@ -69,24 +69,24 @@ export default function ListaServicios({ servicios }: Props) {
         />
       )}
 
-      <div className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+      <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
         {servicios.map((servicio) => (
           <div
             key={servicio.id}
-            className="flex items-center justify-between gap-3 border-b border-zinc-100 px-4 py-3 last:border-b-0"
+            className="flex items-center justify-between gap-3 border-b border-borde px-4 py-3 last:border-b-0"
           >
             <div className="min-w-0">
-              <p className="truncate font-medium text-zinc-900">
+              <p className="truncate font-medium text-texto">
                 {servicio.nombre}
                 {!servicio.activo && (
-                  <span className="ml-2 rounded-full bg-zinc-200 px-2 py-0.5 text-xs text-zinc-600">
+                  <span className="ml-2 rounded-full bg-superficie-alta px-2 py-0.5 text-xs text-texto-suave">
                     inactivo
                   </span>
                 )}
               </p>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-texto-suave">
                 {servicio.presets.length > 0
-                  ? servicio.presets.map(formatearMoneda).join(" Â· ")
+                  ? servicio.presets.map(formatearMoneda).join(" · ")
                   : "Sin presets"}
               </p>
             </div>
@@ -119,4 +119,3 @@ export default function ListaServicios({ servicios }: Props) {
     </div>
   );
 }
-

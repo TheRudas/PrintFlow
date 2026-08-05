@@ -7,12 +7,12 @@ interface Props {
 
 export default function DesgloseServicios({ items }: Props) {
   return (
-    <div className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+    <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
       <div className="border-b border-marca-100 bg-marca-50 px-4 py-2 text-sm font-semibold text-marca-700">
         Por servicio
       </div>
       {items.length === 0 ? (
-        <p className="px-4 py-4 text-sm text-zinc-500">
+        <p className="px-4 py-4 text-sm text-texto-suave">
           Aún no hay ventas para mostrar.
         </p>
       ) : (
@@ -20,15 +20,15 @@ export default function DesgloseServicios({ items }: Props) {
           {items.map((item) => (
             <li
               key={item.servicioId}
-              className="flex items-center justify-between border-b border-zinc-100 px-4 py-3 last:border-b-0"
+              className="flex items-center justify-between border-b border-borde px-4 py-3 last:border-b-0"
             >
               <div>
-                <p className="font-medium text-zinc-900">{item.nombre}</p>
-                <p className="text-xs text-zinc-500">
+                <p className="font-medium text-texto">{item.nombre}</p>
+                <p className="text-xs text-texto-suave">
                   {item.cantidad} registro{item.cantidad === 1 ? "" : "s"}
                 </p>
               </div>
-              <span className="font-semibold text-zinc-900">
+              <span className="font-semibold text-texto">
                 {formatearMoneda(item.montoTotal)}
               </span>
             </li>

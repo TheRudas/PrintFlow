@@ -4,6 +4,7 @@ import PantallaCobro from "@/components/cobro/PantallaCobro";
 import { obtenerUsuarioActual } from "@/lib/auth/acciones";
 import { obtenerServiciosActivos } from "@/lib/repos/servicios";
 import CerrarSesion from "@/components/auth/CerrarSesion";
+import BotonTema from "@/components/ui/BotonTema";
 
 export default async function Inicio(props: PageProps<"/">) {
   const searchParams = await props.searchParams;
@@ -23,18 +24,19 @@ export default async function Inicio(props: PageProps<"/">) {
         <h1 className="gradiente-marca bg-clip-text text-2xl font-bold tracking-tight text-transparent">
           PrintFlow
         </h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <BotonTema />
           {sesionAdmin && (
             <Link
               href="/admin"
-              className="btn-feedback rounded-full bg-marca-100 px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-200"
+              className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50"
             >
               Panel
             </Link>
           )}
           <Link
             href="/ayuda"
-            className="btn-feedback rounded-full border border-marca-200 bg-white px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50"
+            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50"
           >
             Ayuda
           </Link>

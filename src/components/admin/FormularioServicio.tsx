@@ -42,7 +42,7 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
   function parsearPresets(texto: string): number[] {
     return texto
       .split(",")
-      .map((valor) => Number(valor.trim()))
+      .map((valor) => Math.trunc(Number(valor.trim())))
       .filter((valor) => Number.isFinite(valor) && valor > 0);
   }
 
@@ -57,7 +57,7 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
       precioPorDefecto:
         precioPorDefecto.trim() === ""
           ? null
-          : Number(precioPorDefecto),
+          : Math.trunc(Number(precioPorDefecto)),
       presets: parsearPresets(presets),
       unidad: unidad.trim() === "" ? "hoja" : unidad.trim(),
       activo,
@@ -78,24 +78,24 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
   return (
     <form
       onSubmit={manejarEnvio}
-      className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4"
+      className="flex flex-col gap-3 rounded-2xl border border-borde bg-superficie p-4"
     >
-      <h2 className="font-semibold text-zinc-900">
+      <h2 className="font-semibold text-texto">
         {servicio ? "Editar servicio" : "Nuevo servicio"}
       </h2>
 
-      <label className="flex flex-col gap-1 text-sm text-zinc-600">
+      <label className="flex flex-col gap-1 text-sm text-texto-suave">
         Nombre
         <input
           type="text"
           value={nombre}
           onChange={(evento) => setNombre(evento.target.value)}
           required
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
+          className="rounded-xl border-2 border-borde px-3 py-2 text-texto focus:border-marca-500 focus:outline-none"
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-zinc-600">
+      <label className="flex flex-col gap-1 text-sm text-texto-suave">
         Slug (para el sticker NFC)
         <input
           type="text"
@@ -104,45 +104,45 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
           required
           disabled={servicio !== null}
           placeholder="impresion-a3-color"
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none disabled:bg-zinc-100 disabled:text-zinc-500"
+          className="rounded-xl border-2 border-borde px-3 py-2 text-texto focus:border-marca-500 focus:outline-none disabled:bg-superficie-alta disabled:text-texto-suave"
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-zinc-600">
+      <label className="flex flex-col gap-1 text-sm text-texto-suave">
         Precio por defecto
         <input
           type="number"
-          inputMode="decimal"
+          inputMode="numeric"
           min="0"
-          step="0.01"
+          step="1"
           value={precioPorDefecto}
           onChange={(evento) => setPrecioPorDefecto(evento.target.value)}
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
+          className="rounded-xl border-2 border-borde px-3 py-2 text-texto focus:border-marca-500 focus:outline-none"
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-zinc-600">
+      <label className="flex flex-col gap-1 text-sm text-texto-suave">
         Presets (separados por coma)
         <input
           type="text"
           value={presets}
           onChange={(evento) => setPresets(evento.target.value)}
           placeholder="300, 700, 1000"
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
+          className="rounded-xl border-2 border-borde px-3 py-2 text-texto focus:border-marca-500 focus:outline-none"
         />
       </label>
 
-      <label className="flex flex-col gap-1 text-sm text-zinc-600">
+      <label className="flex flex-col gap-1 text-sm text-texto-suave">
         Unidad
         <input
           type="text"
           value={unidad}
           onChange={(evento) => setUnidad(evento.target.value)}
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
+          className="rounded-xl border-2 border-borde px-3 py-2 text-texto focus:border-marca-500 focus:outline-none"
         />
       </label>
 
-      <label className="flex items-center gap-2 text-sm text-zinc-600">
+      <label className="flex items-center gap-2 text-sm text-texto-suave">
         <input
           type="checkbox"
           checked={activo}

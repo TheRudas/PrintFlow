@@ -8,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
       "Registro de impresiones y fotocopias de tu negocio con stickers NFC.",
     start_url: "/",
     display: "standalone",
-    background_color: "#faf8ff",
+    background_color: "#17121f",
     theme_color: "#7c3aed",
     icons: [
       {

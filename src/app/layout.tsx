@@ -25,13 +25,26 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
+const SCRIPT_TEMA = `
+(function () {
+  try {
+    var guardado = localStorage.getItem("printflow-tema");
+    var oscuro = guardado !== "claro";
+    document.documentElement.classList.toggle("dark", oscuro);
+  } catch (e) {}
+})();
+`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`dark ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

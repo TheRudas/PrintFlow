@@ -22,8 +22,15 @@ export default function SelectorPrecio({
   }
 
   function manejarMontoLibre(valor: string): void {
-    const monto = valor === "" ? null : Number(valor);
-    onEscribirPrecio(monto);
+    if (valor === "") {
+      onEscribirPrecio(null);
+      return;
+    }
+
+    const monto = Math.trunc(Number(valor));
+    if (Number.isFinite(monto)) {
+      onEscribirPrecio(monto);
+    }
   }
 
   return (
@@ -35,10 +42,10 @@ export default function SelectorPrecio({
               key={preset}
               type="button"
               onClick={() => onSeleccionarPrecio(preset)}
-              className={`btn-feedback rounded-full border-2 px-5 py-3 text-base font-semibold ${
+              className={`btn-feedback rounded-full border-2 px-4 py-2 text-sm font-semibold ${
                 esSeleccionado(preset)
                   ? "border-marca-500 bg-marca-500 text-white"
-                  : "border-zinc-200 bg-white text-zinc-800 hover:border-marca-300"
+                  : "border-borde bg-superficie text-texto hover:border-marca-300"
               }`}
             >
               {formatearMoneda(preset)}
@@ -53,10 +60,10 @@ export default function SelectorPrecio({
           onClick={() =>
             onSeleccionarPrecio(servicio.precio_por_defecto as number)
           }
-          className={`btn-feedback rounded-full border-2 px-5 py-3 text-base font-semibold ${
+          className={`btn-feedback rounded-full border-2 px-4 py-2 text-sm font-semibold ${
             esSeleccionado(servicio.precio_por_defecto as number)
               ? "border-marca-500 bg-marca-500 text-white"
-              : "border-zinc-200 bg-white text-zinc-800 hover:border-marca-300"
+              : "border-borde bg-superficie text-texto hover:border-marca-300"
           }`}
         >
           {formatearMoneda(servicio.precio_por_defecto as number)}
@@ -65,15 +72,14 @@ export default function SelectorPrecio({
 
       <input
         type="number"
-        inputMode="decimal"
+        inputMode="numeric"
         min="0"
-        step="0.01"
+        step="1"
         placeholder="Monto libre..."
         value={precioSeleccionado === null ? "" : precioSeleccionado}
         onChange={(evento) => manejarMontoLibre(evento.target.value)}
-        className="rounded-2xl border-2 border-zinc-200 bg-white px-4 py-3 text-lg text-zinc-900 placeholder:text-zinc-400 focus:border-marca-500 focus:outline-none"
+        className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-lg text-texto placeholder:text-texto-tenue focus:border-marca-500 focus:outline-none"
       />
     </div>
   );
 }
-
