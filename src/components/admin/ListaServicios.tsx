@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -34,7 +34,7 @@ export default function ListaServicios({ servicios }: Props) {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium text-zinc-500">Servicios</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">Servicios</h2>
         <button
           type="button"
           onClick={() => {
@@ -86,7 +86,7 @@ export default function ListaServicios({ servicios }: Props) {
               </p>
               <p className="text-xs text-zinc-500">
                 {servicio.presets.length > 0
-                  ? servicio.presets.map(formatearMoneda).join(" · ")
+                  ? servicio.presets.map(formatearMoneda).join(" Â· ")
                   : "Sin presets"}
               </p>
             </div>
@@ -97,7 +97,7 @@ export default function ListaServicios({ servicios }: Props) {
                   setServicioEnEdicion(servicio);
                   setCreando(false);
                 }}
-                className="btn-feedback rounded-full border border-zinc-200 px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+                className="btn-feedback rounded-full border border-marca-200 px-3 py-1.5 text-sm font-medium text-marca-700 hover:bg-marca-50"
               >
                 Editar
               </button>
@@ -119,3 +119,4 @@ export default function ListaServicios({ servicios }: Props) {
     </div>
   );
 }
+

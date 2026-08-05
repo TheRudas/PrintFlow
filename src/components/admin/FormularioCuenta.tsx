@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -45,8 +45,8 @@ export default function FormularioCuenta() {
           value={nombre}
           onChange={(evento) => setNombre(evento.target.value)}
           required
-          placeholder="Ej: Mamá, Papá"
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-indigo-600 focus:outline-none"
+          placeholder="Ej: MamÃ¡, PapÃ¡"
+          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
         />
       </label>
 
@@ -58,19 +58,19 @@ export default function FormularioCuenta() {
           onChange={(evento) => setCorreo(evento.target.value)}
           required
           placeholder="mama@correo.com"
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-indigo-600 focus:outline-none"
+          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
         />
       </label>
 
       <label className="flex flex-col gap-1 text-sm text-zinc-600">
-        Contraseña
+        ContraseÃ±a
         <input
           type="password"
           value={contrasena}
           onChange={(evento) => setContrasena(evento.target.value)}
           required
           minLength={6}
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-indigo-600 focus:outline-none"
+          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
         />
       </label>
 
@@ -79,10 +79,11 @@ export default function FormularioCuenta() {
       <button
         type="submit"
         disabled={guardando}
-        className="btn-feedback rounded-full bg-emerald-500 py-3 font-medium text-white hover:bg-emerald-600 disabled:opacity-50"
+        className="btn-feedback gradiente-marca rounded-full py-3 font-medium text-white disabled:opacity-50"
       >
         {guardando ? "Creando..." : "Crear cuenta"}
       </button>
     </form>
   );
 }
+

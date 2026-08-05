@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import {
@@ -91,7 +91,7 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
           value={nombre}
           onChange={(evento) => setNombre(evento.target.value)}
           required
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-indigo-600 focus:outline-none"
+          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
         />
       </label>
 
@@ -104,7 +104,7 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
           required
           disabled={servicio !== null}
           placeholder="impresion-a3-color"
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-indigo-600 focus:outline-none disabled:bg-zinc-100 disabled:text-zinc-500"
+          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none disabled:bg-zinc-100 disabled:text-zinc-500"
         />
       </label>
 
@@ -117,7 +117,7 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
           step="0.01"
           value={precioPorDefecto}
           onChange={(evento) => setPrecioPorDefecto(evento.target.value)}
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-indigo-600 focus:outline-none"
+          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
         />
       </label>
 
@@ -128,7 +128,7 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
           value={presets}
           onChange={(evento) => setPresets(evento.target.value)}
           placeholder="300, 700, 1000"
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-indigo-600 focus:outline-none"
+          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
         />
       </label>
 
@@ -138,7 +138,7 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
           type="text"
           value={unidad}
           onChange={(evento) => setUnidad(evento.target.value)}
-          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-indigo-600 focus:outline-none"
+          className="rounded-xl border-2 border-zinc-200 px-3 py-2 text-zinc-900 focus:border-marca-500 focus:outline-none"
         />
       </label>
 
@@ -147,7 +147,7 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
           type="checkbox"
           checked={activo}
           onChange={(evento) => setActivo(evento.target.checked)}
-          className="h-4 w-4 accent-indigo-600"
+          className="h-4 w-4 accent-marca-500"
         />
         Activo (visible en la pantalla de cobro)
       </label>
@@ -157,10 +157,11 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
       <button
         type="submit"
         disabled={guardando}
-        className="btn-feedback rounded-full bg-indigo-600 py-3 font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+        className="btn-feedback gradiente-marca rounded-full py-3 font-medium text-white disabled:opacity-50"
       >
         {guardando ? "Guardando..." : "Guardar"}
       </button>
     </form>
   );
 }
+

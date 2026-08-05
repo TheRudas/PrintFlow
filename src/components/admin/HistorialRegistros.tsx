@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { obtenerPaginaHistorial } from "@/lib/admin/acciones";
@@ -45,14 +45,14 @@ export default function HistorialRegistros({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium text-zinc-500">Historial</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">Historial</h2>
         <span className="text-xs text-zinc-400">
           {historial.totalRegistros} en total
         </span>
       </div>
 
       {historial.registros.length === 0 ? (
-        <p className="text-sm text-zinc-500">Aún no hay registros.</p>
+        <p className="text-sm text-zinc-500">AÃºn no hay registros.</p>
       ) : (
         <div className="flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white">
           {historial.registros.map((registro) => (
@@ -66,7 +66,7 @@ export default function HistorialRegistros({
                 </p>
                 <p className="text-xs text-zinc-500">
                   {new Date(registro.creado_en).toLocaleString("es-AR")}
-                  {registro.nota ? ` · ${registro.nota}` : ""}
+                  {registro.nota ? ` Â· ${registro.nota}` : ""}
                 </p>
               </div>
               <div className="text-right">
@@ -74,7 +74,7 @@ export default function HistorialRegistros({
                   {formatearMoneda(registro.total)}
                 </p>
                 <p className="text-xs text-zinc-500">
-                  {registro.cantidad} ×{" "}
+                  {registro.cantidad} Ã—{" "}
                   {formatearMoneda(registro.precio_unitario)}
                 </p>
               </div>
@@ -89,7 +89,7 @@ export default function HistorialRegistros({
             type="button"
             onClick={() => irAPagina(paginaActual - 1)}
             disabled={paginaActual === 0 || cargando}
-            className="btn-feedback rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-40"
+            className="btn-feedback rounded-full border border-marca-200 bg-white px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40"
           >
             Anterior
           </button>
@@ -100,7 +100,7 @@ export default function HistorialRegistros({
             type="button"
             onClick={() => irAPagina(paginaActual + 1)}
             disabled={paginaActual + 1 >= totalPaginas || cargando}
-            className="btn-feedback rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-40"
+            className="btn-feedback rounded-full border border-marca-200 bg-white px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40"
           >
             Siguiente
           </button>
@@ -112,3 +112,4 @@ export default function HistorialRegistros({
     </div>
   );
 }
+

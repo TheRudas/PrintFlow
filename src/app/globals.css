@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
-  --foreground: #18181b;
+  --background: #faf8ff;
+  --foreground: #2a2333;
 }
 
 @theme inline {
@@ -10,6 +10,22 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-marca-50: #f6f1ff;
+  --color-marca-100: #ede4ff;
+  --color-marca-200: #dccbfe;
+  --color-marca-300: #c2a3fc;
+  --color-marca-400: #a26ff8;
+  --color-marca-500: #8b4ef2;
+  --color-marca-600: #7c3aed;
+  --color-marca-700: #6a2bd4;
+  --color-marca-800: #5826ad;
+  --color-marca-900: #4a218c;
+
+  --color-acento-100: #ffe4f1;
+  --color-acento-400: #f472b6;
+  --color-acento-500: #ec4899;
+  --color-acento-600: #db2777;
 }
 
 @utility btn-feedback {
@@ -22,11 +38,21 @@
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
+    box-shadow: 0 4px 14px -4px var(--color-marca-400 / 0.5);
   }
 
   &:active:not(:disabled) {
     transform: scale(0.96);
+    box-shadow: none;
   }
+}
+
+@utility gradiente-marca {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-marca-500),
+    var(--color-acento-500)
+  );
 }
 
 @keyframes toast-entrar {

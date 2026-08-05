@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { cambiarContrasena } from "@/lib/auth/acciones";
@@ -16,7 +16,7 @@ export default function GestionCuentas({ perfiles }: Props) {
     usuarioId: string
   ): Promise<void> {
     const nuevaContrasena = prompt(
-      "Nueva contraseña (mínimo 6 caracteres):"
+      "Nueva contraseÃ±a (mÃ­nimo 6 caracteres):"
     );
     if (!nuevaContrasena || nuevaContrasena.length < 6) {
       return;
@@ -24,14 +24,14 @@ export default function GestionCuentas({ perfiles }: Props) {
 
     const resultado = await cambiarContrasena(usuarioId, nuevaContrasena);
     if (!resultado.exito) {
-      alert(resultado.error ?? "No se pudo cambiar la contraseña");
+      alert(resultado.error ?? "No se pudo cambiar la contraseÃ±a");
     }
   }
 
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium text-zinc-500">Cuentas</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">Cuentas</h2>
         <button
           type="button"
           onClick={() => setMostrarFormulario((mostrar) => !mostrar)}
@@ -63,9 +63,9 @@ export default function GestionCuentas({ perfiles }: Props) {
               <button
                 type="button"
                 onClick={() => manejarCambiarContrasena(perfil.id)}
-                className="btn-feedback shrink-0 rounded-full border border-zinc-200 px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+                className="btn-feedback shrink-0 rounded-full border border-marca-200 px-3 py-1.5 text-sm font-medium text-marca-700 hover:bg-marca-50"
               >
-                Cambiar contraseña
+                Cambiar contraseÃ±a
               </button>
             )}
           </div>
@@ -74,3 +74,4 @@ export default function GestionCuentas({ perfiles }: Props) {
     </div>
   );
 }
+

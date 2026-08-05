@@ -13,7 +13,7 @@ export default async function PaginaIngresar(props: PageProps<"/ingresar">) {
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-6 px-6">
-      <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
+      <h1 className="gradiente-marca bg-clip-text text-3xl font-bold tracking-tight text-transparent">
         PrintFlow
       </h1>
       <p className="text-center text-zinc-600">

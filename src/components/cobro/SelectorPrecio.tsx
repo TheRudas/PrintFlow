@@ -1,4 +1,4 @@
-import { formatearMoneda } from "@/lib/formatear";
+﻿import { formatearMoneda } from "@/lib/formatear";
 import type { Servicio } from "@/lib/types";
 
 interface Props {
@@ -37,8 +37,8 @@ export default function SelectorPrecio({
               onClick={() => onSeleccionarPrecio(preset)}
               className={`btn-feedback rounded-full border-2 px-5 py-3 text-base font-semibold ${
                 esSeleccionado(preset)
-                  ? "border-indigo-600 bg-indigo-600 text-white"
-                  : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300"
+                  ? "border-marca-500 bg-marca-500 text-white"
+                  : "border-zinc-200 bg-white text-zinc-800 hover:border-marca-300"
               }`}
             >
               {formatearMoneda(preset)}
@@ -55,8 +55,8 @@ export default function SelectorPrecio({
           }
           className={`btn-feedback rounded-full border-2 px-5 py-3 text-base font-semibold ${
             esSeleccionado(servicio.precio_por_defecto as number)
-              ? "border-indigo-600 bg-indigo-600 text-white"
-              : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300"
+              ? "border-marca-500 bg-marca-500 text-white"
+              : "border-zinc-200 bg-white text-zinc-800 hover:border-marca-300"
           }`}
         >
           {formatearMoneda(servicio.precio_por_defecto as number)}
@@ -71,8 +71,9 @@ export default function SelectorPrecio({
         placeholder="Monto libre..."
         value={precioSeleccionado === null ? "" : precioSeleccionado}
         onChange={(evento) => manejarMontoLibre(evento.target.value)}
-        className="rounded-2xl border-2 border-zinc-200 bg-white px-4 py-3 text-lg text-zinc-900 placeholder:text-zinc-400 focus:border-indigo-600 focus:outline-none"
+        className="rounded-2xl border-2 border-zinc-200 bg-white px-4 py-3 text-lg text-zinc-900 placeholder:text-zinc-400 focus:border-marca-500 focus:outline-none"
       />
     </div>
   );
 }
+

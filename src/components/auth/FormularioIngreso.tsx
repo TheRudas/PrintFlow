@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -24,7 +24,7 @@ export default function FormularioIngreso() {
       router.push(slug ? `/?servicio=${slug}` : "/");
       router.refresh();
     } else {
-      setError(resultado.error ?? "No se pudo iniciar sesión");
+      setError(resultado.error ?? "No se pudo iniciar sesiÃ³n");
       setIngresando(false);
     }
   }
@@ -42,19 +42,19 @@ export default function FormularioIngreso() {
           onChange={(evento) => setCorreo(evento.target.value)}
           autoComplete="email"
           required
-          className="rounded-2xl border-2 border-zinc-200 bg-white px-4 py-3 text-zinc-900 focus:border-indigo-600 focus:outline-none"
+          className="rounded-2xl border-2 border-zinc-200 bg-white px-4 py-3 text-zinc-900 focus:border-marca-500 focus:outline-none"
         />
       </label>
 
       <label className="flex flex-col gap-1 text-sm text-zinc-600">
-        Contraseña
+        ContraseÃ±a
         <input
           type="password"
           value={contrasena}
           onChange={(evento) => setContrasena(evento.target.value)}
           autoComplete="current-password"
           required
-          className="rounded-2xl border-2 border-zinc-200 bg-white px-4 py-3 text-zinc-900 focus:border-indigo-600 focus:outline-none"
+          className="rounded-2xl border-2 border-zinc-200 bg-white px-4 py-3 text-zinc-900 focus:border-marca-500 focus:outline-none"
         />
       </label>
 
@@ -63,10 +63,11 @@ export default function FormularioIngreso() {
       <button
         type="submit"
         disabled={ingresando}
-        className="btn-feedback mt-1 rounded-full bg-indigo-600 py-3 font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+        className="btn-feedback mt-1 rounded-full gradiente-marca py-3 font-medium text-white disabled:opacity-50"
       >
         {ingresando ? "Ingresando..." : "Ingresar"}
       </button>
     </form>
   );
 }
+

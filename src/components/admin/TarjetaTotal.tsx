@@ -12,9 +12,9 @@ export default function TarjetaTotal({
   cantidadRegistros,
 }: Props) {
   return (
-    <div className="flex flex-col gap-1 rounded-2xl border border-zinc-200 bg-white p-4">
-      <span className="text-sm font-medium text-zinc-500">{etiqueta}</span>
-      <span className="text-2xl font-bold text-zinc-900">
+    <div className="flex flex-col gap-1 rounded-2xl border border-marca-100 bg-white p-4 shadow-sm">
+      <span className="text-sm font-semibold text-marca-500">{etiqueta}</span>
+      <span className="gradiente-marca bg-clip-text text-2xl font-bold text-transparent">
         {formatearMoneda(montoTotal)}
       </span>
       <span className="text-xs text-zinc-400">

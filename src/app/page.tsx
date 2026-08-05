@@ -20,21 +20,21 @@ export default async function Inicio(props: PageProps<"/">) {
   return (
     <main className="flex flex-1 flex-col items-center gap-6 px-4 py-6">
       <header className="flex w-full max-w-md items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
+        <h1 className="gradiente-marca bg-clip-text text-2xl font-bold tracking-tight text-transparent">
           PrintFlow
         </h1>
         <div className="flex gap-2">
           {sesionAdmin && (
             <Link
               href="/admin"
-              className="btn-feedback rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-50"
+              className="btn-feedback rounded-full bg-marca-100 px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-200"
             >
               Panel
             </Link>
           )}
           <Link
             href="/ayuda"
-            className="btn-feedback rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-50"
+            className="btn-feedback rounded-full border border-marca-200 bg-white px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50"
           >
             Ayuda
           </Link>
