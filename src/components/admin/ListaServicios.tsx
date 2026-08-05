@@ -5,6 +5,7 @@ import { actualizarServicioComoAdmin } from "@/lib/admin/acciones";
 import { formatearMoneda } from "@/lib/formatear";
 import type { Servicio } from "@/lib/types";
 import FormularioServicio from "./FormularioServicio";
+import BotonGrabarSticker from "./BotonGrabarSticker";
 
 interface Props {
   servicios: Servicio[];
@@ -90,6 +91,7 @@ export default function ListaServicios({ servicios, onCambio }: Props) {
               </p>
             </div>
             <div className="flex shrink-0 gap-2">
+              <BotonGrabarSticker slug={servicio.slug} />
               <button
                 type="button"
                 onClick={() => {

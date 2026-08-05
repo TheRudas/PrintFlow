@@ -14,6 +14,7 @@ import TarjetaTotal from "@/components/admin/TarjetaTotal";
 import DesgloseServicios from "@/components/admin/DesgloseServicios";
 import HistorialRegistros from "@/components/admin/HistorialRegistros";
 import ListaServicios from "@/components/admin/ListaServicios";
+import InstructivoStickers from "@/components/admin/InstructivoStickers";
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +79,10 @@ export default async function PaginaAdmin() {
           servicios={servicios}
           onCambio={async () => {}}
         />
+      </section>
+
+      <section className="w-full max-w-2xl">
+        <InstructivoStickers servicios={servicios} />
       </section>
     </main>
   );
