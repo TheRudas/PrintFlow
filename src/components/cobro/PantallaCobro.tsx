@@ -23,7 +23,6 @@ export default function PantallaCobro({
   const [servicio, setServicio] = useState<Servicio | null>(null);
   const [precioUnitario, setPrecioUnitario] = useState<number | null>(null);
   const [cantidad, setCantidad] = useState(1);
-  const [nota, setNota] = useState("");
   const [guardando, setGuardando] = useState(false);
   const [toast, setToast] = useState<EstadoToast>(null);
   const servicioInicialAplicado = useRef(false);
@@ -44,7 +43,6 @@ export default function PantallaCobro({
     setServicio(nuevoServicio);
     setPrecioUnitario(nuevoServicio.precio_por_defecto);
     setCantidad(1);
-    setNota("");
     setToast(null);
   }
 
@@ -76,12 +74,10 @@ export default function PantallaCobro({
         cantidad,
         precioUnitario,
         total: precioUnitario * cantidad,
-        nota: nota.trim() === "" ? null : nota.trim(),
       });
       setToast({ tipo: "exito", mensaje: "Venta registrada" });
       setPrecioUnitario(servicio.precio_por_defecto);
       setCantidad(1);
-      setNota("");
     } catch (error) {
       setToast({
         tipo: "error",
@@ -122,19 +118,6 @@ export default function PantallaCobro({
             <ContadorCantidad
               cantidad={cantidad}
               onCambiarCantidad={cambiarCantidad}
-            />
-          </section>
-
-          <section className="flex flex-col gap-2">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">
-              Nota (opcional)
-            </h2>
-            <input
-              type="text"
-              value={nota}
-              onChange={(evento) => setNota(evento.target.value)}
-              placeholder="Ej: anillado, papel especial..."
-              className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-texto placeholder:text-texto-tenue focus:border-marca-500 focus:outline-none"
             />
           </section>
 

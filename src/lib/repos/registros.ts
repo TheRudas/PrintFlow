@@ -13,7 +13,6 @@ export async function crearRegistro(
       cantidad: datos.cantidad,
       precio_unitario: datos.precioUnitario,
       total: datos.total,
-      nota: datos.nota ?? null,
     })
     .select()
     .single();

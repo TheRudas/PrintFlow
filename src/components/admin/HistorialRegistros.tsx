@@ -66,7 +66,6 @@ export default function HistorialRegistros({
                 </p>
                 <p className="text-xs text-texto-suave">
                   {new Date(registro.creado_en).toLocaleString("es-AR")}
-                  {registro.nota ? ` · ${registro.nota}` : ""}
                 </p>
               </div>
               <div className="text-right">

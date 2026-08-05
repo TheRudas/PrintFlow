@@ -7,6 +7,17 @@ interface Props {
   onGuardar: () => void;
 }
 
+function claseDeTamanoPara(montoFormateado: string): string {
+  const largo = montoFormateado.length;
+  if (largo > 14) {
+    return "text-xl";
+  }
+  if (largo > 10) {
+    return "text-2xl";
+  }
+  return "text-4xl";
+}
+
 export default function ResumenTotal({
   precioUnitario,
   cantidad,
@@ -15,25 +26,31 @@ export default function ResumenTotal({
 }: Props) {
   const precioValido = precioUnitario !== null && precioUnitario > 0;
   const total = precioValido ? precioUnitario * cantidad : 0;
+  const montoFormateado = formatearMoneda(total);
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl bg-marca-900 p-5 text-white">
-      <div className="flex items-baseline justify-between">
-        <span className="text-sm text-marca-200">Total</span>
-        <span className="text-4xl font-bold">
+    <div className="flex flex-col gap-4 rounded-2xl bg-marca-900 p-5 text-white">
+      <div className="flex min-w-0 items-baseline justify-between gap-3">
+        <span className="whitespace-nowrap text-lg font-semibold text-marca-300">
+          {precioValido ? (
+            <>
+              {formatearMoneda(precioUnitario as number)} × {cantidad}
+            </>
+          ) : (
+            "Sin precio"
+          )}
+        </span>
+        <span
+          className={`whitespace-nowrap font-bold tabular-nums ${claseDeTamanoPara(montoFormateado)}`}
+        >
           {formatearMoneda(total)}
         </span>
       </div>
-      {precioUnitario !== null && precioValido && (
-        <p className="text-xs text-marca-300">
-          {formatearMoneda(precioUnitario)} × {cantidad}
-        </p>
-      )}
       <button
         type="button"
         onClick={onGuardar}
         disabled={!precioValido || guardando}
-        className="btn-feedback gradiente-marca mt-1 rounded-full py-4 text-lg font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
+        className="btn-feedback gradiente-marca rounded-full py-4 text-lg font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
       >
         {guardando ? "Guardando..." : "Guardar venta"}
       </button>

@@ -7,7 +7,6 @@ export type DatosNuevoRegistro = {
   cantidad: number;
   precioUnitario: number;
   total: number;
-  nota?: string | null;
 };
 
 export type Totales = {

@@ -55,7 +55,6 @@ export type Database = {
           cantidad: number
           creado_en: string
           id: string
-          nota: string | null
           precio_unitario: number
           servicio_id: string
           total: number
@@ -64,7 +63,6 @@ export type Database = {
           cantidad?: number
           creado_en?: string
           id?: string
-          nota?: string | null
           precio_unitario: number
           servicio_id: string
           total: number
@@ -73,7 +71,6 @@ export type Database = {
           cantidad?: number
           creado_en?: string
           id?: string
-          nota?: string | null
           precio_unitario?: number
           servicio_id?: string
           total?: number
