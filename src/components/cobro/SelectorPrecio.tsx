@@ -15,7 +15,6 @@ export default function SelectorPrecio({
   onEscribirPrecio,
 }: Props) {
   const tienePresets = servicio.presets.length > 0;
-  const tienePrecioPorDefecto = servicio.precio_por_defecto !== null;
 
   function esSeleccionado(precio: number): boolean {
     return precioSeleccionado !== null && precioSeleccionado === precio;
@@ -54,32 +53,21 @@ export default function SelectorPrecio({
         </div>
       )}
 
-      {tienePrecioPorDefecto && (
-        <button
-          type="button"
-          onClick={() =>
-            onSeleccionarPrecio(servicio.precio_por_defecto as number)
-          }
-          className={`btn-feedback rounded-full border-2 px-4 py-2 text-sm font-semibold ${
-            esSeleccionado(servicio.precio_por_defecto as number)
-              ? "border-marca-500 bg-marca-500 text-white"
-              : "border-borde bg-superficie text-texto hover:border-marca-300"
-          }`}
-        >
-          {formatearMoneda(servicio.precio_por_defecto as number)}
-        </button>
-      )}
-
-      <input
-        type="number"
-        inputMode="numeric"
-        min="0"
-        step="1"
-        placeholder="Monto libre..."
-        value={precioSeleccionado === null ? "" : precioSeleccionado}
-        onChange={(evento) => manejarMontoLibre(evento.target.value)}
-        className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-lg text-texto placeholder:text-texto-tenue focus:border-marca-500 focus:outline-none"
-      />
+      <label className="flex flex-col gap-1.5">
+        <span className="text-sm font-semibold uppercase tracking-wide text-marca-500">
+          Escribir valor personalizado
+        </span>
+        <input
+          type="number"
+          inputMode="numeric"
+          min="0"
+          step="50"
+          placeholder="Monto libre..."
+          value={precioSeleccionado === null ? "" : precioSeleccionado}
+          onChange={(evento) => manejarMontoLibre(evento.target.value)}
+          className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-lg text-texto placeholder:text-texto-tenue focus:border-marca-500 focus:outline-none"
+        />
+      </label>
     </div>
   );
 }
