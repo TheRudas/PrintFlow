@@ -28,7 +28,19 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ## Estructura
 
 ```
+docs/           # especificación y planes de implementación (spec → plan → código)
+  stakeholders.md
+  spec/         # spec de cada feature
+  plan/         # plan de implementación de cada feature
 src/
   app/          # rutas y páginas
   lib/          # tipos, cliente de Supabase y helpers
 ```
+
+## Proceso de desarrollo
+
+Cada feature sigue el flujo `spec → plan → código`:
+
+1. Se documenta el spec en `docs/spec/` (user stories, acceptance scenarios, requisitos funcionales).
+2. Se escribe el plan de implementación en `docs/plan/`.
+3. Se implementa el código siguiendo el plan y los principios de clean code del proyecto.
