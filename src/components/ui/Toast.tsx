@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export type TipoToast = "exito" | "error";
 
@@ -11,37 +11,65 @@ interface Props {
   duracionMs?: number;
 }
 
+const DURACION_SALIDA_MS = 250;
+
 export default function Toast({
   mensaje,
   tipo,
   onCerrar,
   duracionMs = 3000,
 }: Props) {
+  const [saliendo, setSaliendo] = useState(false);
+
   useEffect(() => {
-    const temporizador = setTimeout(onCerrar, duracionMs);
+    const temporizador = setTimeout(() => setSaliendo(true), duracionMs);
     return () => clearTimeout(temporizador);
-  }, [onCerrar, duracionMs]);
+  }, [duracionMs]);
+
+  useEffect(() => {
+    if (!saliendo) {
+      return;
+    }
+    const temporizador = setTimeout(onCerrar, DURACION_SALIDA_MS);
+    return () => clearTimeout(temporizador);
+  }, [saliendo, onCerrar]);
 
   const esExito = tipo === "exito";
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-6 z-50 flex justify-center px-4">
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center px-6 ${
+        saliendo ? "pointer-events-none" : ""
+      }`}
+    >
+      <div
+        aria-hidden
+        className={`absolute inset-0 bg-zinc-950/50 backdrop-blur-[2px] transition-opacity duration-300 ease-out ${
+          saliendo ? "opacity-0" : "opacity-100"
+        }`}
+      />
       <div
         role="status"
-        className={`pointer-events-auto flex animate-[toast-in_0.2s_ease] items-center gap-3 rounded-full border px-5 py-3 shadow-lg ${
-          esExito
-            ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-            : "border-red-200 bg-red-50 text-red-800"
-        }`}
+        className={`relative flex w-full max-w-xs flex-col items-center gap-4 rounded-3xl border bg-white p-8 text-center shadow-2xl transition-all duration-300 ease-out ${
+          saliendo
+            ? "scale-90 opacity-0"
+            : "animate-[toast-entrar_0.25s_cubic-bezier(0.16,1,0.3,1)]"
+        } ${esExito ? "border-emerald-200" : "border-red-200"}`}
       >
         <span
-          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white ${
+          className={`flex h-14 w-14 items-center justify-center rounded-full text-2xl font-bold text-white ${
             esExito ? "bg-emerald-500" : "bg-red-500"
           }`}
         >
           {esExito ? "✓" : "!"}
         </span>
-        <span className="text-sm font-medium">{mensaje}</span>
+        <span
+          className={`text-base font-medium ${
+            esExito ? "text-emerald-900" : "text-red-900"
+          }`}
+        >
+          {mensaje}
+        </span>
       </div>
     </div>
   );
