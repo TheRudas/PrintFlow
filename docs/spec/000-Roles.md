@@ -120,7 +120,7 @@ pasa a modo Admin: aparece el enlace "Panel", y las acciones protegidas quedan d
 1. **Scenario: Desbloqueo con código correcto**
     - **Given** la pantalla de Ayuda abierta.
     - **When** el operador escribe el código correcto.
-    - **Then** el dispositivo pasa a modo Admin, se recuerda el rol (7 días) y aparece el acceso al panel.
+    - **Then** el dispositivo pasa a modo Admin, se recuerda el rol de forma permanente y aparece el acceso al panel.
 
 2. **Scenario: Código incorrecto**
     - **Given** la pantalla de Ayuda abierta.
@@ -224,8 +224,8 @@ si el sistema lo impide o lo hace con advertencia clara.
   ver historial, gestionar servicios, exportar datos (spec 005) y cambiar el código (spec 004).
 - **FR-005**: El rol **Administrador** **NO DEBE** poder borrar físicamente registros de venta ni servicios con
   historia; los servicios solo se desactivan.
-- **FR-006**: La elevación a Admin **DEBE** persistir por dispositivo (cookie firmada, 7 días) sin volver a pedir el
-  código.
+- **FR-006**: La elevación a Admin **DEBE** persistir por dispositivo (cookie firmada, sin expiración automática) sin
+  volver a pedir el código, hasta que se cierre la sesión manualmente.
 - **FR-007**: Todo acceso a acciones protegidas **DEBE** validarse en el servidor (`esAdmin()`), no solo ocultarse en
   la UI.
 - **FR-008**: El código admin **NUNCA** debe aparecer en el bundle del navegador (validación exclusiva en servidor).
@@ -235,7 +235,7 @@ si el sistema lo impide o lo hace con advertencia clara.
 1. **Rol (Empleado / Administrador)**:
     - Estado de sesión por dispositivo, no una entidad de base de datos.
     - **Default**: **Empleado**. Se eleva a **Administrador** con el código secreto validado en servidor.
-    - Se persiste como cookie firmada (`printflow_admin`, expira a los 7 días).
+    - Se persiste como cookie firmada (`printflow_admin`, sin expiración automática; se cierra manualmente).
 
 2. **Matriz de permisos**:
     - Define qué acciones habilitan o bloquean cada rol. Centralizar en un módulo (`esAdmin()`) para que la UI y el
@@ -250,6 +250,7 @@ si el sistema lo impide o lo hace con advertencia clara.
   vista.
 - **SC-003**: Toda acción protegida (panel, gestión, exportación, cambio de código) falla en el servidor para un rol
   Empleado, incluso si se intenta por URL o request directo.
-- **SC-004**: El rol Admin se mantiene activo en el dispositivo por 7 días sin re-ingresar el código.
+- **SC-004**: El rol Admin se mantiene activo en el dispositivo sin límite de tiempo, hasta cerrar la sesión
+  manualmente.
 - **SC-005**: El historial de ventas es inmutable: no se puede borrar un registro ni un servicio con historia, ni
   siquiera como Administrador.

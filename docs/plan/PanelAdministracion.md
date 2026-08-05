@@ -99,7 +99,8 @@ components que consultan Supabase directamente (sin exponer la lógica al navega
   El valor efectivo es: el de la tabla si existe, si no el de la env var (FR-002, FR-008).
 - La cookie `printflow_admin` guarda `admin:<timestamp>` firmada con HMAC-SHA256 usando un secreto propio
   (`ADMIN_COOKIE_SECRET`), para que no se pueda forjar desde el navegador.
-- `esAdmin()` es una función server: lee la cookie, verifica firma y expiración (7 días) → devuelve boolean.
+- `esAdmin()` es una función server: lee la cookie, verifica la firma → devuelve boolean. La cookie no expira por
+  tiempo; la sesión se cierra manualmente desde el panel.
 - El código NUNCA viaja al navegador; solo se envía desde el input y se compara en el server (SC-003).
 
 - [ ] T001 Migración `tabla_configuracion`:
@@ -109,8 +110,8 @@ components que consultan Supabase directamente (sin exponer la lógica al navega
   - RLS anon con las mismas políticas de acceso (solo lectura necesaria; escritura solo por el dueño — usamos RLS
     permisiva como en las otras tablas por simplicidad doméstica)
 - [ ] T002 Crear `src/lib/admin/cookie.ts`:
-  - `leerSesionAdmin()` → parsea cookie, verifica firma HMAC y expiración → `{ esAdmin: boolean }`
-  - `crearCookieAdmin()` → genera cookie firmada con expiración 7 días
+  - `leerSesionAdmin()` → parsea cookie, verifica firma HMAC → `{ esAdmin: boolean }`
+  - `crearCookieAdmin()` → genera cookie firmada sin expiración por tiempo (maxAge de 10 años; se cierra manualmente)
   - `borrarCookieAdmin()` → elimina la cookie
 - [ ] T003 Crear `src/lib/admin/acciones.ts` (`'use server'`):
   - `ingresarCodigoAdmin(codigo)` → compara contra env/tabla → si coincide, setea cookie; devuelve `{ exito: boolean }`

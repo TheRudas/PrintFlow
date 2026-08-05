@@ -2,8 +2,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 
 export const NOMBRE_COOKIE_ADMIN = "printflow_admin";
-const DIAS_DE_VIGENCIA = 7;
-const MILISEGUNDOS_POR_DIA = 24 * 60 * 60 * 1000;
+const MAX_AGE_SEGUNDOS = 10 * 365 * 24 * 60 * 60;
 
 function obtenerSecreto(): string {
   const secreto = process.env.ADMIN_COOKIE_SECRET;
@@ -34,35 +33,29 @@ export async function leerSesionAdmin(): Promise<boolean> {
   }
 
   const partes = valor.split(".");
-  if (partes.length !== 3) {
+  if (partes.length !== 2) {
     return false;
   }
 
-  const [rol, expiracion, firma] = partes;
+  const [rol, firma] = partes;
 
   if (rol !== "admin") {
     return false;
   }
 
-  const expiracionMs = Number(expiracion);
-  if (!Number.isFinite(expiracionMs) || expiracionMs < Date.now()) {
-    return false;
-  }
-
-  const firmaEsperada = firmar(`${rol}.${expiracion}`);
+  const firmaEsperada = firmar(rol);
   return firmasCoinciden(firma, firmaEsperada);
 }
 
 export async function crearCookieAdmin(): Promise<void> {
   const cookieStore = await cookies();
-  const expiracion = Date.now() + DIAS_DE_VIGENCIA * MILISEGUNDOS_POR_DIA;
-  const valor = `admin.${expiracion}.${firmar(`admin.${expiracion}`)}`;
+  const valor = `admin.${firmar("admin")}`;
 
   cookieStore.set(NOMBRE_COOKIE_ADMIN, valor, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
-    maxAge: DIAS_DE_VIGENCIA * 24 * 60 * 60,
+    maxAge: MAX_AGE_SEGUNDOS,
     path: "/",
   });
 }
