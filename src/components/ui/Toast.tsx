@@ -65,7 +65,9 @@ export default function Toast({
         </span>
         <span
           className={`text-base font-medium ${
-            esExito ? "text-emerald-900" : "text-red-900"
+            esExito
+              ? "text-emerald-900 dark:text-emerald-200"
+              : "text-red-900 dark:text-red-200"
           }`}
         >
           {mensaje}

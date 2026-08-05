@@ -8,7 +8,7 @@ interface Props {
 export default function DesgloseServicios({ items }: Props) {
   return (
     <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
-      <div className="border-b border-marca-100 bg-marca-50 px-4 py-2 text-sm font-semibold text-marca-700">
+      <div className="border-b border-marca-100 bg-marca-50 px-4 py-2 text-sm font-semibold text-marca-700 dark:text-marca-300">
         Por servicio
       </div>
       {items.length === 0 ? (

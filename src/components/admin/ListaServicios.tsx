@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -47,7 +47,7 @@ export default function ListaServicios({ servicios }: Props) {
         </button>
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
       {creando && (
         <FormularioServicio
@@ -97,7 +97,7 @@ export default function ListaServicios({ servicios }: Props) {
                   setServicioEnEdicion(servicio);
                   setCreando(false);
                 }}
-                className="btn-feedback rounded-full border border-marca-200 px-3 py-1.5 text-sm font-medium text-marca-700 hover:bg-marca-50"
+                className="btn-feedback rounded-full border border-marca-200 px-3 py-1.5 text-sm font-medium text-marca-700 hover:bg-marca-50 dark:text-marca-300"
               >
                 Editar
               </button>
@@ -106,8 +106,8 @@ export default function ListaServicios({ servicios }: Props) {
                 onClick={() => alternarActivo(servicio)}
                 className={`btn-feedback rounded-full border px-3 py-1.5 text-sm font-medium ${
                   servicio.activo
-                    ? "border-red-200 text-red-600 hover:bg-red-50"
-                    : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"
+                    ? "border-red-200 text-red-600 hover:bg-red-50 dark:border-red-500/40 dark:text-red-400 dark:hover:bg-red-500/10"
+                    : "border-emerald-200 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-500/40 dark:text-emerald-400 dark:hover:bg-emerald-500/10"
                 }`}
               >
                 {servicio.activo ? "Desactivar" : "Activar"}

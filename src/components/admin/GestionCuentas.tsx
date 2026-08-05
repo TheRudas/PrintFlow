@@ -63,7 +63,7 @@ export default function GestionCuentas({ perfiles }: Props) {
               <button
                 type="button"
                 onClick={() => manejarCambiarContrasena(perfil.id)}
-                className="btn-feedback shrink-0 rounded-full border border-marca-200 px-3 py-1.5 text-sm font-medium text-marca-700 hover:bg-marca-50"
+                className="btn-feedback shrink-0 rounded-full border border-marca-200 px-3 py-1.5 text-sm font-medium text-marca-700 hover:bg-marca-50 dark:text-marca-300"
               >
                 Cambiar contraseña
               </button>

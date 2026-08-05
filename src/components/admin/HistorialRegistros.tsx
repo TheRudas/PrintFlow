@@ -89,7 +89,7 @@ export default function HistorialRegistros({
             type="button"
             onClick={() => irAPagina(paginaActual - 1)}
             disabled={paginaActual === 0 || cargando}
-            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40"
+            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40 dark:text-marca-300"
           >
             Anterior
           </button>
@@ -100,7 +100,7 @@ export default function HistorialRegistros({
             type="button"
             onClick={() => irAPagina(paginaActual + 1)}
             disabled={paginaActual + 1 >= totalPaginas || cargando}
-            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40"
+            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40 dark:text-marca-300"
           >
             Siguiente
           </button>

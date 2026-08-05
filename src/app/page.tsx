@@ -29,14 +29,14 @@ export default async function Inicio(props: PageProps<"/">) {
           {sesionAdmin && (
             <Link
               href="/admin"
-              className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50"
+              className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 dark:text-marca-300"
             >
               Panel
             </Link>
           )}
           <Link
             href="/ayuda"
-            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50"
+            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 dark:text-marca-300"
           >
             Ayuda
           </Link>

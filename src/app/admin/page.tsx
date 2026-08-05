@@ -48,7 +48,7 @@ export default async function PaginaAdmin() {
           <CerrarSesion />
           <Link
             href="/"
-            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50"
+            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 dark:text-marca-300"
           >
             Volver
           </Link>
