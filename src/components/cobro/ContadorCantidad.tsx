@@ -13,7 +13,7 @@ export default function ContadorCantidad({
         type="button"
         onClick={() => onCambiarCantidad(cantidad - 1)}
         disabled={cantidad <= 1}
-        className="flex h-14 w-14 items-center justify-center rounded-xl bg-zinc-100 text-2xl font-bold text-zinc-800 transition-colors hover:bg-zinc-200 disabled:opacity-40"
+        className="btn-feedback flex h-14 w-14 items-center justify-center rounded-xl bg-zinc-100 text-2xl font-bold text-zinc-800 hover:bg-zinc-200 disabled:opacity-40"
       >
         −
       </button>
@@ -24,7 +24,7 @@ export default function ContadorCantidad({
       <button
         type="button"
         onClick={() => onCambiarCantidad(cantidad + 1)}
-        className="flex h-14 w-14 items-center justify-center rounded-xl bg-zinc-100 text-2xl font-bold text-zinc-800 transition-colors hover:bg-zinc-200"
+        className="btn-feedback flex h-14 w-14 items-center justify-center rounded-xl bg-zinc-100 text-2xl font-bold text-zinc-800 hover:bg-zinc-200"
       >
         +
       </button>

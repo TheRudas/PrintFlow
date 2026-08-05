@@ -79,7 +79,7 @@ export default function FormularioCuenta() {
       <button
         type="submit"
         disabled={guardando}
-        className="rounded-full bg-emerald-500 py-3 font-medium text-white transition-colors hover:bg-emerald-600 disabled:opacity-50"
+        className="btn-feedback rounded-full bg-emerald-500 py-3 font-medium text-white hover:bg-emerald-600 disabled:opacity-50"
       >
         {guardando ? "Creando..." : "Crear cuenta"}
       </button>

@@ -33,7 +33,7 @@ export default async function PaginaNfc({
       </p>
       <Link
         href="/"
-        className="rounded-full bg-indigo-600 px-6 py-3 font-medium text-white"
+        className="btn-feedback rounded-full bg-indigo-600 px-6 py-3 font-medium text-white hover:bg-indigo-700"
       >
         Elegir otro servicio
       </Link>

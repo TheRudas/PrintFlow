@@ -63,7 +63,7 @@ export default function FormularioIngreso() {
       <button
         type="submit"
         disabled={ingresando}
-        className="mt-1 rounded-full bg-indigo-600 py-3 font-medium text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
+        className="btn-feedback mt-1 rounded-full bg-indigo-600 py-3 font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
       >
         {ingresando ? "Ingresando..." : "Ingresar"}
       </button>

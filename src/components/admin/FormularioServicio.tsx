@@ -157,7 +157,7 @@ export default function FormularioServicio({ servicio, onGuardado }: Props) {
       <button
         type="submit"
         disabled={guardando}
-        className="rounded-full bg-indigo-600 py-3 font-medium text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
+        className="btn-feedback rounded-full bg-indigo-600 py-3 font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
       >
         {guardando ? "Guardando..." : "Guardar"}
       </button>

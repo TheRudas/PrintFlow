@@ -35,7 +35,7 @@ export default function SelectorPrecio({
               key={preset}
               type="button"
               onClick={() => onSeleccionarPrecio(preset)}
-              className={`rounded-full border-2 px-5 py-3 text-base font-semibold transition-colors ${
+              className={`btn-feedback rounded-full border-2 px-5 py-3 text-base font-semibold ${
                 esSeleccionado(preset)
                   ? "border-indigo-600 bg-indigo-600 text-white"
                   : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300"
@@ -53,7 +53,7 @@ export default function SelectorPrecio({
           onClick={() =>
             onSeleccionarPrecio(servicio.precio_por_defecto as number)
           }
-          className={`rounded-full border-2 px-5 py-3 text-base font-semibold transition-colors ${
+          className={`btn-feedback rounded-full border-2 px-5 py-3 text-base font-semibold ${
             esSeleccionado(servicio.precio_por_defecto as number)
               ? "border-indigo-600 bg-indigo-600 text-white"
               : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-300"

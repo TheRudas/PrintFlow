@@ -41,7 +41,7 @@ export default function ListaServicios({ servicios }: Props) {
             setCreando(true);
             setServicioEnEdicion(null);
           }}
-          className="rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-600"
+          className="btn-feedback rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600"
         >
           + Nuevo
         </button>
@@ -97,14 +97,14 @@ export default function ListaServicios({ servicios }: Props) {
                   setServicioEnEdicion(servicio);
                   setCreando(false);
                 }}
-                className="rounded-full border border-zinc-200 px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50"
+                className="btn-feedback rounded-full border border-zinc-200 px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
               >
                 Editar
               </button>
               <button
                 type="button"
                 onClick={() => alternarActivo(servicio)}
-                className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
+                className={`btn-feedback rounded-full border px-3 py-1.5 text-sm font-medium ${
                   servicio.activo
                     ? "border-red-200 text-red-600 hover:bg-red-50"
                     : "border-emerald-200 text-emerald-600 hover:bg-emerald-50"
