@@ -69,12 +69,18 @@ export default function HistorialCompleto({
     modalidadElegida: ModalidadHistorial
   ): Promise<void> {
     setCargando(true);
+    setHistorial({
+      registros: [],
+      totalRegistros: 0,
+      pagina: 0,
+      tamanoPagina: 200,
+    });
+    setSeleccionados(new Set());
     const resultado = await obtenerHistorialCompletoComoAdmin(0, {
       tipo: tipoElegido,
       modalidad: modalidadElegida,
     });
     setHistorial(resultado);
-    setSeleccionados(new Set());
     setCargando(false);
   }
 
@@ -186,7 +192,28 @@ export default function HistorialCompleto({
         </span>
       </div>
 
-      {historial.registros.length === 0 ? (
+      {cargando ? (
+        <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
+          <div className="border-b border-borde bg-superficie-alta px-4 py-2">
+            <div className="h-4 w-32 animate-pulse rounded bg-superficie-alta" />
+          </div>
+          {[0, 1, 2, 3, 4].map((indice) => (
+            <div
+              key={indice}
+              className="flex items-center justify-between border-b border-borde px-4 py-3 last:border-b-0"
+            >
+              <div className="flex flex-col gap-2">
+                <div className="h-3 w-40 animate-pulse rounded bg-superficie-alta" />
+                <div className="h-3 w-24 animate-pulse rounded bg-superficie-alta" />
+              </div>
+              <div className="flex flex-col items-end gap-2">
+                <div className="h-3 w-16 animate-pulse rounded bg-superficie-alta" />
+                <div className="h-3 w-10 animate-pulse rounded bg-superficie-alta" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : historial.registros.length === 0 ? (
         <p className="text-sm text-texto-suave">Aún no hay registros.</p>
       ) : (
         <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
@@ -247,10 +274,6 @@ export default function HistorialCompleto({
             })}
           </div>
         </div>
-      )}
-
-      {cargando && (
-        <p className="text-center text-xs text-texto-tenue">Cargando...</p>
       )}
 
       {cantidadSeleccionados > 0 && (
