@@ -68,7 +68,7 @@ export default function SelectorPrecio({
             type="button"
             onClick={() => ajustarValor(-50)}
             disabled={precioSeleccionado === null || precioSeleccionado <= 0}
-            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-marca-300 disabled:opacity-40"
+            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-transparent hover:bg-gradient-to-br hover:from-marca-600 hover:to-marca-800 hover:text-white disabled:opacity-40"
           >
             −
           </button>
@@ -84,7 +84,7 @@ export default function SelectorPrecio({
           <button
             type="button"
             onClick={() => ajustarValor(50)}
-            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-marca-300"
+            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-transparent hover:bg-gradient-to-br hover:from-marca-600 hover:to-marca-800 hover:text-white"
           >
             +
           </button>

@@ -35,7 +35,7 @@ export default function ResumenTotal({
   return (
     <div className="sombra-marca flex flex-col gap-4 rounded-3xl bg-marca-900 p-5 text-white">
       <div className="flex min-w-0 items-center justify-between gap-3">
-        <span className="whitespace-nowrap text-lg font-semibold text-marca-200">
+        <span className="whitespace-nowrap text-lg font-semibold text-marca-300">
           {esCasa ? (
             `Gratis × ${cantidad}`
           ) : precioValido ? (
