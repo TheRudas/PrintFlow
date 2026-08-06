@@ -60,7 +60,7 @@ export default function SelectorPrecio({
       )}
 
       <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-semibold uppercase tracking-wide text-marca-500">
+        <span className="gradiente-marca bg-clip-text text-sm font-semibold uppercase tracking-wide text-transparent">
           Escribir valor personalizado
         </span>
         <div className="flex items-center gap-2">
