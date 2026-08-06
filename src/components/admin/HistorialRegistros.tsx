@@ -2,10 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  eliminarRegistroComoAdmin,
-  obtenerPaginaHistorial,
-} from "@/lib/admin/acciones";
+import { eliminarRegistroComoAdmin } from "@/lib/admin/acciones";
 import { formatearMoneda } from "@/lib/formatear";
 import type { HistorialPaginado, Servicio } from "@/lib/types";
 import DialogoConfirmacion from "@/components/ui/DialogoConfirmacion";
@@ -39,7 +36,6 @@ export default function HistorialRegistros({
   servicios,
 }: Props) {
   const [historial, setHistorial] = useState(historialInicial);
-  const [cargando, setCargando] = useState(false);
   const [registroAEliminar, setRegistroAEliminar] = useState<{
     id: string;
     nombre: string;
@@ -54,23 +50,6 @@ export default function HistorialRegistros({
       setHistorial(historialInicial);
     }
   }, [historialInicial]);
-
-  const totalPaginas = Math.max(
-    1,
-    Math.ceil(historial.totalRegistros / historial.tamanoPagina)
-  );
-  const paginaActual = historial.pagina;
-
-  async function irAPagina(pagina: number): Promise<void> {
-    if (pagina < 0 || pagina >= totalPaginas || cargando) {
-      return;
-    }
-
-    setCargando(true);
-    const resultado = await obtenerPaginaHistorial(pagina);
-    setHistorial(resultado);
-    setCargando(false);
-  }
 
   async function eliminarRegistro(): Promise<void> {
     if (!registroAEliminar) {
@@ -147,33 +126,6 @@ export default function HistorialRegistros({
             </div>
           ))}
         </div>
-      )}
-
-      {totalPaginas > 1 && (
-        <div className="flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => irAPagina(paginaActual - 1)}
-            disabled={paginaActual === 0 || cargando}
-            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40 dark:text-marca-300"
-          >
-            Anterior
-          </button>
-          <span className="text-sm text-texto-suave">
-            {paginaActual + 1} de {totalPaginas}
-          </span>
-          <button
-            type="button"
-            onClick={() => irAPagina(paginaActual + 1)}
-            disabled={paginaActual + 1 >= totalPaginas || cargando}
-            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40 dark:text-marca-300"
-          >
-            Siguiente
-          </button>
-        </div>
-      )}
-      {cargando && (
-        <p className="text-center text-xs text-texto-tenue">Cargando...</p>
       )}
 
       {registroAEliminar && (
