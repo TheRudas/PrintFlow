@@ -70,7 +70,22 @@ export default function HistorialRegistros({
 
     const resultado = await eliminarRegistroComoAdmin(registroAEliminar.id);
     setRegistroAEliminar(null);
+
     if (resultado.exito) {
+      const registrosRestantes = historial.registros.filter(
+        (registro) => registro.id !== registroAEliminar.id
+      );
+
+      if (registrosRestantes.length === 0 && paginaActual > 0) {
+        await irAPagina(paginaActual - 1);
+      } else {
+        setHistorial((actual) => ({
+          ...actual,
+          registros: registrosRestantes,
+          totalRegistros: Math.max(0, actual.totalRegistros - 1),
+        }));
+      }
+
       router.refresh();
     } else {
       window.alert(resultado.error ?? "No se pudo eliminar el registro");
