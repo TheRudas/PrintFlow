@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { crearRegistro } from "@/lib/repos/registros";
 import type { Servicio } from "@/lib/types";
 import SelectorServicio from "./SelectorServicio";
@@ -16,35 +16,48 @@ interface Props {
 
 type EstadoToast = { tipo: TipoToast; mensaje: string } | null;
 
+const SLUG_USO_CASA = "uso-casa";
+
+function servicioInicial(servicios: Servicio[], servicioInicialId: string | null): Servicio | null {
+  if (!servicioInicialId) {
+    return null;
+  }
+  return servicios.find((item) => item.id === servicioInicialId) ?? null;
+}
+
 export default function PantallaCobro({
   servicios,
   servicioInicialId,
 }: Props) {
-  const [servicio, setServicio] = useState<Servicio | null>(null);
-  const [precioUnitario, setPrecioUnitario] = useState<number | null>(null);
+  const [servicio, setServicio] = useState<Servicio | null>(() =>
+    servicioInicial(servicios, servicioInicialId)
+  );
+  const [precioUnitario, setPrecioUnitario] = useState<number | null>(() => {
+    const inicial = servicioInicial(servicios, servicioInicialId);
+    if (!inicial) {
+      return null;
+    }
+    return inicial.slug === SLUG_USO_CASA ? 0 : inicial.precio_por_defecto;
+  });
   const [cantidad, setCantidad] = useState(1);
   const [guardando, setGuardando] = useState(false);
   const [toast, setToast] = useState<EstadoToast>(null);
-  const servicioInicialAplicado = useRef(false);
 
-  useEffect(() => {
-    if (servicioInicialId && !servicioInicialAplicado.current) {
-      const servicioEncontrado = servicios.find(
-        (item) => item.id === servicioInicialId
+  const esUsoDeCasa = useCallback((candidato: Servicio): boolean => {
+    return candidato.slug === SLUG_USO_CASA;
+  }, []);
+
+  const seleccionarServicio = useCallback(
+    (nuevoServicio: Servicio): void => {
+      setServicio(nuevoServicio);
+      setPrecioUnitario(
+        esUsoDeCasa(nuevoServicio) ? 0 : nuevoServicio.precio_por_defecto
       );
-      if (servicioEncontrado) {
-        seleccionarServicio(servicioEncontrado);
-        servicioInicialAplicado.current = true;
-      }
-    }
-  }, [servicioInicialId, servicios]);
-
-  function seleccionarServicio(nuevoServicio: Servicio): void {
-    setServicio(nuevoServicio);
-    setPrecioUnitario(nuevoServicio.precio_por_defecto);
-    setCantidad(1);
-    setToast(null);
-  }
+      setCantidad(1);
+      setToast(null);
+    },
+    [esUsoDeCasa]
+  );
 
   function seleccionarPrecio(precio: number): void {
     setPrecioUnitario(precio);
@@ -61,7 +74,14 @@ export default function PantallaCobro({
   }
 
   async function guardarVenta(): Promise<void> {
-    if (!servicio || precioUnitario === null || precioUnitario <= 0) {
+    if (!servicio) {
+      return;
+    }
+
+    const esCasa = esUsoDeCasa(servicio);
+    const precioEfectivo = esCasa ? 0 : precioUnitario;
+
+    if (!esCasa && (precioUnitario === null || precioUnitario <= 0)) {
       return;
     }
 
@@ -72,11 +92,12 @@ export default function PantallaCobro({
       await crearRegistro({
         servicioId: servicio.id,
         cantidad,
-        precioUnitario,
-        total: precioUnitario * cantidad,
+        precioUnitario: precioEfectivo as number,
+        total: (precioEfectivo as number) * cantidad,
+        esCasa,
       });
-      setToast({ tipo: "exito", mensaje: "Venta registrada" });
-      setPrecioUnitario(servicio.precio_por_defecto);
+      setToast({ tipo: "exito", mensaje: esCasa ? "Uso de la casa registrado" : "Venta registrada" });
+      setPrecioUnitario(esCasa ? 0 : servicio.precio_por_defecto);
       setCantidad(1);
     } catch (error) {
       setToast({
@@ -103,15 +124,17 @@ export default function PantallaCobro({
 
       {servicio && (
         <>
-          <section className="flex flex-col gap-2">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">Precio</h2>
-            <SelectorPrecio
-              servicio={servicio}
-              precioSeleccionado={precioUnitario}
-              onSeleccionarPrecio={seleccionarPrecio}
-              onEscribirPrecio={escribirPrecio}
-            />
-          </section>
+          {!esUsoDeCasa(servicio) && (
+            <section className="flex flex-col gap-2">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">Precio</h2>
+              <SelectorPrecio
+                servicio={servicio}
+                precioSeleccionado={precioUnitario}
+                onSeleccionarPrecio={seleccionarPrecio}
+                onEscribirPrecio={escribirPrecio}
+              />
+            </section>
+          )}
 
           <section className="flex flex-col gap-2">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">Cantidad</h2>

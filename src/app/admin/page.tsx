@@ -6,12 +6,14 @@ import { esAdmin, listarPerfiles } from "@/lib/auth/acciones";
 import {
   obtenerTotalesCombinados,
   obtenerTotalesGenerales,
+  obtenerEstadisticasCasa,
   obtenerDesglosePorServicio,
   obtenerHistorialPaginado,
 } from "@/lib/repos/estadisticas";
 import { obtenerTodosLosServicios } from "@/lib/repos/servicios";
 import TarjetaTotal from "@/components/admin/TarjetaTotal";
 import ResumenGeneral from "@/components/admin/ResumenGeneral";
+import UsoCasa from "@/components/admin/UsoCasa";
 import DesgloseServicios from "@/components/admin/DesgloseServicios";
 import HistorialRegistros from "@/components/admin/HistorialRegistros";
 import ListaServicios from "@/components/admin/ListaServicios";
@@ -30,6 +32,7 @@ export default async function PaginaAdmin() {
   const [
     totales,
     totalesGenerales,
+    usoCasa,
     desglose,
     historial,
     servicios,
@@ -37,6 +40,7 @@ export default async function PaginaAdmin() {
   ] = await Promise.all([
     obtenerTotalesCombinados(),
     obtenerTotalesGenerales(),
+    obtenerEstadisticasCasa(),
     obtenerDesglosePorServicio(),
     obtenerHistorialPaginado(0, REGISTROS_EN_PANEL),
     obtenerTodosLosServicios(),
@@ -69,6 +73,10 @@ export default async function PaginaAdmin() {
 
       <section className="w-full max-w-2xl">
         <ResumenGeneral totales={totalesGenerales} />
+      </section>
+
+      <section className="w-full max-w-2xl">
+        <UsoCasa estadisticas={usoCasa} />
       </section>
 
       <section className="w-full max-w-2xl">

@@ -54,6 +54,7 @@ export type Database = {
         Row: {
           cantidad: number
           creado_en: string
+          es_casa: boolean
           id: string
           precio_unitario: number
           servicio_id: string
@@ -62,6 +63,7 @@ export type Database = {
         Insert: {
           cantidad?: number
           creado_en?: string
+          es_casa?: boolean
           id?: string
           precio_unitario: number
           servicio_id: string
@@ -70,6 +72,7 @@ export type Database = {
         Update: {
           cantidad?: number
           creado_en?: string
+          es_casa?: boolean
           id?: string
           precio_unitario?: number
           servicio_id?: string

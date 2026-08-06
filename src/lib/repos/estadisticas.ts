@@ -6,6 +6,7 @@ import {
 } from "../fechas";
 import type {
   DesgloseServicio,
+  EstadisticasCasa,
   FiltroHistorial,
   HistorialPaginado,
   ModalidadHistorial,
@@ -48,6 +49,7 @@ export async function obtenerTotales(desde: Date): Promise<Totales> {
   const { data, error } = await supabase
     .from("registros")
     .select("total")
+    .eq("es_casa", false)
     .gte("creado_en", desde.toISOString());
 
   if (error) {
@@ -66,13 +68,13 @@ export async function obtenerTotalesCombinados(): Promise<{
 
   const { data, error } = await supabase
     .from("registros")
-    .select("total, creado_en");
+    .select("total, creado_en, es_casa");
 
   if (error) {
     throw new Error(`No se pudieron obtener los totales: ${error.message}`);
   }
 
-  const registros = data ?? [];
+  const registros = (data ?? []).filter((registro) => !registro.es_casa);
 
   return {
     hoy: sumaDeRegistros(
@@ -110,7 +112,7 @@ export async function obtenerTotalesGenerales(): Promise<TotalesGenerales> {
 
   const { data, error } = await supabase
     .from("registros")
-    .select("total, cantidad");
+    .select("total, cantidad, es_casa");
 
   if (error) {
     throw new Error(
@@ -119,13 +121,14 @@ export async function obtenerTotalesGenerales(): Promise<TotalesGenerales> {
   }
 
   const registros = data ?? [];
+  const ventas = registros.filter((registro) => !registro.es_casa);
 
   return {
-    montoTotal: registros.reduce(
+    montoTotal: ventas.reduce(
       (acumulado, registro) => acumulado + registro.total,
       0
     ),
-    cantidadRegistros: registros.length,
+    cantidadRegistros: ventas.length,
     cantidadHojas: registros.reduce(
       (acumulado, registro) => acumulado + registro.cantidad,
       0
@@ -140,18 +143,20 @@ export async function obtenerDesglosePorServicio(): Promise<
 
   const { data, error } = await supabase
     .from("servicios")
-    .select("id, nombre, registros(total, cantidad)");
+    .select("id, nombre, registros(total, cantidad, es_casa)");
 
   if (error) {
     throw new Error(`No se pudo obtener el desglose: ${error.message}`);
   }
 
   return (data ?? []).map((servicio) => {
-    const registros =
+    const registros = (
       servicio.registros as unknown as Array<{
         total: number;
         cantidad: number;
-      }>;
+        es_casa: boolean;
+      }>
+    ).filter((registro) => !registro.es_casa);
     const montoTotal = registros.reduce(
       (acumulado, registro) => acumulado + registro.total,
       0
@@ -274,6 +279,49 @@ export async function obtenerHistorialFiltrado(
     totalRegistros: count ?? 0,
     pagina,
     tamanoPagina,
+  };
+}
+
+export async function obtenerEstadisticasCasa(): Promise<EstadisticasCasa> {
+  const supabase = await crearClienteServidor();
+
+  const { data, error } = await supabase
+    .from("registros")
+    .select("cantidad, creado_en")
+    .eq("es_casa", true);
+
+  if (error) {
+    throw new Error(
+      `No se pudieron obtener las estadísticas de la casa: ${error.message}`
+    );
+  }
+
+  const registros = data ?? [];
+
+  const contarDesde = (desde: Date): { cantidadHojas: number; cantidadRegistros: number } => {
+    const filtrados = registros.filter(
+      (registro) => new Date(registro.creado_en) >= desde
+    );
+    return {
+      cantidadHojas: filtrados.reduce(
+        (acumulado, registro) => acumulado + registro.cantidad,
+        0
+      ),
+      cantidadRegistros: filtrados.length,
+    };
+  };
+
+  return {
+    hoy: contarDesde(inicioDelDia()),
+    semana: contarDesde(inicioDeSemana()),
+    mes: contarDesde(inicioDelMes()),
+    total: {
+      cantidadHojas: registros.reduce(
+        (acumulado, registro) => acumulado + registro.cantidad,
+        0
+      ),
+      cantidadRegistros: registros.length,
+    },
   };
 }
 

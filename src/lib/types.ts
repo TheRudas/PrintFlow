@@ -7,6 +7,7 @@ export type DatosNuevoRegistro = {
   cantidad: number;
   precioUnitario: number;
   total: number;
+  esCasa: boolean;
 };
 
 export type Totales = {
@@ -18,6 +19,13 @@ export type TotalesGenerales = {
   montoTotal: number;
   cantidadRegistros: number;
   cantidadHojas: number;
+};
+
+export type EstadisticasCasa = {
+  hoy: { cantidadHojas: number; cantidadRegistros: number };
+  semana: { cantidadHojas: number; cantidadRegistros: number };
+  mes: { cantidadHojas: number; cantidadRegistros: number };
+  total: { cantidadHojas: number; cantidadRegistros: number };
 };
 
 export type DesgloseServicio = {

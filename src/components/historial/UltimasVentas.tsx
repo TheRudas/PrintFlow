@@ -45,6 +45,11 @@ export default function UltimasVentas({ registros, servicios }: Props) {
               <div className="min-w-0">
                 <p className="truncate font-medium text-texto">
                   {nombreDeServicio(registro.servicio_id, servicios)}
+                  {registro.es_casa && (
+                    <span className="ml-2 rounded-full bg-marca-100 px-2 py-0.5 text-xs font-semibold text-marca-700 dark:bg-marca-100 dark:text-marca-300">
+                      Casa
+                    </span>
+                  )}
                 </p>
                 <p className="text-xs text-texto-suave">
                   {formatearFecha(registro.creado_en)}
