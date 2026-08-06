@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   eliminarRegistroComoAdmin,
@@ -46,6 +46,15 @@ export default function HistorialRegistros({
   } | null>(null);
   const router = useRouter();
 
+  const historialAnterior = useRef(historialInicial);
+
+  useEffect(() => {
+    if (historialAnterior.current !== historialInicial) {
+      historialAnterior.current = historialInicial;
+      setHistorial(historialInicial);
+    }
+  }, [historialInicial]);
+
   const totalPaginas = Math.max(
     1,
     Math.ceil(historial.totalRegistros / historial.tamanoPagina)
@@ -72,20 +81,6 @@ export default function HistorialRegistros({
     setRegistroAEliminar(null);
 
     if (resultado.exito) {
-      const registrosRestantes = historial.registros.filter(
-        (registro) => registro.id !== registroAEliminar.id
-      );
-
-      if (registrosRestantes.length === 0 && paginaActual > 0) {
-        await irAPagina(paginaActual - 1);
-      } else {
-        setHistorial((actual) => ({
-          ...actual,
-          registros: registrosRestantes,
-          totalRegistros: Math.max(0, actual.totalRegistros - 1),
-        }));
-      }
-
       router.refresh();
     } else {
       window.alert(resultado.error ?? "No se pudo eliminar el registro");

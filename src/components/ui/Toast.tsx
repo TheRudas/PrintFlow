@@ -17,7 +17,7 @@ export default function Toast({
   mensaje,
   tipo,
   onCerrar,
-  duracionMs = 2000,
+  duracionMs = 1500,
 }: Props) {
   const [saliendo, setSaliendo] = useState(false);
 
