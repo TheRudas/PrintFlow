@@ -174,14 +174,11 @@ export async function obtenerHistorialPaginado(
   const paginaInicio = pagina * tamanoPagina;
   const paginaFin = paginaInicio + tamanoPagina - 1;
 
-  const [{ data, error }, { count }] = await Promise.all([
-    supabase
-      .from("registros")
-      .select("*")
-      .order("creado_en", { ascending: false })
-      .range(paginaInicio, paginaFin),
-    supabase.from("registros").select("*", { count: "exact", head: true }),
-  ]);
+  const { data, count, error } = await supabase
+    .from("registros")
+    .select("*", { count: "exact" })
+    .order("creado_en", { ascending: false })
+    .range(paginaInicio, paginaFin);
 
   if (error) {
     throw new Error(`No se pudo obtener el historial: ${error.message}`);
@@ -256,30 +253,25 @@ export async function obtenerHistorialFiltrado(
     }
   }
 
-  let consulta = supabase.from("registros").select("*");
-  let consultaConteo = supabase
+  let consulta = supabase
     .from("registros")
-    .select("*", { count: "exact", head: true });
+    .select("*", { count: "exact" })
+    .order("creado_en", { ascending: false })
+    .range(paginaInicio, paginaFin);
 
   if (idsFiltrados !== null) {
     consulta = consulta.in("servicio_id", idsFiltrados);
-    consultaConteo = consultaConteo.in("servicio_id", idsFiltrados);
   }
 
-  const [resultado, conteo] = await Promise.all([
-    consulta
-      .order("creado_en", { ascending: false })
-      .range(paginaInicio, paginaFin),
-    consultaConteo,
-  ]);
+  const { data, count, error } = await consulta;
 
-  if (resultado.error) {
-    throw new Error(`No se pudo obtener el historial: ${resultado.error.message}`);
+  if (error) {
+    throw new Error(`No se pudo obtener el historial: ${error.message}`);
   }
 
   return {
-    registros: resultado.data ?? [],
-    totalRegistros: conteo.count ?? 0,
+    registros: data ?? [],
+    totalRegistros: count ?? 0,
     pagina,
     tamanoPagina,
   };
