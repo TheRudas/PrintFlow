@@ -1,7 +1,11 @@
 ﻿"use client";
 
 import { useState } from "react";
-import { obtenerPaginaHistorial } from "@/lib/admin/acciones";
+import { useRouter } from "next/navigation";
+import {
+  eliminarRegistroComoAdmin,
+  obtenerPaginaHistorial,
+} from "@/lib/admin/acciones";
 import { formatearMoneda } from "@/lib/formatear";
 import type { HistorialPaginado, Servicio } from "@/lib/types";
 
@@ -18,12 +22,24 @@ function nombreDeServicio(
   return servicio?.nombre ?? "Servicio eliminado";
 }
 
+function formatearFecha(fechaIso: string): string {
+  return new Date(fechaIso).toLocaleString("es-CO", {
+    timeZone: "America/Bogota",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export default function HistorialRegistros({
   historialInicial,
   servicios,
 }: Props) {
   const [historial, setHistorial] = useState(historialInicial);
   const [cargando, setCargando] = useState(false);
+  const router = useRouter();
 
   const totalPaginas = Math.max(
     1,
@@ -40,6 +56,22 @@ export default function HistorialRegistros({
     const resultado = await obtenerPaginaHistorial(pagina);
     setHistorial(resultado);
     setCargando(false);
+  }
+
+  async function manejarEliminar(registroId: string): Promise<void> {
+    const confirmado = window.confirm(
+      "¿Estás seguro de que querés eliminar este registro?"
+    );
+    if (!confirmado) {
+      return;
+    }
+
+    const resultado = await eliminarRegistroComoAdmin(registroId);
+    if (resultado.exito) {
+      router.refresh();
+    } else {
+      window.alert(resultado.error ?? "No se pudo eliminar el registro");
+    }
   }
 
   return (
@@ -65,17 +97,31 @@ export default function HistorialRegistros({
                   {nombreDeServicio(registro.servicio_id, servicios)}
                 </p>
                 <p className="text-xs text-texto-suave">
-                  {new Date(registro.creado_en).toLocaleString("es-AR")}
+                  {formatearFecha(registro.creado_en)}
                 </p>
               </div>
-              <div className="text-right">
-                <p className="font-semibold text-texto">
-                  {formatearMoneda(registro.total)}
-                </p>
-                <p className="text-xs text-texto-suave">
-                  {registro.cantidad} ×{" "}
-                  {formatearMoneda(registro.precio_unitario)}
-                </p>
+              <div className="flex items-center gap-3">
+                <div className="text-right">
+                  <p className="font-semibold text-texto">
+                    {formatearMoneda(registro.total)}
+                  </p>
+                  <p className="text-xs text-texto-suave">
+                    {registro.cantidad} ×{" "}
+                    {formatearMoneda(registro.precio_unitario)}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => manejarEliminar(registro.id)}
+                  aria-label={`Eliminar registro de ${nombreDeServicio(
+                    registro.servicio_id,
+                    servicios
+                  )}`}
+                  title="Eliminar registro"
+                  className="btn-feedback flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-red-200 text-lg font-bold text-red-600 hover:bg-red-50 dark:border-red-500/40 dark:text-red-400 dark:hover:bg-red-500/10"
+                >
+                  −
+                </button>
               </div>
             </div>
           ))}

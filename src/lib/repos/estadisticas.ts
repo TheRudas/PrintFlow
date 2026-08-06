@@ -8,25 +8,71 @@ import type {
 
 export const TAMANO_PAGINA_HISTORIAL = 50;
 
+const ZONA_HORARIA = "America/Bogota";
+
 type RegistroConTotal = Pick<Registro, "total">;
+
+function obtenerPartesFechaZona(
+  fecha: Date
+): { anio: number; mes: number; dia: number } {
+  const partes = new Intl.DateTimeFormat("en-US", {
+    timeZone: ZONA_HORARIA,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(fecha);
+
+  const valorDe = (tipo: string): number => {
+    const parte = partes.find((p) => p.type === tipo);
+    return Number(parte?.value ?? "0");
+  };
+
+  return { anio: valorDe("year"), mes: valorDe("month"), dia: valorDe("day") };
+}
+
+function fechaZonaEnUtc(anio: number, mes: number, dia: number): Date {
+  return new Date(Date.UTC(anio, mes - 1, dia, 0, 0, 0));
+}
 
 function inicioDelDia(): Date {
   const ahora = new Date();
-  return new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+  const { anio, mes, dia } = obtenerPartesFechaZona(ahora);
+  return fechaZonaEnUtc(anio, mes, dia);
 }
 
 function inicioDeSemana(): Date {
   const ahora = new Date();
-  const diaDeSemana = (ahora.getDay() + 6) % 7;
-  const inicio = new Date(ahora);
-  inicio.setDate(ahora.getDate() - diaDeSemana);
-  inicio.setHours(0, 0, 0, 0);
-  return inicio;
+  const { anio, mes, dia } = obtenerPartesFechaZona(ahora);
+
+  const diaDeSemana = new Intl.DateTimeFormat("en-US", {
+    timeZone: ZONA_HORARIA,
+    weekday: "short",
+  })
+    .formatToParts(ahora)
+    .find((parte) => parte.type === "weekday")?.value;
+
+  const indiceDia: Record<string, number> = {
+    Mon: 0,
+    Tue: 1,
+    Wed: 2,
+    Thu: 3,
+    Fri: 4,
+    Sat: 5,
+    Sun: 6,
+  };
+
+  const diaInicio = dia - (indiceDia[diaDeSemana ?? "Mon"] ?? 0);
+
+  const base = fechaZonaEnUtc(anio, mes, diaInicio);
+  const ajuste = new Date(base);
+  ajuste.setUTCHours(0, 0, 0, 0);
+  return ajuste;
 }
 
 function inicioDelMes(): Date {
   const ahora = new Date();
-  return new Date(ahora.getFullYear(), ahora.getMonth(), 1);
+  const { anio, mes } = obtenerPartesFechaZona(ahora);
+  return fechaZonaEnUtc(anio, mes, 1);
 }
 
 function sumaDeRegistros(registros: RegistroConTotal[]): Totales {

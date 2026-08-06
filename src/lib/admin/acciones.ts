@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { esAdmin } from "../auth/acciones";
+import { crearClienteServidor } from "../supabase/server";
 import {
   actualizarServicio,
   crearServicio,
@@ -64,4 +65,26 @@ export async function obtenerPaginaHistorial(
   }
 
   return obtenerHistorialPaginado(pagina);
+}
+
+export async function eliminarRegistroComoAdmin(
+  registroId: string
+): Promise<{ exito: boolean; error?: string }> {
+  if (!(await esAdmin())) {
+    return { exito: false, error: "No autorizado" };
+  }
+
+  const supabase = await crearClienteServidor();
+
+  const { error } = await supabase
+    .from("registros")
+    .delete()
+    .eq("id", registroId);
+
+  if (error) {
+    return { exito: false, error: error.message };
+  }
+
+  revalidatePath("/admin");
+  return { exito: true };
 }
