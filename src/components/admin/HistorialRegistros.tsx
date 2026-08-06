@@ -8,6 +8,7 @@ import {
 } from "@/lib/admin/acciones";
 import { formatearMoneda } from "@/lib/formatear";
 import type { HistorialPaginado, Servicio } from "@/lib/types";
+import DialogoConfirmacion from "@/components/ui/DialogoConfirmacion";
 
 interface Props {
   historialInicial: HistorialPaginado;
@@ -39,6 +40,10 @@ export default function HistorialRegistros({
 }: Props) {
   const [historial, setHistorial] = useState(historialInicial);
   const [cargando, setCargando] = useState(false);
+  const [registroAEliminar, setRegistroAEliminar] = useState<{
+    id: string;
+    nombre: string;
+  } | null>(null);
   const router = useRouter();
 
   const totalPaginas = Math.max(
@@ -58,15 +63,13 @@ export default function HistorialRegistros({
     setCargando(false);
   }
 
-  async function manejarEliminar(registroId: string): Promise<void> {
-    const confirmado = window.confirm(
-      "¿Estás seguro de que querés eliminar este registro?"
-    );
-    if (!confirmado) {
+  async function eliminarRegistro(): Promise<void> {
+    if (!registroAEliminar) {
       return;
     }
 
-    const resultado = await eliminarRegistroComoAdmin(registroId);
+    const resultado = await eliminarRegistroComoAdmin(registroAEliminar.id);
+    setRegistroAEliminar(null);
     if (resultado.exito) {
       router.refresh();
     } else {
@@ -112,13 +115,21 @@ export default function HistorialRegistros({
                 </div>
                 <button
                   type="button"
-                  onClick={() => manejarEliminar(registro.id)}
+                  onClick={() =>
+                    setRegistroAEliminar({
+                      id: registro.id,
+                      nombre: nombreDeServicio(
+                        registro.servicio_id,
+                        servicios
+                      ),
+                    })
+                  }
                   aria-label={`Eliminar registro de ${nombreDeServicio(
                     registro.servicio_id,
                     servicios
                   )}`}
                   title="Eliminar registro"
-                  className="btn-feedback flex h-6 shrink-0 items-center justify-center rounded-full border border-red-200 px-3 text-xs font-bold text-red-600 hover:bg-red-50 dark:border-red-500/40 dark:text-red-400 dark:hover:bg-red-500/10"
+                  className="btn-feedback glow-rojo flex h-6 shrink-0 items-center justify-center rounded-full border border-red-200 px-3 text-xs font-bold text-red-600 hover:bg-red-50 dark:border-red-500/40 dark:text-red-400 dark:hover:bg-red-500/10"
                 >
                   −
                 </button>
@@ -153,6 +164,16 @@ export default function HistorialRegistros({
       )}
       {cargando && (
         <p className="text-center text-xs text-texto-tenue">Cargando...</p>
+      )}
+
+      {registroAEliminar && (
+        <DialogoConfirmacion
+          titulo="Eliminar registro"
+          mensaje={`¿Estás seguro de que querés eliminar el registro de ${registroAEliminar.nombre}?`}
+          textoConfirmar="Eliminar"
+          onConfirmar={eliminarRegistro}
+          onCancelar={() => setRegistroAEliminar(null)}
+        />
       )}
     </div>
   );

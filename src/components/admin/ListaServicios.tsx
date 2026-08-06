@@ -41,7 +41,7 @@ export default function ListaServicios({ servicios }: Props) {
             setCreando(true);
             setServicioEnEdicion(null);
           }}
-          className="btn-feedback rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600"
+          className="btn-feedback glow-verde rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600"
         >
           + Nuevo
         </button>
@@ -106,8 +106,8 @@ export default function ListaServicios({ servicios }: Props) {
                 onClick={() => alternarActivo(servicio)}
                 className={`btn-feedback rounded-full border px-3 py-1.5 text-sm font-medium ${
                   servicio.activo
-                    ? "border-red-200 text-red-600 hover:bg-red-50 dark:border-red-500/40 dark:text-red-400 dark:hover:bg-red-500/10"
-                    : "border-emerald-200 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-500/40 dark:text-emerald-400 dark:hover:bg-emerald-500/10"
+                    ? "glow-rojo border-red-200 text-red-600 hover:bg-red-50 dark:border-red-500/40 dark:text-red-400 dark:hover:bg-red-500/10"
+                    : "glow-verde border-emerald-200 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-500/40 dark:text-emerald-400 dark:hover:bg-emerald-500/10"
                 }`}
               >
                 {servicio.activo ? "Desactivar" : "Activar"}

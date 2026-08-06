@@ -50,7 +50,7 @@ export default function ResumenTotal({
         type="button"
         onClick={onGuardar}
         disabled={!precioValido || guardando}
-        className="btn-feedback gradiente-marca rounded-full py-4 text-lg font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
+        className="btn-feedback glow-marca gradiente-marca rounded-full py-4 text-lg font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
       >
         {guardando ? "Guardando..." : "Guardar venta"}
       </button>

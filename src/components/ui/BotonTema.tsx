@@ -30,7 +30,7 @@ export default function BotonTema() {
       onClick={() => setTema(esOscuro ? "claro" : "oscuro")}
       aria-label={esOscuro ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
       title={esOscuro ? "Modo claro" : "Modo oscuro"}
-      className="btn-feedback flex h-9 w-9 items-center justify-center rounded-full border border-marca-200 bg-superficie text-marca-700 hover:bg-marca-50 dark:text-marca-300"
+      className="btn-feedback glow-rosa flex h-9 w-9 items-center justify-center rounded-full border border-marca-200 bg-superficie text-marca-700 hover:bg-marca-50 dark:text-marca-300"
     >
       {esOscuro ? (
         <svg

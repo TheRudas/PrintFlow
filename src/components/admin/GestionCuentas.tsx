@@ -35,7 +35,7 @@ export default function GestionCuentas({ perfiles }: Props) {
         <button
           type="button"
           onClick={() => setMostrarFormulario((mostrar) => !mostrar)}
-          className="btn-feedback rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600"
+          className="btn-feedback glow-verde rounded-full bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600"
         >
           {mostrarFormulario ? "Ocultar" : "+ Nueva cuenta"}
         </button>

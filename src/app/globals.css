@@ -98,12 +98,35 @@
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px -4px rgb(139 78 242 / 0.5);
   }
 
   &:active:not(:disabled) {
     transform: scale(0.96);
     box-shadow: none;
+  }
+}
+
+@utility glow-marca {
+  &:hover:not(:disabled) {
+    box-shadow: 0 4px 16px -4px rgb(139 78 242 / 0.55);
+  }
+}
+
+@utility glow-rojo {
+  &:hover:not(:disabled) {
+    box-shadow: 0 4px 16px -4px rgb(239 68 68 / 0.55);
+  }
+}
+
+@utility glow-verde {
+  &:hover:not(:disabled) {
+    box-shadow: 0 4px 16px -4px rgb(16 185 129 / 0.55);
+  }
+}
+
+@utility glow-rosa {
+  &:hover:not(:disabled) {
+    box-shadow: 0 4px 16px -4px rgb(236 72 153 / 0.55);
   }
 }
 

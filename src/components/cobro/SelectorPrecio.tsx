@@ -32,6 +32,12 @@ export default function SelectorPrecio({
     }
   }
 
+  function ajustarValor(desplazamiento: number): void {
+    const base = precioSeleccionado ?? 0;
+    const nuevo = Math.max(0, Math.trunc(base) + desplazamiento);
+    onEscribirPrecio(nuevo);
+  }
+
   return (
     <div className="flex flex-col gap-3">
       {tienePresets && (
@@ -43,7 +49,7 @@ export default function SelectorPrecio({
               onClick={() => onSeleccionarPrecio(preset)}
               className={`btn-feedback rounded-full border-2 px-4 py-2 text-sm font-semibold ${
                 esSeleccionado(preset)
-                  ? "border-marca-500 bg-marca-500 text-white"
+                  ? "glow-marca border-marca-500 bg-marca-500 text-white"
                   : "border-borde bg-superficie text-texto hover:border-marca-300"
               }`}
             >
@@ -57,16 +63,32 @@ export default function SelectorPrecio({
         <span className="text-sm font-semibold uppercase tracking-wide text-marca-500">
           Escribir valor personalizado
         </span>
-        <input
-          type="number"
-          inputMode="numeric"
-          min="0"
-          step="50"
-          placeholder="Monto libre..."
-          value={precioSeleccionado === null ? "" : precioSeleccionado}
-          onChange={(evento) => manejarMontoLibre(evento.target.value)}
-          className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-lg text-texto placeholder:text-texto-tenue focus:border-marca-500 focus:outline-none"
-        />
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => ajustarValor(-50)}
+            disabled={precioSeleccionado === null || precioSeleccionado <= 0}
+            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-marca-300 disabled:opacity-40"
+          >
+            −
+          </button>
+          <input
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder="Monto libre..."
+            value={precioSeleccionado === null ? "" : precioSeleccionado}
+            onChange={(evento) => manejarMontoLibre(evento.target.value)}
+            className="w-full rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-center text-lg text-texto placeholder:text-texto-tenue focus:border-marca-500 focus:outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => ajustarValor(50)}
+            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-marca-300"
+          >
+            +
+          </button>
+        </div>
       </label>
     </div>
   );
