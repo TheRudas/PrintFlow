@@ -12,6 +12,7 @@ import type {
   Registro,
   TipoHistorial,
   Totales,
+  TotalesGenerales,
 } from "../types";
 
 export const TAMANO_PAGINA_HISTORIAL = 50;
@@ -102,6 +103,34 @@ export async function obtenerTotalesDeLaSemana(): Promise<Totales> {
 
 export async function obtenerTotalesDelMes(): Promise<Totales> {
   return obtenerTotales(inicioDelMes());
+}
+
+export async function obtenerTotalesGenerales(): Promise<TotalesGenerales> {
+  const supabase = await crearClienteServidor();
+
+  const { data, error } = await supabase
+    .from("registros")
+    .select("total, cantidad");
+
+  if (error) {
+    throw new Error(
+      `No se pudieron obtener los totales generales: ${error.message}`
+    );
+  }
+
+  const registros = data ?? [];
+
+  return {
+    montoTotal: registros.reduce(
+      (acumulado, registro) => acumulado + registro.total,
+      0
+    ),
+    cantidadRegistros: registros.length,
+    cantidadHojas: registros.reduce(
+      (acumulado, registro) => acumulado + registro.cantidad,
+      0
+    ),
+  };
 }
 
 export async function obtenerDesglosePorServicio(): Promise<

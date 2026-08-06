@@ -14,6 +14,12 @@ export type Totales = {
   cantidadRegistros: number;
 };
 
+export type TotalesGenerales = {
+  montoTotal: number;
+  cantidadRegistros: number;
+  cantidadHojas: number;
+};
+
 export type DesgloseServicio = {
   servicioId: string;
   nombre: string;

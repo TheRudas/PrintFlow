@@ -5,11 +5,13 @@ import BotonTema from "@/components/ui/BotonTema";
 import { esAdmin, listarPerfiles } from "@/lib/auth/acciones";
 import {
   obtenerTotalesCombinados,
+  obtenerTotalesGenerales,
   obtenerDesglosePorServicio,
   obtenerHistorialPaginado,
 } from "@/lib/repos/estadisticas";
 import { obtenerTodosLosServicios } from "@/lib/repos/servicios";
 import TarjetaTotal from "@/components/admin/TarjetaTotal";
+import ResumenGeneral from "@/components/admin/ResumenGeneral";
 import DesgloseServicios from "@/components/admin/DesgloseServicios";
 import HistorialRegistros from "@/components/admin/HistorialRegistros";
 import ListaServicios from "@/components/admin/ListaServicios";
@@ -27,12 +29,14 @@ export default async function PaginaAdmin() {
 
   const [
     totales,
+    totalesGenerales,
     desglose,
     historial,
     servicios,
     perfiles,
   ] = await Promise.all([
     obtenerTotalesCombinados(),
+    obtenerTotalesGenerales(),
     obtenerDesglosePorServicio(),
     obtenerHistorialPaginado(0, REGISTROS_EN_PANEL),
     obtenerTodosLosServicios(),
@@ -61,6 +65,10 @@ export default async function PaginaAdmin() {
         <TarjetaTotal etiqueta="Hoy" {...totales.hoy} />
         <TarjetaTotal etiqueta="Semana" {...totales.semana} />
         <TarjetaTotal etiqueta="Mes" {...totales.mes} />
+      </section>
+
+      <section className="w-full max-w-2xl">
+        <ResumenGeneral totales={totalesGenerales} />
       </section>
 
       <section className="w-full max-w-2xl">
