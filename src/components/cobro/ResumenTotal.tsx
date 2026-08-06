@@ -56,7 +56,7 @@ export default function ResumenTotal({
       </button>
       {!precioValido && (
         <p className="text-center text-xs text-marca-300">
-          Elegí un precio para poder guardar
+          Elige un precio para poder guardar
         </p>
       )}
     </div>

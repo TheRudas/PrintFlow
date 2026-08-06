@@ -9,8 +9,8 @@ export default function PaginaAyuda() {
       </div>
       <h1 className="text-2xl font-bold text-texto">Ayuda</h1>
       <p className="max-w-md text-texto-suave">
-        Para registrar una venta, tocá el servicio que corresponde y elegí el
-        precio. Si tenés un sticker NFC, apoyá el celular sobre él y la app
+        Para registrar una venta, toca el servicio que corresponde y elige el
+        precio. Si tienes un sticker NFC, apoya el celular sobre él y la app
         hace el resto.
       </p>
       <Link

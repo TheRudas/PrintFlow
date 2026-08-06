@@ -21,7 +21,7 @@ export default async function PaginaIngresar(props: PageProps<"/ingresar">) {
         PrintFlow
       </h1>
       <p className="text-center text-texto-suave">
-        Ingresá con tu cuenta para registrar ventas.
+        Ingresa con tu cuenta para registrar ventas.
       </p>
       <FormularioIngreso />
     </main>

@@ -169,7 +169,7 @@ export default function HistorialRegistros({
       {registroAEliminar && (
         <DialogoConfirmacion
           titulo="Eliminar registro"
-          mensaje={`¿Estás seguro de que querés eliminar el registro de ${registroAEliminar.nombre}?`}
+          mensaje={`¿Estás seguro de que quieres eliminar el registro de ${registroAEliminar.nombre}?`}
           textoConfirmar="Eliminar"
           onConfirmar={eliminarRegistro}
           onCancelar={() => setRegistroAEliminar(null)}

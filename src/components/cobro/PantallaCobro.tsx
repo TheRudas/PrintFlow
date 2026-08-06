@@ -92,7 +92,7 @@ export default function PantallaCobro({
     <div className="flex w-full max-w-md flex-col gap-5">
       <section className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">
-          Elegí el servicio
+          Elige el servicio
         </h2>
         <SelectorServicio
           servicios={servicios}
