@@ -18,6 +18,8 @@ import type {
 
 export const TAMANO_PAGINA_HISTORIAL = 50;
 
+export const SLUG_USO_CASA = "uso-casa";
+
 type RegistroConTotal = Pick<Registro, "total">;
 
 export function clasificarServicio(slug: string): {
@@ -143,32 +145,34 @@ export async function obtenerDesglosePorServicio(): Promise<
 
   const { data, error } = await supabase
     .from("servicios")
-    .select("id, nombre, registros(total, cantidad, es_casa)");
+    .select("id, slug, nombre, registros(total, cantidad, es_casa)");
 
   if (error) {
     throw new Error(`No se pudo obtener el desglose: ${error.message}`);
   }
 
-  return (data ?? []).map((servicio) => {
-    const registros = (
-      servicio.registros as unknown as Array<{
-        total: number;
-        cantidad: number;
-        es_casa: boolean;
-      }>
-    ).filter((registro) => !registro.es_casa);
-    const montoTotal = registros.reduce(
-      (acumulado, registro) => acumulado + registro.total,
-      0
-    );
+  return (data ?? [])
+    .filter((servicio) => servicio.slug !== SLUG_USO_CASA)
+    .map((servicio) => {
+      const registros = (
+        servicio.registros as unknown as Array<{
+          total: number;
+          cantidad: number;
+          es_casa: boolean;
+        }>
+      ).filter((registro) => !registro.es_casa);
+      const montoTotal = registros.reduce(
+        (acumulado, registro) => acumulado + registro.total,
+        0
+      );
 
-    return {
-      servicioId: servicio.id,
-      nombre: servicio.nombre,
-      montoTotal,
-      cantidad: registros.length,
-    };
-  });
+      return {
+        servicioId: servicio.id,
+        nombre: servicio.nombre,
+        montoTotal,
+        cantidad: registros.length,
+      };
+    });
 }
 
 export async function obtenerHistorialPaginado(
