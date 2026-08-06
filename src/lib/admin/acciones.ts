@@ -85,7 +85,7 @@ export async function obtenerHistorialCompletoComoAdmin(
     };
   }
 
-  return obtenerHistorialFiltrado(pagina, filtro);
+  return obtenerHistorialFiltrado(pagina, filtro, 200);
 }
 
 export async function eliminarRegistroComoAdmin(

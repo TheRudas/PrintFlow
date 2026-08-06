@@ -16,7 +16,7 @@ export default async function PaginaHistorial() {
   }
 
   const [historial, servicios] = await Promise.all([
-    obtenerHistorialFiltrado(0, { tipo: "todas", modalidad: "todas" }),
+    obtenerHistorialFiltrado(0, { tipo: "todas", modalidad: "todas" }, 200),
     obtenerTodosLosServicios(),
   ]);
 

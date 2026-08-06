@@ -62,20 +62,14 @@ export default function HistorialCompleto({
   const [confirmarEliminar, setConfirmarEliminar] = useState(false);
 
   const mostrarSubfiltro = tipo !== "todas";
-  const totalPaginas = Math.max(
-    1,
-    Math.ceil(historial.totalRegistros / historial.tamanoPagina)
-  );
-  const paginaActual = historial.pagina;
   const cantidadSeleccionados = seleccionados.size;
 
-  async function cargarPagina(
-    pagina: number,
+  async function cargarHistorial(
     tipoElegido: TipoHistorial,
     modalidadElegida: ModalidadHistorial
   ): Promise<void> {
     setCargando(true);
-    const resultado = await obtenerHistorialCompletoComoAdmin(pagina, {
+    const resultado = await obtenerHistorialCompletoComoAdmin(0, {
       tipo: tipoElegido,
       modalidad: modalidadElegida,
     });
@@ -87,19 +81,12 @@ export default function HistorialCompleto({
   function cambiarTipo(nuevoTipo: TipoHistorial): void {
     setTipo(nuevoTipo);
     setModalidad("todas");
-    cargarPagina(0, nuevoTipo, "todas");
+    cargarHistorial(nuevoTipo, "todas");
   }
 
   function cambiarModalidad(nuevaModalidad: ModalidadHistorial): void {
     setModalidad(nuevaModalidad);
-    cargarPagina(0, tipo, nuevaModalidad);
-  }
-
-  async function irAPagina(pagina: number): Promise<void> {
-    if (pagina < 0 || pagina >= totalPaginas || cargando) {
-      return;
-    }
-    cargarPagina(pagina, tipo, modalidad);
+    cargarHistorial(tipo, nuevaModalidad);
   }
 
   function alternarSeleccion(id: string): void {
@@ -143,12 +130,9 @@ export default function HistorialCompleto({
       return;
     }
 
-    await cargarPagina(paginaActual, tipo, modalidad);
+    await cargarHistorial(tipo, modalidad);
   }
 
-  const haySeleccionEnPagina = historial.registros.some((registro) =>
-    seleccionados.has(registro.id)
-  );
   const todosSeleccionadosEnPagina =
     historial.registros.length > 0 &&
     historial.registros.every((registro) => seleccionados.has(registro.id));
@@ -202,6 +186,73 @@ export default function HistorialCompleto({
         </span>
       </div>
 
+      {historial.registros.length === 0 ? (
+        <p className="text-sm text-texto-suave">Aún no hay registros.</p>
+      ) : (
+        <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
+          <div className="flex items-center justify-between border-b border-borde bg-superficie-alta px-4 py-2">
+            <label className="flex items-center gap-2 text-sm text-texto-suave">
+              <input
+                type="checkbox"
+                checked={todosSeleccionadosEnPagina}
+                onChange={alternarSeleccionDePagina}
+                className="h-4 w-4 accent-marca-500"
+              />
+              Seleccionar todo
+            </label>
+            {cantidadSeleccionados > 0 && (
+              <span className="text-xs text-texto-tenue">
+                {cantidadSeleccionados} seleccionados
+              </span>
+            )}
+          </div>
+
+          <div className="max-h-96 overflow-y-auto">
+            {historial.registros.map((registro) => {
+              const seleccionado = seleccionados.has(registro.id);
+              return (
+                <div
+                  key={registro.id}
+                  className={`flex items-center justify-between gap-3 border-b border-borde px-4 py-3 last:border-b-0 ${
+                    seleccionado ? "bg-marca-50 dark:bg-marca-100" : ""
+                  }`}
+                >
+                  <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={seleccionado}
+                      onChange={() => alternarSeleccion(registro.id)}
+                      className="h-4 w-4 shrink-0 accent-marca-500"
+                    />
+                    <span className="min-w-0">
+                      <span className="block truncate font-medium text-texto">
+                        {nombreDeServicio(registro.servicio_id, servicios)}
+                      </span>
+                      <span className="block text-xs text-texto-suave">
+                        {formatearFecha(registro.creado_en)}
+                      </span>
+                    </span>
+                  </label>
+                  <div className="text-right">
+                    <p className="font-semibold text-texto">
+                      {formatearMoneda(registro.total)}
+                    </p>
+                    <p className="text-xs text-texto-suave">
+                      {registro.cantidad} ×{" "}
+                      {formatearMoneda(registro.precio_unitario)}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {cargando && (
+        <p className="text-center text-xs text-texto-tenue">Cargando...</p>
+      )}
+
       {cantidadSeleccionados > 0 && (
         <div className="flex items-center justify-between gap-3 rounded-2xl border border-borde bg-superficie px-4 py-3">
           <span className="text-sm font-medium text-texto">
@@ -217,94 +268,6 @@ export default function HistorialCompleto({
             Eliminar seleccionados
           </button>
         </div>
-      )}
-
-      {historial.registros.length === 0 ? (
-        <p className="text-sm text-texto-suave">Aún no hay registros.</p>
-      ) : (
-        <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
-          <div className="flex items-center justify-between border-b border-borde bg-superficie-alta px-4 py-2">
-            <label className="flex items-center gap-2 text-sm text-texto-suave">
-              <input
-                type="checkbox"
-                checked={todosSeleccionadosEnPagina}
-                onChange={alternarSeleccionDePagina}
-                className="h-4 w-4 accent-marca-500"
-              />
-              Seleccionar página
-            </label>
-            {haySeleccionEnPagina && (
-              <span className="text-xs text-texto-tenue">
-                {cantidadSeleccionados} seleccionados
-              </span>
-            )}
-          </div>
-
-          {historial.registros.map((registro) => {
-            const seleccionado = seleccionados.has(registro.id);
-            return (
-              <div
-                key={registro.id}
-                className={`flex items-center justify-between gap-3 border-b border-borde px-4 py-3 last:border-b-0 ${
-                  seleccionado ? "bg-marca-50 dark:bg-marca-100" : ""
-                }`}
-              >
-                <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-3">
-                  <input
-                    type="checkbox"
-                    checked={seleccionado}
-                    onChange={() => alternarSeleccion(registro.id)}
-                    className="h-4 w-4 shrink-0 accent-marca-500"
-                  />
-                  <span className="min-w-0">
-                    <span className="block truncate font-medium text-texto">
-                      {nombreDeServicio(registro.servicio_id, servicios)}
-                    </span>
-                    <span className="block text-xs text-texto-suave">
-                      {formatearFecha(registro.creado_en)}
-                    </span>
-                  </span>
-                </label>
-                <div className="text-right">
-                  <p className="font-semibold text-texto">
-                    {formatearMoneda(registro.total)}
-                  </p>
-                  <p className="text-xs text-texto-suave">
-                    {registro.cantidad} ×{" "}
-                    {formatearMoneda(registro.precio_unitario)}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {totalPaginas > 1 && (
-        <div className="flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => irAPagina(paginaActual - 1)}
-            disabled={paginaActual === 0 || cargando}
-            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40 dark:text-marca-300"
-          >
-            Anterior
-          </button>
-          <span className="text-sm text-texto-suave">
-            {paginaActual + 1} de {totalPaginas}
-          </span>
-          <button
-            type="button"
-            onClick={() => irAPagina(paginaActual + 1)}
-            disabled={paginaActual + 1 >= totalPaginas || cargando}
-            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40 dark:text-marca-300"
-          >
-            Siguiente
-          </button>
-        </div>
-      )}
-      {cargando && (
-        <p className="text-center text-xs text-texto-tenue">Cargando...</p>
       )}
 
       {confirmarEliminar && (
