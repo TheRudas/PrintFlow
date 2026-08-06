@@ -109,3 +109,30 @@ export async function eliminarRegistroComoAdmin(
   revalidatePath("/admin");
   return { exito: true };
 }
+
+export async function eliminarRegistrosComoAdmin(
+  registroIds: string[]
+): Promise<{ exito: boolean; error?: string }> {
+  if (!(await esAdmin())) {
+    return { exito: false, error: "No autorizado" };
+  }
+
+  if (registroIds.length === 0) {
+    return { exito: true };
+  }
+
+  const supabase = await crearClienteServidor();
+
+  const { error } = await supabase
+    .from("registros")
+    .delete()
+    .in("id", registroIds);
+
+  if (error) {
+    return { exito: false, error: error.message };
+  }
+
+  revalidatePath("/admin");
+  revalidatePath("/historial");
+  return { exito: true };
+}
