@@ -29,7 +29,7 @@ export default function ResumenTotal({
   const montoFormateado = formatearMoneda(total);
 
   return (
-    <div className="flex flex-col gap-4 rounded-2xl bg-marca-900 p-5 text-white">
+    <div className="flex flex-col gap-4 rounded-2xl bg-marca-900 p-4 text-white">
       <div className="flex min-w-0 items-center justify-between gap-3">
         <span className="whitespace-nowrap text-lg font-semibold text-marca-300">
           {precioValido ? (
