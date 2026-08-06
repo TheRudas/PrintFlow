@@ -17,13 +17,13 @@ export default function ResumenGeneral({ totales }: Props) {
   const montoFormateado = formatearMoneda(totales.montoTotal);
 
   return (
-    <section className="flex w-full max-w-2xl flex-col gap-3 rounded-2xl border border-marca-100 bg-superficie p-5 shadow-sm">
+    <section className="flex w-full max-w-2xl flex-col gap-3">
       <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">
-        Totales generales
+        Registro histórico
       </h2>
 
-      <div className="grid grid-cols-3 gap-3">
-        <div className="flex flex-col gap-1">
+      <div className="grid w-full grid-cols-3 divide-x divide-borde/40 rounded-2xl border border-marca-100 bg-superficie p-5 shadow-sm">
+        <div className="flex flex-col items-center gap-1 text-center">
           <span className="text-xs font-medium text-texto-suave">
             Acumulado
           </span>
@@ -34,7 +34,7 @@ export default function ResumenGeneral({ totales }: Props) {
           </span>
         </div>
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col items-center gap-1 text-center">
           <span className="text-xs font-medium text-texto-suave">
             Hojas usadas
           </span>
@@ -43,7 +43,7 @@ export default function ResumenGeneral({ totales }: Props) {
           </span>
         </div>
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col items-center gap-1 text-center">
           <span className="text-xs font-medium text-texto-suave">Ventas</span>
           <span className="text-2xl font-bold tabular-nums text-texto">
             {totales.cantidadRegistros.toLocaleString("es-CO")}
