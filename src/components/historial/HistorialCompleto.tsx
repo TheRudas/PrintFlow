@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { obtenerHistorialCompletoComoAdmin } from "@/lib/admin/acciones";
+import {
+  eliminarRegistrosComoAdmin,
+  obtenerHistorialCompletoComoAdmin,
+} from "@/lib/admin/acciones";
 import { formatearMoneda } from "@/lib/formatear";
 import type {
   HistorialPaginado,
@@ -9,6 +12,7 @@ import type {
   Servicio,
   TipoHistorial,
 } from "@/lib/types";
+import DialogoConfirmacion from "@/components/ui/DialogoConfirmacion";
 
 interface Props {
   historialInicial: HistorialPaginado;
@@ -54,6 +58,8 @@ export default function HistorialCompleto({
   const [tipo, setTipo] = useState<TipoHistorial>("todas");
   const [modalidad, setModalidad] = useState<ModalidadHistorial>("todas");
   const [cargando, setCargando] = useState(false);
+  const [seleccionados, setSeleccionados] = useState<Set<string>>(new Set());
+  const [confirmarEliminar, setConfirmarEliminar] = useState(false);
 
   const mostrarSubfiltro = tipo !== "todas";
   const totalPaginas = Math.max(
@@ -61,6 +67,7 @@ export default function HistorialCompleto({
     Math.ceil(historial.totalRegistros / historial.tamanoPagina)
   );
   const paginaActual = historial.pagina;
+  const cantidadSeleccionados = seleccionados.size;
 
   async function cargarPagina(
     pagina: number,
@@ -73,6 +80,7 @@ export default function HistorialCompleto({
       modalidad: modalidadElegida,
     });
     setHistorial(resultado);
+    setSeleccionados(new Set());
     setCargando(false);
   }
 
@@ -93,6 +101,57 @@ export default function HistorialCompleto({
     }
     cargarPagina(pagina, tipo, modalidad);
   }
+
+  function alternarSeleccion(id: string): void {
+    setSeleccionados((actual) => {
+      const nuevo = new Set(actual);
+      if (nuevo.has(id)) {
+        nuevo.delete(id);
+      } else {
+        nuevo.add(id);
+      }
+      return nuevo;
+    });
+  }
+
+  function alternarSeleccionDePagina(): void {
+    const idsPagina = historial.registros.map((registro) => registro.id);
+    const todosSeleccionados = idsPagina.every((id) =>
+      seleccionados.has(id)
+    );
+
+    setSeleccionados((actual) => {
+      const nuevo = new Set(actual);
+      if (todosSeleccionados) {
+        idsPagina.forEach((id) => nuevo.delete(id));
+      } else {
+        idsPagina.forEach((id) => nuevo.add(id));
+      }
+      return nuevo;
+    });
+  }
+
+  async function eliminarSeleccionados(): Promise<void> {
+    setConfirmarEliminar(false);
+    const ids = Array.from(seleccionados);
+
+    const resultado = await eliminarRegistrosComoAdmin(ids);
+    setSeleccionados(new Set());
+
+    if (!resultado.exito) {
+      window.alert(resultado.error ?? "No se pudo eliminar");
+      return;
+    }
+
+    await cargarPagina(paginaActual, tipo, modalidad);
+  }
+
+  const haySeleccionEnPagina = historial.registros.some((registro) =>
+    seleccionados.has(registro.id)
+  );
+  const todosSeleccionadosEnPagina =
+    historial.registros.length > 0 &&
+    historial.registros.every((registro) => seleccionados.has(registro.id));
 
   return (
     <div className="flex w-full max-w-2xl flex-col gap-4">
@@ -147,30 +206,77 @@ export default function HistorialCompleto({
         <p className="text-sm text-texto-suave">Aún no hay registros.</p>
       ) : (
         <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
-          {historial.registros.map((registro) => (
-            <div
-              key={registro.id}
-              className="flex items-center justify-between gap-3 border-b border-borde px-4 py-3 last:border-b-0"
-            >
-              <div className="min-w-0">
-                <p className="truncate font-medium text-texto">
-                  {nombreDeServicio(registro.servicio_id, servicios)}
-                </p>
-                <p className="text-xs text-texto-suave">
-                  {formatearFecha(registro.creado_en)}
-                </p>
+          <div className="flex items-center justify-between border-b border-borde bg-superficie-alta px-4 py-2">
+            <label className="flex items-center gap-2 text-sm text-texto-suave">
+              <input
+                type="checkbox"
+                checked={todosSeleccionadosEnPagina}
+                onChange={alternarSeleccionDePagina}
+                className="h-4 w-4 accent-marca-500"
+              />
+              Seleccionar página
+            </label>
+            {haySeleccionEnPagina && (
+              <span className="text-xs text-texto-tenue">
+                {cantidadSeleccionados} seleccionados
+              </span>
+            )}
+          </div>
+
+          {historial.registros.map((registro) => {
+            const seleccionado = seleccionados.has(registro.id);
+            return (
+              <div
+                key={registro.id}
+                className={`flex items-center justify-between gap-3 border-b border-borde px-4 py-3 last:border-b-0 ${
+                  seleccionado ? "bg-marca-50 dark:bg-marca-100" : ""
+                }`}
+              >
+                <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={seleccionado}
+                    onChange={() => alternarSeleccion(registro.id)}
+                    className="h-4 w-4 shrink-0 accent-marca-500"
+                  />
+                  <span className="min-w-0">
+                    <span className="block truncate font-medium text-texto">
+                      {nombreDeServicio(registro.servicio_id, servicios)}
+                    </span>
+                    <span className="block text-xs text-texto-suave">
+                      {formatearFecha(registro.creado_en)}
+                    </span>
+                  </span>
+                </label>
+                <div className="text-right">
+                  <p className="font-semibold text-texto">
+                    {formatearMoneda(registro.total)}
+                  </p>
+                  <p className="text-xs text-texto-suave">
+                    {registro.cantidad} ×{" "}
+                    {formatearMoneda(registro.precio_unitario)}
+                  </p>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="font-semibold text-texto">
-                  {formatearMoneda(registro.total)}
-                </p>
-                <p className="text-xs text-texto-suave">
-                  {registro.cantidad} ×{" "}
-                  {formatearMoneda(registro.precio_unitario)}
-                </p>
-              </div>
-            </div>
-          ))}
+            );
+          })}
+        </div>
+      )}
+
+      {cantidadSeleccionados > 0 && (
+        <div className="flex items-center justify-between gap-3 rounded-2xl border border-borde bg-superficie px-4 py-3">
+          <span className="text-sm font-medium text-texto">
+            {cantidadSeleccionados}{" "}
+            {cantidadSeleccionados === 1 ? "registro" : "registros"}{" "}
+            seleccionado{cantidadSeleccionados === 1 ? "" : "s"}
+          </span>
+          <button
+            type="button"
+            onClick={() => setConfirmarEliminar(true)}
+            className="btn-feedback glow-rojo rounded-full bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600"
+          >
+            Eliminar seleccionados
+          </button>
         </div>
       )}
 
@@ -199,6 +305,18 @@ export default function HistorialCompleto({
       )}
       {cargando && (
         <p className="text-center text-xs text-texto-tenue">Cargando...</p>
+      )}
+
+      {confirmarEliminar && (
+        <DialogoConfirmacion
+          titulo="Eliminar seleccionados"
+          mensaje={`¿Estás seguro de que querés eliminar ${cantidadSeleccionados} ${
+            cantidadSeleccionados === 1 ? "registro" : "registros"
+          }?`}
+          textoConfirmar="Eliminar"
+          onConfirmar={eliminarSeleccionados}
+          onCancelar={() => setConfirmarEliminar(false)}
+        />
       )}
     </div>
   );
