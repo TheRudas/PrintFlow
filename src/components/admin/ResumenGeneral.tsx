@@ -35,16 +35,16 @@ export default function ResumenGeneral({ totales }: Props) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <span className="text-xs font-medium text-texto-suave">Hojas</span>
+          <span className="text-xs font-medium text-texto-suave">
+            Hojas usadas
+          </span>
           <span className="text-2xl font-bold tabular-nums text-texto">
             {totales.cantidadHojas.toLocaleString("es-CO")}
           </span>
         </div>
 
         <div className="flex flex-col gap-1">
-          <span className="text-xs font-medium text-texto-suave">
-            Registros
-          </span>
+          <span className="text-xs font-medium text-texto-suave">Ventas</span>
           <span className="text-2xl font-bold tabular-nums text-texto">
             {totales.cantidadRegistros.toLocaleString("es-CO")}
           </span>
