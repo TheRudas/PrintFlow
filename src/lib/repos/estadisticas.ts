@@ -1,8 +1,11 @@
 ﻿import { crearClienteServidor } from "../supabase/server";
 import type {
   DesgloseServicio,
+  FiltroHistorial,
   HistorialPaginado,
+  ModalidadHistorial,
   Registro,
+  TipoHistorial,
   Totales,
 } from "../types";
 
@@ -11,6 +14,19 @@ export const TAMANO_PAGINA_HISTORIAL = 50;
 const ZONA_HORARIA = "America/Bogota";
 
 type RegistroConTotal = Pick<Registro, "total">;
+
+export function clasificarServicio(slug: string): {
+  tipo: TipoHistorial;
+  modalidad: ModalidadHistorial;
+} {
+  const esFotocopia = slug.startsWith("fotocopia");
+  const esColor = slug.endsWith("color");
+
+  return {
+    tipo: esFotocopia ? "fotocopia" : "impresion",
+    modalidad: esColor ? "color" : "bn",
+  };
+}
 
 function obtenerPartesFechaZona(
   fecha: Date
@@ -205,6 +221,96 @@ export async function obtenerHistorialPaginado(
   return {
     registros: data ?? [],
     totalRegistros: count ?? 0,
+    pagina,
+    tamanoPagina,
+  };
+}
+
+export async function obtenerUltimasVentas(
+  cantidad: number
+): Promise<Registro[]> {
+  const supabase = await crearClienteServidor();
+
+  const { data, error } = await supabase
+    .from("registros")
+    .select("*")
+    .order("creado_en", { ascending: false })
+    .limit(cantidad);
+
+  if (error) {
+    throw new Error(`No se pudieron obtener las últimas ventas: ${error.message}`);
+  }
+
+  return data ?? [];
+}
+
+export async function obtenerHistorialFiltrado(
+  pagina: number,
+  filtro: FiltroHistorial,
+  tamanoPagina: number = TAMANO_PAGINA_HISTORIAL
+): Promise<HistorialPaginado> {
+  const supabase = await crearClienteServidor();
+  const paginaInicio = pagina * tamanoPagina;
+  const paginaFin = paginaInicio + tamanoPagina - 1;
+
+  let idsFiltrados: string[] | null = null;
+
+  if (filtro.tipo !== "todas" || filtro.modalidad !== "todas") {
+    const { data: servicios, error: errorServicios } = await supabase
+      .from("servicios")
+      .select("id, slug");
+
+    if (errorServicios) {
+      throw new Error(
+        `No se pudieron obtener los servicios: ${errorServicios.message}`
+      );
+    }
+
+    idsFiltrados = (servicios ?? [])
+      .filter((servicio) => {
+        const { tipo, modalidad } = clasificarServicio(servicio.slug);
+        const coincideTipo =
+          filtro.tipo === "todas" || tipo === filtro.tipo;
+        const coincideModalidad =
+          filtro.modalidad === "todas" || modalidad === filtro.modalidad;
+        return coincideTipo && coincideModalidad;
+      })
+      .map((servicio) => servicio.id);
+
+    if (idsFiltrados.length === 0) {
+      return {
+        registros: [],
+        totalRegistros: 0,
+        pagina,
+        tamanoPagina,
+      };
+    }
+  }
+
+  let consulta = supabase.from("registros").select("*");
+  let consultaConteo = supabase
+    .from("registros")
+    .select("*", { count: "exact", head: true });
+
+  if (idsFiltrados !== null) {
+    consulta = consulta.in("servicio_id", idsFiltrados);
+    consultaConteo = consultaConteo.in("servicio_id", idsFiltrados);
+  }
+
+  const [resultado, conteo] = await Promise.all([
+    consulta
+      .order("creado_en", { ascending: false })
+      .range(paginaInicio, paginaFin),
+    consultaConteo,
+  ]);
+
+  if (resultado.error) {
+    throw new Error(`No se pudo obtener el historial: ${resultado.error.message}`);
+  }
+
+  return {
+    registros: resultado.data ?? [],
+    totalRegistros: conteo.count ?? 0,
     pagina,
     tamanoPagina,
   };

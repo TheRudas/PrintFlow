@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import PantallaCobro from "@/components/cobro/PantallaCobro";
+import UltimasVentas from "@/components/historial/UltimasVentas";
 import { obtenerUsuarioActual } from "@/lib/auth/acciones";
 import { obtenerServiciosActivos } from "@/lib/repos/servicios";
+import { obtenerUltimasVentas } from "@/lib/repos/estadisticas";
 import CerrarSesion from "@/components/auth/CerrarSesion";
 import BotonTema from "@/components/ui/BotonTema";
+
+const CANTIDAD_ULTIMAS_VENTAS = 6;
 
 export default async function Inicio(props: PageProps<"/">) {
   const searchParams = await props.searchParams;
@@ -16,7 +20,10 @@ export default async function Inicio(props: PageProps<"/">) {
   }
 
   const sesionAdmin = perfil?.rol === "admin";
-  const servicios = await obtenerServiciosActivos();
+  const [servicios, ultimasVentas] = await Promise.all([
+    obtenerServiciosActivos(),
+    sesionAdmin ? obtenerUltimasVentas(CANTIDAD_ULTIMAS_VENTAS) : [],
+  ]);
 
   return (
     <main className="flex flex-1 flex-col items-center gap-6 px-4 py-6">
@@ -42,6 +49,10 @@ export default async function Inicio(props: PageProps<"/">) {
         servicios={servicios}
         servicioInicialId={typeof servicioId === "string" ? servicioId : null}
       />
+
+      {sesionAdmin && (
+        <UltimasVentas registros={ultimasVentas} servicios={servicios} />
+      )}
     </main>
   );
 }

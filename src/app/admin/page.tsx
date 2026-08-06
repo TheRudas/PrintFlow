@@ -15,6 +15,8 @@ import HistorialRegistros from "@/components/admin/HistorialRegistros";
 import ListaServicios from "@/components/admin/ListaServicios";
 import GestionCuentas from "@/components/admin/GestionCuentas";
 
+const REGISTROS_EN_PANEL = 6;
+
 export const dynamic = "force-dynamic";
 
 export default async function PaginaAdmin() {
@@ -32,7 +34,7 @@ export default async function PaginaAdmin() {
   ] = await Promise.all([
     obtenerTotalesCombinados(),
     obtenerDesglosePorServicio(),
-    obtenerHistorialPaginado(0),
+    obtenerHistorialPaginado(0, REGISTROS_EN_PANEL),
     obtenerTodosLosServicios(),
     listarPerfiles(),
   ]);
@@ -70,6 +72,14 @@ export default async function PaginaAdmin() {
           historialInicial={historial}
           servicios={servicios}
         />
+        <div className="mt-3 text-center">
+          <Link
+            href="/historial"
+            className="text-sm font-medium text-marca-600 underline hover:text-marca-500 dark:text-marca-400"
+          >
+            Abrir historial completo
+          </Link>
+        </div>
       </section>
 
       <section className="w-full max-w-2xl">

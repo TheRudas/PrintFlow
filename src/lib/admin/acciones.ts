@@ -8,10 +8,15 @@ import {
   crearServicio,
 } from "../repos/servicios";
 import {
+  obtenerHistorialFiltrado,
   obtenerHistorialPaginado,
   TAMANO_PAGINA_HISTORIAL,
 } from "../repos/estadisticas";
-import type { DatosServicio, HistorialPaginado } from "../types";
+import type {
+  DatosServicio,
+  FiltroHistorial,
+  HistorialPaginado,
+} from "../types";
 
 export async function crearServicioComoAdmin(
   datos: DatosServicio
@@ -65,6 +70,22 @@ export async function obtenerPaginaHistorial(
   }
 
   return obtenerHistorialPaginado(pagina);
+}
+
+export async function obtenerHistorialCompletoComoAdmin(
+  pagina: number,
+  filtro: FiltroHistorial
+): Promise<HistorialPaginado> {
+  if (!(await esAdmin())) {
+    return {
+      registros: [],
+      totalRegistros: 0,
+      pagina: 0,
+      tamanoPagina: TAMANO_PAGINA_HISTORIAL,
+    };
+  }
+
+  return obtenerHistorialFiltrado(pagina, filtro);
 }
 
 export async function eliminarRegistroComoAdmin(

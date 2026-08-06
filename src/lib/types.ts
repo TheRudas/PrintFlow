@@ -38,3 +38,12 @@ export type DatosServicio = {
 };
 
 export type Perfil = Tables<"perfiles">;
+
+export type TipoHistorial = "todas" | "impresion" | "fotocopia";
+
+export type ModalidadHistorial = "todas" | "bn" | "color";
+
+export type FiltroHistorial = {
+  tipo: TipoHistorial;
+  modalidad: ModalidadHistorial;
+};
