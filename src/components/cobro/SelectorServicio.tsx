@@ -45,14 +45,14 @@ export default function SelectorServicio({
               esUsoDeCasa ? "col-span-2" : ""
             } ${
               seleccionado
-                ? "sombra-marca border-marca-500 bg-gradient-to-br from-marca-500/15 via-superficie to-acento-500/10"
+                ? "border-marca-500 bg-marca-100 dark:bg-marca-100"
                 : "border-borde bg-superficie hover:-translate-y-0.5 hover:border-marca-300"
             }`}
           >
             <span
               className={`flex h-9 w-9 items-center justify-center rounded-full text-lg font-bold ${
                 seleccionado
-                  ? "gradiente-marca text-white"
+                  ? "bg-marca-600 text-white"
                   : "bg-marca-100 text-marca-600 dark:bg-marca-100 dark:text-marca-300"
               }`}
             >
