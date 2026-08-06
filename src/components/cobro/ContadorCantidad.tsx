@@ -66,7 +66,7 @@ export default function ContadorCantidad({
   );
 
   return (
-    <div className="flex items-center justify-between rounded-2xl border-2 border-borde bg-superficie p-2">
+    <div className="sombra-suave flex items-center justify-between rounded-2xl border border-borde bg-superficie p-2">
       <button
         type="button"
         onPointerDown={(evento) => {
@@ -80,7 +80,7 @@ export default function ContadorCantidad({
         onPointerCancel={detenerRepeticion}
         onContextMenu={(evento) => evento.preventDefault()}
         disabled={cantidad <= 1}
-        className="btn-feedback flex h-14 w-14 items-center justify-center rounded-xl bg-marca-100 text-2xl font-bold text-marca-700 hover:bg-marca-200 disabled:opacity-40 dark:text-marca-300"
+        className="btn-feedback flex h-14 w-14 items-center justify-center rounded-xl bg-marca-100 text-2xl font-bold text-marca-700 hover:bg-marca-200 disabled:opacity-40 dark:bg-marca-100 dark:text-marca-300"
       >
         −
       </button>
@@ -98,7 +98,7 @@ export default function ContadorCantidad({
         onPointerLeave={detenerRepeticion}
         onPointerCancel={detenerRepeticion}
         onContextMenu={(evento) => evento.preventDefault()}
-        className="btn-feedback flex h-14 w-14 items-center justify-center rounded-xl bg-marca-100 text-2xl font-bold text-marca-700 hover:bg-marca-200 dark:text-marca-300"
+        className="btn-feedback flex h-14 w-14 items-center justify-center rounded-xl bg-marca-100 text-2xl font-bold text-marca-700 hover:bg-marca-200 dark:bg-marca-100 dark:text-marca-300"
       >
         +
       </button>

@@ -69,7 +69,10 @@ export default function HistorialRegistros({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">Historial</h2>
+        <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-marca-500">
+          <span className="gradiente-marca h-4 w-1 rounded-full" />
+          Historial
+        </h2>
         <span className="text-xs text-texto-tenue">
           {historial.totalRegistros} en total
         </span>
@@ -78,7 +81,7 @@ export default function HistorialRegistros({
       {historial.registros.length === 0 ? (
         <p className="text-sm text-texto-suave">Aún no hay registros.</p>
       ) : (
-        <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
+        <div className="sombra-suave flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
           {historial.registros.map((registro) => (
             <div
               key={registro.id}

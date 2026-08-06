@@ -1,5 +1,6 @@
 import { formatearMoneda } from "@/lib/formatear";
 import type { TotalesGenerales } from "@/lib/types";
+import TituloSeccionAdmin from "./TituloSeccionAdmin";
 
 interface Props {
   totales: TotalesGenerales;
@@ -17,12 +18,10 @@ export default function ResumenGeneral({ totales }: Props) {
   const montoFormateado = formatearMoneda(totales.montoTotal);
 
   return (
-    <section className="flex w-full max-w-2xl flex-col gap-3">
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">
-        Registro histórico
-      </h2>
+    <section className="animar-entrada flex w-full max-w-2xl flex-col gap-3">
+      <TituloSeccionAdmin>Registro histórico</TituloSeccionAdmin>
 
-      <div className="grid w-full grid-cols-3 divide-x divide-borde/40 rounded-2xl border border-marca-100 bg-superficie p-5 shadow-sm">
+      <div className="sombra-suave grid w-full grid-cols-3 divide-x divide-borde/40 rounded-2xl border border-marca-100 bg-superficie p-5">
         <div className="flex flex-col items-center gap-1 text-center">
           <span className="text-xs font-medium text-texto-suave">
             Acumulado

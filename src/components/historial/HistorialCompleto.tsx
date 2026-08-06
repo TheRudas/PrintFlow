@@ -184,7 +184,8 @@ export default function HistorialCompleto({
       </div>
 
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">
+        <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-marca-500">
+          <span className="gradiente-marca h-4 w-1 rounded-full" />
           Historial completo
         </h2>
         <span className="text-xs text-texto-tenue">
@@ -193,7 +194,7 @@ export default function HistorialCompleto({
       </div>
 
       {cargando ? (
-        <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
+        <div className="sombra-suave flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
           <div className="border-b border-borde bg-superficie-alta px-4 py-2">
             <div className="h-4 w-32 animate-pulse rounded bg-superficie-alta" />
           </div>
@@ -216,7 +217,7 @@ export default function HistorialCompleto({
       ) : historial.registros.length === 0 ? (
         <p className="text-sm text-texto-suave">Aún no hay registros.</p>
       ) : (
-        <div className="flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
+        <div className="sombra-suave flex flex-col overflow-hidden rounded-2xl border border-borde bg-superficie">
           <div className="flex items-center justify-between border-b border-borde bg-superficie-alta px-4 py-2">
             <label className="flex items-center gap-2 text-sm text-texto-suave">
               <input

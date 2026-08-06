@@ -8,6 +8,16 @@ interface Props {
 
 const SLUG_USO_CASA = "uso-casa";
 
+function iconoPara(slug: string): string {
+  if (slug.includes("fotocopia")) {
+    return "▦";
+  }
+  if (slug === SLUG_USO_CASA) {
+    return "⌂";
+  }
+  return "▤";
+}
+
 export default function SelectorServicio({
   servicios,
   seleccionadoId,
@@ -31,15 +41,24 @@ export default function SelectorServicio({
             key={servicio.id}
             type="button"
             onClick={() => onSeleccionar(servicio)}
-            className={`btn-feedback flex min-h-24 flex-col items-center justify-center gap-1 rounded-2xl border-2 px-3 py-4 text-center ${
+            className={`btn-feedback animar-entrada sombra-suave flex min-h-28 flex-col items-center justify-center gap-1.5 rounded-2xl border-2 px-3 py-4 text-center transition-all duration-200 ${
               esUsoDeCasa ? "col-span-2" : ""
             } ${
               seleccionado
-                ? "border-marca-500 bg-marca-50"
-                : "border-borde bg-superficie hover:border-marca-300"
+                ? "sombra-marca border-marca-500 bg-gradient-to-br from-marca-500/15 via-superficie to-acento-500/10"
+                : "border-borde bg-superficie hover:-translate-y-0.5 hover:border-marca-300"
             }`}
           >
-            <span className="font-semibold text-texto">
+            <span
+              className={`flex h-9 w-9 items-center justify-center rounded-full text-lg font-bold ${
+                seleccionado
+                  ? "gradiente-marca text-white"
+                  : "bg-marca-100 text-marca-600 dark:bg-marca-100 dark:text-marca-300"
+              }`}
+            >
+              {iconoPara(servicio.slug)}
+            </span>
+            <span className="font-semibold leading-tight text-texto">
               {servicio.nombre}
             </span>
             <span className="text-xs text-texto-suave">

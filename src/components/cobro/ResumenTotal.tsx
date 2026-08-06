@@ -33,9 +33,9 @@ export default function ResumenTotal({
   const montoFormateado = formatearMoneda(total);
 
   return (
-    <div className="flex flex-col gap-4 rounded-2xl bg-marca-900 p-4 text-white">
+    <div className="sombra-marca flex flex-col gap-4 rounded-3xl bg-gradient-to-br from-marca-800 via-marca-900 to-marca-950 p-5 text-white">
       <div className="flex min-w-0 items-center justify-between gap-3">
-        <span className="whitespace-nowrap text-lg font-semibold text-marca-300">
+        <span className="whitespace-nowrap text-lg font-semibold text-marca-200">
           {esCasa ? (
             `Gratis × ${cantidad}`
           ) : precioValido ? (
@@ -56,7 +56,7 @@ export default function ResumenTotal({
         type="button"
         onClick={onGuardar}
         disabled={!precioValido || guardando}
-        className="btn-feedback glow-marca gradiente-marca rounded-full py-4 text-lg font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
+        className="btn-feedback glow-rosa rounded-full bg-gradient-to-r from-acento-500 to-acento-600 py-4 text-lg font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
       >
         {guardando ? "Guardando..." : "Guardar venta"}
       </button>

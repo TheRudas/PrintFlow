@@ -47,10 +47,10 @@ export default function SelectorPrecio({
               key={preset}
               type="button"
               onClick={() => onSeleccionarPrecio(preset)}
-              className={`btn-feedback rounded-full border-2 px-4 py-2 text-sm font-semibold ${
+              className={`btn-feedback rounded-full border-2 px-4 py-2 text-sm font-semibold transition-all duration-200 ${
                 esSeleccionado(preset)
-                  ? "glow-marca border-marca-500 bg-marca-500 text-white"
-                  : "border-borde bg-superficie text-texto hover:border-marca-300"
+                  ? "glow-marca sombra-marca border-marca-500 bg-gradient-to-r from-marca-500 to-marca-600 text-white"
+                  : "sombra-suave border-borde bg-superficie text-texto hover:-translate-y-0.5 hover:border-marca-300"
               }`}
             >
               {formatearMoneda(preset)}

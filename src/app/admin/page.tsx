@@ -50,9 +50,31 @@ export default async function PaginaAdmin() {
   return (
     <main className="flex flex-1 flex-col items-center gap-6 px-4 py-6">
       <div className="flex w-full max-w-2xl items-center justify-between">
-        <h1 className="gradiente-marca bg-clip-text text-2xl font-bold tracking-tight text-transparent">
-          Panel
-        </h1>
+        <div className="flex items-center gap-2.5">
+          <div className="gradiente-marca sombra-marca flex h-10 w-10 items-center justify-center rounded-xl">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-5 w-5"
+            >
+              <path d="M6 18V6" />
+              <path d="m6 6-3 3" />
+              <path d="m6 6 3 3" />
+              <path d="M18 18V6" />
+              <path d="m18 6-3 3" />
+              <path d="m18 6 3 3" />
+              <path d="M6 12h12" />
+            </svg>
+          </div>
+          <h1 className="gradiente-marca bg-clip-text text-2xl font-bold tracking-tight text-transparent">
+            Panel
+          </h1>
+        </div>
         <div className="flex gap-2">
           <BotonTema />
           <CerrarSesion />

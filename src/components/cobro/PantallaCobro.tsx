@@ -7,6 +7,7 @@ import SelectorServicio from "./SelectorServicio";
 import SelectorPrecio from "./SelectorPrecio";
 import ContadorCantidad from "./ContadorCantidad";
 import ResumenTotal from "./ResumenTotal";
+import TituloSeccion from "./TituloSeccion";
 import Toast, { type TipoToast } from "@/components/ui/Toast";
 
 interface Props {
@@ -111,10 +112,8 @@ export default function PantallaCobro({
 
   return (
     <div className="flex w-full max-w-md flex-col gap-5">
-      <section className="flex flex-col gap-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">
-          Elige el servicio
-        </h2>
+      <section className="flex flex-col gap-3">
+        <TituloSeccion>Elige el servicio</TituloSeccion>
         <SelectorServicio
           servicios={servicios}
           seleccionadoId={servicio?.id ?? null}
@@ -125,8 +124,8 @@ export default function PantallaCobro({
       {servicio && (
         <>
           {!esUsoDeCasa(servicio) && (
-            <section className="flex flex-col gap-2">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">Precio</h2>
+            <section className="flex flex-col gap-3">
+              <TituloSeccion>Precio</TituloSeccion>
               <SelectorPrecio
                 servicio={servicio}
                 precioSeleccionado={precioUnitario}
@@ -136,8 +135,8 @@ export default function PantallaCobro({
             </section>
           )}
 
-          <section className="flex flex-col gap-2">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-marca-500">Cantidad</h2>
+          <section className="flex flex-col gap-3">
+            <TituloSeccion>Cantidad</TituloSeccion>
             <ContadorCantidad
               cantidad={cantidad}
               onCambiarCantidad={cambiarCantidad}

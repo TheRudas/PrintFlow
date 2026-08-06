@@ -32,7 +32,7 @@ export default function FormularioIngreso() {
   return (
     <form
       onSubmit={manejarEnvio}
-      className="flex w-full max-w-sm flex-col gap-3"
+      className="animar-entrada sombra-suave flex w-full max-w-sm flex-col gap-3 rounded-3xl border border-marca-100 bg-superficie p-6"
     >
       <label className="flex flex-col gap-1 text-sm text-texto-suave">
         Correo
@@ -42,7 +42,7 @@ export default function FormularioIngreso() {
           onChange={(evento) => setCorreo(evento.target.value)}
           autoComplete="email"
           required
-          className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-texto focus:border-marca-500 focus:outline-none"
+          className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-texto transition-colors focus:border-marca-500 focus:outline-none"
         />
       </label>
 
@@ -54,7 +54,7 @@ export default function FormularioIngreso() {
           onChange={(evento) => setContrasena(evento.target.value)}
           autoComplete="current-password"
           required
-          className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-texto focus:border-marca-500 focus:outline-none"
+          className="rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-texto transition-colors focus:border-marca-500 focus:outline-none"
         />
       </label>
 
@@ -63,7 +63,7 @@ export default function FormularioIngreso() {
       <button
         type="submit"
         disabled={ingresando}
-        className="btn-feedback mt-1 rounded-full gradiente-marca py-3 font-medium text-white disabled:opacity-50"
+        className="btn-feedback glow-marca mt-1 rounded-full gradiente-marca py-3 font-medium text-white disabled:opacity-50"
       >
         {ingresando ? "Ingresando..." : "Ingresar"}
       </button>

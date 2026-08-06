@@ -25,8 +25,9 @@ export default function TarjetaTotal({
   const montoFormateado = formatearMoneda(montoTotal);
 
   return (
-    <div className="flex min-w-0 flex-col gap-1 rounded-2xl border border-marca-100 bg-superficie p-4 shadow-sm">
-      <span className="truncate text-xs font-semibold text-marca-500">
+    <div className="sombra-suave animar-entrada flex min-w-0 flex-col gap-1.5 rounded-2xl border border-marca-100 bg-superficie p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-marca-300">
+      <span className="flex items-center gap-1.5 text-xs font-semibold text-marca-500">
+        <span className="gradiente-marca h-2 w-2 rounded-full" />
         {etiqueta}
       </span>
       <span
