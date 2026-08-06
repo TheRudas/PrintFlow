@@ -4,6 +4,7 @@ interface Props {
   precioUnitario: number | null;
   cantidad: number;
   guardando: boolean;
+  esCasa: boolean;
   onGuardar: () => void;
 }
 
@@ -22,9 +23,12 @@ export default function ResumenTotal({
   precioUnitario,
   cantidad,
   guardando,
+  esCasa,
   onGuardar,
 }: Props) {
-  const precioValido = precioUnitario !== null && precioUnitario > 0;
+  const precioValido =
+    precioUnitario !== null &&
+    (esCasa ? precioUnitario >= 0 : precioUnitario > 0);
   const total = precioValido ? precioUnitario * cantidad : 0;
   const montoFormateado = formatearMoneda(total);
 
@@ -32,7 +36,9 @@ export default function ResumenTotal({
     <div className="flex flex-col gap-4 rounded-2xl bg-marca-900 p-4 text-white">
       <div className="flex min-w-0 items-center justify-between gap-3">
         <span className="whitespace-nowrap text-lg font-semibold text-marca-300">
-          {precioValido ? (
+          {esCasa ? (
+            `Gratis × ${cantidad}`
+          ) : precioValido ? (
             <>
               {formatearMoneda(precioUnitario as number)} × {cantidad}
             </>
@@ -43,7 +49,7 @@ export default function ResumenTotal({
         <span
           className={`whitespace-nowrap font-bold tabular-nums ${claseDeTamanoPara(montoFormateado)}`}
         >
-          {formatearMoneda(total)}
+          {esCasa ? "Gratis" : formatearMoneda(total)}
         </span>
       </div>
       <button
@@ -54,7 +60,7 @@ export default function ResumenTotal({
       >
         {guardando ? "Guardando..." : "Guardar venta"}
       </button>
-      {!precioValido && (
+      {!precioValido && !esCasa && (
         <p className="text-center text-xs text-marca-300">
           Elige un precio para poder guardar
         </p>

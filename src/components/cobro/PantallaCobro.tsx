@@ -148,6 +148,7 @@ export default function PantallaCobro({
             precioUnitario={precioUnitario}
             cantidad={cantidad}
             guardando={guardando}
+            esCasa={servicio ? esUsoDeCasa(servicio) : false}
             onGuardar={guardarVenta}
           />
         </>
