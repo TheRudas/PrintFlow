@@ -182,6 +182,22 @@ body {
   font-family: var(--font-sans);
 }
 
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 250ms;
+  transition-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none;
+  }
+}
+
 @layer base {
   button:not(:disabled) {
     cursor: pointer;
