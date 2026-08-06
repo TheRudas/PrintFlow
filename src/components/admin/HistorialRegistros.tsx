@@ -118,7 +118,7 @@ export default function HistorialRegistros({
                     servicios
                   )}`}
                   title="Eliminar registro"
-                  className="btn-feedback flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-red-200 text-lg font-bold text-red-600 hover:bg-red-50 dark:border-red-500/40 dark:text-red-400 dark:hover:bg-red-500/10"
+                  className="btn-feedback flex h-8 shrink-0 items-center justify-center rounded-full border border-red-200 px-3 text-sm font-semibold text-red-600 hover:bg-red-50 dark:border-red-500/40 dark:text-red-400 dark:hover:bg-red-500/10"
                 >
                   −
                 </button>
