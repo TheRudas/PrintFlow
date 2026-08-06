@@ -202,6 +202,23 @@ export default function HistorialCompleto({
         </span>
       </div>
 
+      {cantidadSeleccionados > 0 && (
+        <div className="flex items-center justify-between gap-3 rounded-2xl border border-borde bg-superficie px-4 py-3">
+          <span className="text-sm font-medium text-texto">
+            {cantidadSeleccionados}{" "}
+            {cantidadSeleccionados === 1 ? "registro" : "registros"}{" "}
+            seleccionado{cantidadSeleccionados === 1 ? "" : "s"}
+          </span>
+          <button
+            type="button"
+            onClick={() => setConfirmarEliminar(true)}
+            className="btn-feedback glow-rojo rounded-full bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600"
+          >
+            Eliminar seleccionados
+          </button>
+        </div>
+      )}
+
       {historial.registros.length === 0 ? (
         <p className="text-sm text-texto-suave">Aún no hay registros.</p>
       ) : (
@@ -260,23 +277,6 @@ export default function HistorialCompleto({
               </div>
             );
           })}
-        </div>
-      )}
-
-      {cantidadSeleccionados > 0 && (
-        <div className="flex items-center justify-between gap-3 rounded-2xl border border-borde bg-superficie px-4 py-3">
-          <span className="text-sm font-medium text-texto">
-            {cantidadSeleccionados}{" "}
-            {cantidadSeleccionados === 1 ? "registro" : "registros"}{" "}
-            seleccionado{cantidadSeleccionados === 1 ? "" : "s"}
-          </span>
-          <button
-            type="button"
-            onClick={() => setConfirmarEliminar(true)}
-            className="btn-feedback glow-rojo rounded-full bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600"
-          >
-            Eliminar seleccionados
-          </button>
         </div>
       )}
 
