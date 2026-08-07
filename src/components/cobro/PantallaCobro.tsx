@@ -1,15 +1,17 @@
 ﻿"use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { crearRegistro } from "@/lib/repos/registros";
-import type { Servicio } from "@/lib/types";
+import type { ItemCarrito, Servicio } from "@/lib/types";
 import SelectorServicio from "./SelectorServicio";
 import SelectorPrecio from "./SelectorPrecio";
 import ContadorCantidad from "./ContadorCantidad";
 import ResumenTotal from "./ResumenTotal";
 import TituloSeccion from "./TituloSeccion";
 import ConfirmarVenta from "./ConfirmarVenta";
+import CarritoPaquete from "./CarritoPaquete";
+import AgregarAlCarrito from "./AgregarAlCarrito";
 import RefrescarEnMedianoche from "@/components/ui/RefrescarEnMedianoche";
 import SincronizarTiempoReal from "@/components/ui/SincronizarTiempoReal";
 import Toast, { type TipoToast } from "@/components/ui/Toast";
@@ -30,6 +32,12 @@ function servicioInicial(servicios: Servicio[], servicioInicialId: string | null
   return servicios.find((item) => item.id === servicioInicialId) ?? null;
 }
 
+let contadorItems = 0;
+function nuevoIdItem(): string {
+  contadorItems += 1;
+  return `item-${contadorItems}`;
+}
+
 export default function PantallaCobro({
   servicios,
   servicioInicialId,
@@ -48,7 +56,17 @@ export default function PantallaCobro({
   const [guardando, setGuardando] = useState(false);
   const [mostrandoConfirmacion, setMostrandoConfirmacion] = useState(false);
   const [toast, setToast] = useState<EstadoToast>(null);
+
+  const [modoPaquete, setModoPaquete] = useState(false);
+  const [itemsCarrito, setItemsCarrito] = useState<ItemCarrito[]>([]);
+  const [mostrandoAgregar, setMostrandoAgregar] = useState(false);
+
   const router = useRouter();
+
+  const serviciosParaCarrito = useMemo(
+    () => servicios.filter((s) => s.slug !== SLUG_USO_CASA),
+    [servicios]
+  );
 
   const esUsoDeCasa = useCallback((candidato: Servicio): boolean => {
     return candidato.slug === SLUG_USO_CASA;
@@ -66,18 +84,28 @@ export default function PantallaCobro({
     [esUsoDeCasa]
   );
 
-  function seleccionarPrecio(precio: number): void {
-    setPrecioUnitario(precio);
+  function activarPaquete(): void {
+    setServicio(null);
+    setPrecioUnitario(null);
+    setModoPaquete(true);
   }
 
-  function escribirPrecio(precio: number | null): void {
-    setPrecioUnitario(precio);
+  function agregarAlCarrito(servicioAgregar: Servicio, precio: number, cant: number): void {
+    setItemsCarrito((actuales) => [
+      ...actuales,
+      {
+        id: nuevoIdItem(),
+        servicioId: servicioAgregar.id,
+        nombre: servicioAgregar.nombre,
+        precioUnitario: precio,
+        cantidad: cant,
+      },
+    ]);
+    setMostrandoAgregar(false);
   }
 
-  function cambiarCantidad(nuevaCantidad: number): void {
-    if (nuevaCantidad >= 1) {
-      setCantidad(nuevaCantidad);
-    }
+  function eliminarDelCarrito(id: string): void {
+    setItemsCarrito((actuales) => actuales.filter((item) => item.id !== id));
   }
 
   async function guardarVenta(): Promise<void> {
@@ -117,6 +145,71 @@ export default function PantallaCobro({
     }
   }
 
+  async function guardarPaquete(): Promise<void> {
+    setGuardando(true);
+    setToast(null);
+
+    try {
+      for (const item of itemsCarrito) {
+        await crearRegistro({
+          servicioId: item.servicioId,
+          cantidad: item.cantidad,
+          precioUnitario: item.precioUnitario,
+          total: item.precioUnitario * item.cantidad,
+          esCasa: false,
+        });
+      }
+      setToast({ tipo: "exito", mensaje: "Paquete registrado" });
+      setItemsCarrito([]);
+      setModoPaquete(false);
+      router.refresh();
+    } catch (error) {
+      setToast({
+        tipo: "error",
+        mensaje: `No se pudo guardar: ${error instanceof Error ? error.message : "error de conexión"}`,
+      });
+    } finally {
+      setGuardando(false);
+    }
+  }
+
+  if (modoPaquete) {
+    return (
+      <div className="flex w-full max-w-md flex-col gap-5">
+        <CarritoPaquete
+          items={itemsCarrito}
+          servicios={servicios}
+          guardando={guardando}
+          onAgregar={() => setMostrandoAgregar(true)}
+          onEliminar={eliminarDelCarrito}
+          onGuardar={guardarPaquete}
+          onCancelar={() => {
+            setModoPaquete(false);
+            setItemsCarrito([]);
+          }}
+        />
+
+        {mostrandoAgregar && (
+          <AgregarAlCarrito
+            servicios={serviciosParaCarrito}
+            onAgregar={agregarAlCarrito}
+            onCancelar={() => setMostrandoAgregar(false)}
+          />
+        )}
+
+        {toast && (
+          <Toast
+            mensaje={toast.mensaje}
+            tipo={toast.tipo}
+            onCerrar={() => setToast(null)}
+          />
+        )}
+        <RefrescarEnMedianoche />
+        <SincronizarTiempoReal />
+      </div>
+    );
+  }
+
   return (
     <div className="flex w-full max-w-md flex-col gap-5">
       <section className="flex flex-col gap-3">
@@ -126,6 +219,13 @@ export default function PantallaCobro({
           seleccionadoId={servicio?.id ?? null}
           onSeleccionar={seleccionarServicio}
         />
+        <button
+          type="button"
+          onClick={activarPaquete}
+          className="btn-feedback rounded-2xl border-2 border-dashed border-borde bg-superficie px-4 py-3 text-sm font-semibold text-texto-suave hover:border-marca-300 hover:text-texto"
+        >
+          📦 Paquete
+        </button>
       </section>
 
       {servicio && (
@@ -136,8 +236,8 @@ export default function PantallaCobro({
               <SelectorPrecio
                 servicio={servicio}
                 precioSeleccionado={precioUnitario}
-                onSeleccionarPrecio={seleccionarPrecio}
-                onEscribirPrecio={escribirPrecio}
+                onSeleccionarPrecio={(p) => setPrecioUnitario(p)}
+                onEscribirPrecio={(p) => setPrecioUnitario(p)}
               />
             </section>
           )}
@@ -146,7 +246,9 @@ export default function PantallaCobro({
             <TituloSeccion>Cantidad</TituloSeccion>
             <ContadorCantidad
               cantidad={cantidad}
-              onCambiarCantidad={cambiarCantidad}
+              onCambiarCantidad={(n) => {
+                if (n >= 1) setCantidad(n);
+              }}
             />
           </section>
 

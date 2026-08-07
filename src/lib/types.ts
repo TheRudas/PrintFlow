@@ -63,3 +63,11 @@ export type FiltroHistorial = {
   fechaDesde?: string;
   fechaHasta?: string;
 };
+
+export type ItemCarrito = {
+  id: string;
+  servicioId: string;
+  nombre: string;
+  precioUnitario: number;
+  cantidad: number;
+};

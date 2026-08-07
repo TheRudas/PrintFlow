@@ -45,7 +45,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <footer className="py-3 text-center text-xs text-texto-tenue">
+          v2.21
+        </footer>
+      </body>
     </html>
   );
 }
