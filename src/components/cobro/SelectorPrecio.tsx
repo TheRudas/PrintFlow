@@ -120,7 +120,7 @@ export default function SelectorPrecio({
             onPointerCancel={detenerRepeticion}
             onContextMenu={(evento) => evento.preventDefault()}
             disabled={precioSeleccionado === null || precioSeleccionado <= 0}
-            className="btn-feedback flex w-14 shrink-0 items-center justify-center border-r border-borde text-2xl font-bold text-texto hover:bg-superficie-alta active:bg-marca-100 disabled:opacity-30"
+            className="btn-feedback flex w-14 shrink-0 items-center justify-center border-r border-borde text-2xl font-bold text-texto hover:bg-marca-50 hover:text-marca-600 active:bg-marca-500 active:text-white disabled:opacity-30"
           >
             −
           </button>
@@ -145,7 +145,7 @@ export default function SelectorPrecio({
             onPointerLeave={detenerRepeticion}
             onPointerCancel={detenerRepeticion}
             onContextMenu={(evento) => evento.preventDefault()}
-            className="btn-feedback flex w-14 shrink-0 items-center justify-center border-l border-borde text-2xl font-bold text-texto hover:bg-superficie-alta active:bg-marca-100"
+            className="btn-feedback flex w-14 shrink-0 items-center justify-center border-l border-borde text-2xl font-bold text-texto hover:bg-marca-50 hover:text-marca-600 active:bg-marca-500 active:text-white"
           >
             +
           </button>
