@@ -48,7 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         {children}
         <footer className="py-3 text-center text-xs text-texto-tenue">
-          v2.21
+          v2.30
         </footer>
       </body>
     </html>

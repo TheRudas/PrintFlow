@@ -9,11 +9,14 @@ import type {
   EstadisticasCasa,
   FiltroHistorial,
   HistorialPaginado,
+  KpisPeriodo,
   ModalidadHistorial,
   Registro,
   TipoHistorial,
   Totales,
   TotalesGenerales,
+  VentaPorDia,
+  VentaPorDiaServicio,
 } from "../types";
 
 export const TAMANO_PAGINA_HISTORIAL = 50;
@@ -43,6 +46,171 @@ function sumaDeRegistros(registros: RegistroConTotal[]): Totales {
     ),
     cantidadRegistros: registros.length,
   };
+}
+
+export async function obtenerDesgloseConFechas(
+  desde: Date,
+  hasta: Date
+): Promise<DesgloseServicio[]> {
+  const supabase = await crearClienteServidor();
+
+  const { data, error } = await supabase
+    .from("servicios")
+    .select("id, slug, nombre, registros!inner(total, cantidad, es_casa, creado_en)");
+
+  if (error) {
+    throw new Error(`No se pudo obtener el desglose: ${error.message}`);
+  }
+
+  const desdeIso = desde.toISOString();
+  const hastaIso = hasta.toISOString();
+
+  return (data ?? [])
+    .filter((servicio) => servicio.slug !== SLUG_USO_CASA)
+    .map((servicio) => {
+      const registros = (
+        (servicio.registros as unknown as Array<{
+          total: number;
+          cantidad: number;
+          es_casa: boolean;
+          creado_en: string;
+        }>) ?? []
+      ).filter(
+        (registro) =>
+          !registro.es_casa &&
+          registro.creado_en >= desdeIso &&
+          registro.creado_en < hastaIso
+      );
+
+      const montoTotal = registros.reduce(
+        (acumulado, registro) => acumulado + registro.total,
+        0
+      );
+
+      return {
+        servicioId: servicio.id,
+        nombre: servicio.nombre,
+        montoTotal,
+        cantidad: registros.length,
+      };
+    });
+}
+
+export async function obtenerVentasDetalladasPorDia(
+  desde: Date,
+  hasta: Date
+): Promise<VentaPorDiaServicio[]> {
+  const supabase = await crearClienteServidor();
+
+  const { data, error } = await supabase
+    .from("registros")
+    .select("total, creado_en, servicio_id, servicios!inner(nombre, slug)")
+    .eq("es_casa", false)
+    .gte("creado_en", desde.toISOString())
+    .lt("creado_en", hasta.toISOString());
+
+  if (error) {
+    throw new Error(`No se pudieron obtener las ventas detalladas: ${error.message}`);
+  }
+
+  const resultado: VentaPorDiaServicio[] = [];
+
+  for (const r of data ?? []) {
+    const servicio = (
+      r as unknown as {
+        servicios: { nombre: string; slug: string } | { nombre: string; slug: string }[];
+      }
+    ).servicios;
+    const srv = Array.isArray(servicio) ? servicio[0] : servicio;
+
+    resultado.push({
+      fecha: (r.creado_en as string).slice(0, 10),
+      nombre: srv?.nombre ?? "Servicio eliminado",
+      slug: srv?.slug ?? "",
+      montoTotal: r.total,
+    });
+  }
+
+  return resultado;
+}
+
+export async function obtenerVentasPorDia(
+  desde: Date,
+  hasta: Date
+): Promise<VentaPorDia[]> {
+  const supabase = await crearClienteServidor();
+
+  const { data, error } = await supabase
+    .from("registros")
+    .select("total, creado_en")
+    .eq("es_casa", false)
+    .gte("creado_en", desde.toISOString())
+    .lt("creado_en", hasta.toISOString())
+    .order("creado_en", { ascending: true });
+
+  if (error) {
+    throw new Error(`No se pudieron obtener las ventas por día: ${error.message}`);
+  }
+
+  const agrupado = new Map<string, VentaPorDia>();
+
+  for (const registro of data ?? []) {
+    const fecha = registro.creado_en.slice(0, 10);
+    const existente = agrupado.get(fecha);
+    if (existente) {
+      existente.montoTotal += registro.total;
+      existente.cantidad += 1;
+    } else {
+      agrupado.set(fecha, {
+        fecha,
+        montoTotal: registro.total,
+        cantidad: 1,
+      });
+    }
+  }
+
+  return Array.from(agrupado.values());
+}
+
+export async function obtenerKpis(
+  desde: Date,
+  hasta: Date
+): Promise<KpisPeriodo> {
+  const supabase = await crearClienteServidor();
+
+  const { data, error } = await supabase
+    .from("registros")
+    .select("total, creado_en")
+    .eq("es_casa", false)
+    .gte("creado_en", desde.toISOString())
+    .lt("creado_en", hasta.toISOString());
+
+  if (error) {
+    throw new Error(`No se pudieron obtener los KPIs: ${error.message}`);
+  }
+
+  const registros = data ?? [];
+  const total = registros.reduce((s, r) => s + r.total, 0);
+
+  const diasUnicos = new Set(
+    registros.map((r) => r.creado_en.slice(0, 10))
+  );
+  const cantidadDias = diasUnicos.size || 1;
+  const promedioDiario = Math.round(total / cantidadDias);
+
+  let mejorDia: { fecha: string; monto: number } | null = null;
+  const agrupadoDia = new Map<string, number>();
+  for (const registro of registros) {
+    const fecha = registro.creado_en.slice(0, 10);
+    agrupadoDia.set(fecha, (agrupadoDia.get(fecha) ?? 0) + registro.total);
+  }
+  for (const [fecha, monto] of agrupadoDia) {
+    if (!mejorDia || monto > mejorDia.monto) {
+      mejorDia = { fecha, monto };
+    }
+  }
+
+  return { total, promedioDiario, mejorDia };
 }
 
 export async function obtenerTotales(desde: Date): Promise<Totales> {

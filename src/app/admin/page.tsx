@@ -81,6 +81,28 @@ export default async function PaginaAdmin() {
       </section>
 
       <section className="w-full max-w-2xl">
+        <Link
+          href="/admin/detalles"
+          className="btn-feedback glow-marca gradiente-marca flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-bold text-white"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-5 w-5"
+          >
+            <path d="M3 3v18h18" />
+            <path d="m19 9-5 5-4-4-3 3" />
+          </svg>
+          Ver gráficas y detalles
+        </Link>
+      </section>
+
+      <section className="w-full max-w-2xl">
         <ResumenGeneral totales={totalesGenerales} />
       </section>
 

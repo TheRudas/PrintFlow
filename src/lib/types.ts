@@ -71,3 +71,22 @@ export type ItemCarrito = {
   precioUnitario: number;
   cantidad: number;
 };
+
+export type VentaPorDia = {
+  fecha: string;
+  montoTotal: number;
+  cantidad: number;
+};
+
+export type VentaPorDiaServicio = {
+  fecha: string;
+  nombre: string;
+  slug: string;
+  montoTotal: number;
+};
+
+export type KpisPeriodo = {
+  total: number;
+  promedioDiario: number;
+  mejorDia: { fecha: string; monto: number } | null;
+};
