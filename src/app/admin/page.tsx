@@ -31,7 +31,7 @@ export default async function PaginaAdmin() {
     redirect("/");
   }
 
-  const { perfil, correo, usuarioId } = await obtenerUsuarioActual();
+  const { perfil, correo } = await obtenerUsuarioActual();
   const nombreMostrado = nombreUsuario(correo, perfil?.nombre);
 
   const [
@@ -137,7 +137,7 @@ export default async function PaginaAdmin() {
         <ListaServicios servicios={servicios} />
       </section>
       <RefrescarEnMedianoche />
-      <SincronizarTiempoReal perfilId={usuarioId} />
+      <SincronizarTiempoReal />
     </main>
   );
 }

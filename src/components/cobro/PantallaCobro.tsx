@@ -17,7 +17,6 @@ import Toast, { type TipoToast } from "@/components/ui/Toast";
 interface Props {
   servicios: Servicio[];
   servicioInicialId: string | null;
-  usuarioId: string | null;
 }
 
 type EstadoToast = { tipo: TipoToast; mensaje: string } | null;
@@ -34,7 +33,6 @@ function servicioInicial(servicios: Servicio[], servicioInicialId: string | null
 export default function PantallaCobro({
   servicios,
   servicioInicialId,
-  usuarioId,
 }: Props) {
   const [servicio, setServicio] = useState<Servicio | null>(() =>
     servicioInicial(servicios, servicioInicialId)
@@ -184,7 +182,7 @@ export default function PantallaCobro({
         />
       )}
       <RefrescarEnMedianoche />
-      <SincronizarTiempoReal perfilId={usuarioId} />
+      <SincronizarTiempoReal />
     </div>
   );
 }

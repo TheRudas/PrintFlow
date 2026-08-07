@@ -17,7 +17,7 @@ export default async function PaginaHistorial() {
     redirect("/");
   }
 
-  const { perfil, correo, usuarioId } = await obtenerUsuarioActual();
+  const { perfil, correo } = await obtenerUsuarioActual();
   const nombreMostrado = nombreUsuario(correo, perfil?.nombre);
 
   const [historial, servicios] = await Promise.all([
@@ -52,7 +52,7 @@ export default async function PaginaHistorial() {
         servicios={servicios}
       />
       <RefrescarEnMedianoche />
-      <SincronizarTiempoReal perfilId={usuarioId} />
+      <SincronizarTiempoReal />
     </main>
   );
 }

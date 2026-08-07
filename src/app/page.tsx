@@ -89,7 +89,6 @@ export default async function Inicio(props: PageProps<"/">) {
       <PantallaCobro
         servicios={servicios}
         servicioInicialId={typeof servicioId === "string" ? servicioId : null}
-        usuarioId={usuarioId}
       />
 
       {sesionAdmin && (

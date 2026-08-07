@@ -4,20 +4,14 @@ import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { crearClienteSupabase } from "@/lib/supabase/client";
 
-interface Props {
-  perfilId: string | null;
-}
-
-export default function SincronizarTiempoReal({ perfilId }: Props) {
+export default function SincronizarTiempoReal() {
   const router = useRouter();
   const refrescoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const canalRef = useRef<{ unsubscribe: () => void } | null>(null);
   const routerRef = useRef(router);
-  const perfilIdRef = useRef(perfilId);
 
   useEffect(() => {
     routerRef.current = router;
-    perfilIdRef.current = perfilId;
   });
 
   useEffect(() => {
@@ -48,20 +42,12 @@ export default function SincronizarTiempoReal({ perfilId }: Props) {
         .on(
           "postgres_changes",
           { event: "INSERT", schema: "public", table: "registros" },
-          (payload) => {
-            const perfilActual = perfilIdRef.current;
-            if (perfilActual && payload.new.perfil_id === perfilActual) {
-              return;
-            }
-            programarRefresco();
-          }
+          () => programarRefresco()
         )
         .on(
           "postgres_changes",
           { event: "DELETE", schema: "public", table: "registros" },
-          () => {
-            programarRefresco();
-          }
+          () => programarRefresco()
         )
         .subscribe();
     }
