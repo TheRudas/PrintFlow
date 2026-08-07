@@ -10,6 +10,8 @@ import MenuUsuario from "@/components/ui/MenuUsuario";
 
 const CANTIDAD_ULTIMAS_VENTAS = 6;
 
+export const dynamic = "force-dynamic";
+
 export default async function Inicio(props: PageProps<"/">) {
   const searchParams = await props.searchParams;
   const servicioId = searchParams.servicio;
