@@ -94,10 +94,7 @@ export async function crearCuentaEmpleado(
     };
   }
 
-  const perfil = await obtenerPerfilPorUsuarioId(data.user.id);
-  if (!perfil) {
-    await asignarRol(data.user.id, nombre.trim(), "empleado");
-  }
+  await asignarRol(data.user.id, nombre.trim(), "empleado");
 
   return { exito: true };
 }

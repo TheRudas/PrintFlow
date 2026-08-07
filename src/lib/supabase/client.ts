@@ -16,6 +16,11 @@ function obtenerVariable(nombre: string): string {
 export function crearClienteSupabase() {
   return createBrowserClient<Database>(
     obtenerVariable("NEXT_PUBLIC_SUPABASE_URL"),
-    obtenerVariable("NEXT_PUBLIC_SUPABASE_ANON_KEY")
+    obtenerVariable("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
+    {
+      cookieOptions: {
+        maxAge: 60 * 60 * 24 * 365,
+      },
+    }
   );
 }

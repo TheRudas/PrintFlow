@@ -272,6 +272,14 @@ export async function obtenerHistorialFiltrado(
     consulta = consulta.in("servicio_id", idsFiltrados);
   }
 
+  if (filtro.fechaDesde) {
+    consulta = consulta.gte("creado_en", filtro.fechaDesde);
+  }
+
+  if (filtro.fechaHasta) {
+    consulta = consulta.lt("creado_en", filtro.fechaHasta);
+  }
+
   const { data, count, error } = await consulta;
 
   if (error) {

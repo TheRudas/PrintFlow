@@ -60,4 +60,6 @@ export type ModalidadHistorial = "todas" | "bn" | "color";
 export type FiltroHistorial = {
   tipo: TipoHistorial;
   modalidad: ModalidadHistorial;
+  fechaDesde?: string;
+  fechaHasta?: string;
 };

@@ -31,6 +31,16 @@ const MODALIDADES: Array<{ valor: ModalidadHistorial; etiqueta: string }> = [
   { valor: "color", etiqueta: "A Color" },
 ];
 
+function fechaBogotaAIso(fecha: string): string {
+  return `${fecha}T05:00:00.000Z`;
+}
+
+function diaSiguiente(fecha: string): string {
+  const d = new Date(`${fecha}T12:00:00`);
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
 function nombreDeServicio(
   servicioId: string,
   servicios: Servicio[]
@@ -57,6 +67,8 @@ export default function HistorialCompleto({
   const [historial, setHistorial] = useState(historialInicial);
   const [tipo, setTipo] = useState<TipoHistorial>("todas");
   const [modalidad, setModalidad] = useState<ModalidadHistorial>("todas");
+  const [fechaDesde, setFechaDesde] = useState("");
+  const [fechaHasta, setFechaHasta] = useState("");
   const [cargando, setCargando] = useState(false);
   const [seleccionados, setSeleccionados] = useState<Set<string>>(new Set());
   const [confirmarEliminar, setConfirmarEliminar] = useState(false);
@@ -66,7 +78,9 @@ export default function HistorialCompleto({
 
   async function cargarHistorial(
     tipoElegido: TipoHistorial,
-    modalidadElegida: ModalidadHistorial
+    modalidadElegida: ModalidadHistorial,
+    desde?: string,
+    hasta?: string,
   ): Promise<void> {
     setCargando(true);
     setHistorial({
@@ -79,6 +93,8 @@ export default function HistorialCompleto({
     const resultado = await obtenerHistorialCompletoComoAdmin(0, {
       tipo: tipoElegido,
       modalidad: modalidadElegida,
+      fechaDesde: desde || undefined,
+      fechaHasta: hasta || undefined,
     });
     setHistorial(resultado);
     setCargando(false);
@@ -87,12 +103,30 @@ export default function HistorialCompleto({
   function cambiarTipo(nuevoTipo: TipoHistorial): void {
     setTipo(nuevoTipo);
     setModalidad("todas");
-    cargarHistorial(nuevoTipo, "todas");
+    cargarHistorial(nuevoTipo, "todas", fechasActivas().desde, fechasActivas().hasta);
   }
 
   function cambiarModalidad(nuevaModalidad: ModalidadHistorial): void {
     setModalidad(nuevaModalidad);
-    cargarHistorial(tipo, nuevaModalidad);
+    cargarHistorial(tipo, nuevaModalidad, fechasActivas().desde, fechasActivas().hasta);
+  }
+
+  function fechasActivas(): { desde: string | undefined; hasta: string | undefined } {
+    return {
+      desde: fechaDesde ? fechaBogotaAIso(fechaDesde) : undefined,
+      hasta: fechaHasta ? fechaBogotaAIso(diaSiguiente(fechaHasta)) : undefined,
+    };
+  }
+
+  function aplicarFiltroFechas(): void {
+    const { desde, hasta } = fechasActivas();
+    cargarHistorial(tipo, modalidad, desde, hasta);
+  }
+
+  function limpiarFechas(): void {
+    setFechaDesde("");
+    setFechaHasta("");
+    cargarHistorial(tipo, modalidad);
   }
 
   function alternarSeleccion(id: string): void {
@@ -136,7 +170,7 @@ export default function HistorialCompleto({
       return;
     }
 
-    await cargarHistorial(tipo, modalidad);
+    await cargarHistorial(tipo, modalidad, fechasActivas().desde, fechasActivas().hasta);
   }
 
   const todosSeleccionadosEnPagina =
@@ -146,6 +180,44 @@ export default function HistorialCompleto({
   return (
     <div className="flex w-full max-w-2xl flex-col gap-4">
       <div className="flex flex-col gap-3">
+        <div className="flex items-end gap-2">
+          <div className="flex flex-1 flex-col gap-1">
+            <label className="text-xs font-medium text-texto-suave">Desde</label>
+            <input
+              type="date"
+              value={fechaDesde}
+              onChange={(e) => setFechaDesde(e.target.value)}
+              className="rounded-xl border border-borde bg-superficie px-3 py-2 text-sm text-texto focus:border-marca-500 focus:outline-none"
+            />
+          </div>
+          <div className="flex flex-1 flex-col gap-1">
+            <label className="text-xs font-medium text-texto-suave">Hasta</label>
+            <input
+              type="date"
+              value={fechaHasta}
+              onChange={(e) => setFechaHasta(e.target.value)}
+              className="rounded-xl border border-borde bg-superficie px-3 py-2 text-sm text-texto focus:border-marca-500 focus:outline-none"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={aplicarFiltroFechas}
+            disabled={!fechaDesde && !fechaHasta}
+            className="btn-feedback rounded-xl border border-marca-200 bg-superficie px-3 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 disabled:opacity-40 dark:text-marca-300"
+          >
+            Filtrar
+          </button>
+          {(fechaDesde || fechaHasta) && (
+            <button
+              type="button"
+              onClick={limpiarFechas}
+              className="btn-feedback rounded-xl border border-borde bg-superficie px-3 py-2 text-sm text-texto-suave hover:bg-superficie-alta"
+            >
+              Limpiar
+            </button>
+          )}
+        </div>
+
         <div className="flex flex-wrap gap-2">
           {TIPOS.map((opcion) => (
             <button
@@ -302,7 +374,7 @@ export default function HistorialCompleto({
       {confirmarEliminar && (
         <DialogoConfirmacion
           titulo="Eliminar seleccionados"
-          mensaje={`¿Estás seguro de que querés eliminar ${cantidadSeleccionados} ${
+          mensaje={`¿Estás seguro de que quieres eliminar ${cantidadSeleccionados} ${
             cantidadSeleccionados === 1 ? "registro" : "registros"
           }?`}
           textoConfirmar="Eliminar"

@@ -12,7 +12,7 @@ function obtenerVariable(nombre: string): string {
 }
 
 export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers: request.headers,
     },
@@ -30,13 +30,11 @@ export async function proxy(request: NextRequest) {
           cookiesParaSetear.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
           cookiesParaSetear.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
+            response.cookies.set(name, value, {
+              ...options,
+              maxAge: 60 * 60 * 24 * 365,
+            })
           );
         },
       },

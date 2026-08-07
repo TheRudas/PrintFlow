@@ -4,25 +4,27 @@ import PantallaCobro from "@/components/cobro/PantallaCobro";
 import UltimasVentas from "@/components/historial/UltimasVentas";
 import { obtenerUsuarioActual } from "@/lib/auth/acciones";
 import { obtenerServiciosActivos } from "@/lib/repos/servicios";
-import { obtenerUltimasVentas } from "@/lib/repos/estadisticas";
-import CerrarSesion from "@/components/auth/CerrarSesion";
-import BotonTema from "@/components/ui/BotonTema";
+import { obtenerUltimasVentas, obtenerTotalesDeHoy } from "@/lib/repos/estadisticas";
+import { formatearMoneda, nombreUsuario } from "@/lib/formatear";
+import MenuUsuario from "@/components/ui/MenuUsuario";
 
 const CANTIDAD_ULTIMAS_VENTAS = 6;
 
 export default async function Inicio(props: PageProps<"/">) {
   const searchParams = await props.searchParams;
   const servicioId = searchParams.servicio;
-  const { usuarioId, perfil } = await obtenerUsuarioActual();
+  const { usuarioId, correo, perfil } = await obtenerUsuarioActual();
 
   if (!usuarioId) {
     redirect("/ingresar");
   }
 
   const sesionAdmin = perfil?.rol === "admin";
-  const [servicios, ultimasVentas] = await Promise.all([
+  const nombreMostrado = nombreUsuario(correo, perfil?.nombre);
+  const [servicios, ultimasVentas, totalesHoy] = await Promise.all([
     obtenerServiciosActivos(),
     sesionAdmin ? obtenerUltimasVentas(CANTIDAD_ULTIMAS_VENTAS) : [],
+    obtenerTotalesDeHoy(),
   ]);
 
   return (
@@ -54,7 +56,6 @@ export default async function Inicio(props: PageProps<"/">) {
           </h1>
         </div>
         <div className="flex flex-wrap items-center justify-end gap-2">
-          <BotonTema />
           {sesionAdmin && (
             <Link
               href="/admin"
@@ -63,13 +64,30 @@ export default async function Inicio(props: PageProps<"/">) {
               Panel
             </Link>
           )}
-          <CerrarSesion />
+          {nombreMostrado && (
+            <span className="rounded-full border border-borde bg-superficie px-3 py-1.5 text-sm font-semibold text-texto-suave">
+              {nombreMostrado}
+            </span>
+          )}
+          <MenuUsuario />
         </div>
       </header>
+
+      {totalesHoy.montoTotal > 0 && (
+        <div className="sombra-suave flex w-full max-w-md items-center justify-between rounded-2xl border border-borde bg-superficie px-4 py-3">
+          <span className="text-sm font-medium text-texto-suave">
+            Total de hoy
+          </span>
+          <span className="text-lg font-bold tabular-nums text-texto">
+            {formatearMoneda(totalesHoy.montoTotal)}
+          </span>
+        </div>
+      )}
 
       <PantallaCobro
         servicios={servicios}
         servicioInicialId={typeof servicioId === "string" ? servicioId : null}
+        usuarioId={usuarioId}
       />
 
       {sesionAdmin && (

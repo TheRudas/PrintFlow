@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import CerrarSesion from "@/components/auth/CerrarSesion";
-import BotonTema from "@/components/ui/BotonTema";
+import MenuUsuario from "@/components/ui/MenuUsuario";
+import SincronizarTiempoReal from "@/components/ui/SincronizarTiempoReal";
+import RefrescarEnMedianoche from "@/components/ui/RefrescarEnMedianoche";
 import HistorialCompleto from "@/components/historial/HistorialCompleto";
-import { esAdmin } from "@/lib/auth/acciones";
+import { esAdmin, obtenerUsuarioActual } from "@/lib/auth/acciones";
+import { nombreUsuario } from "@/lib/formatear";
 import { obtenerHistorialFiltrado } from "@/lib/repos/estadisticas";
 import { obtenerTodosLosServicios } from "@/lib/repos/servicios";
 
@@ -14,6 +16,9 @@ export default async function PaginaHistorial() {
   if (!sesionValida) {
     redirect("/");
   }
+
+  const { perfil, correo, usuarioId } = await obtenerUsuarioActual();
+  const nombreMostrado = nombreUsuario(correo, perfil?.nombre);
 
   const [historial, servicios] = await Promise.all([
     obtenerHistorialFiltrado(0, { tipo: "todas", modalidad: "todas" }, 200),
@@ -27,8 +32,12 @@ export default async function PaginaHistorial() {
           Historial completo
         </h1>
         <div className="flex gap-2">
-          <BotonTema />
-          <CerrarSesion />
+          {nombreMostrado && (
+            <span className="rounded-full border border-borde bg-superficie px-3 py-1.5 text-sm font-semibold text-texto-suave">
+              {nombreMostrado}
+            </span>
+          )}
+          <MenuUsuario />
           <Link
             href="/"
             className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 dark:text-marca-300"
@@ -42,6 +51,8 @@ export default async function PaginaHistorial() {
         historialInicial={historial}
         servicios={servicios}
       />
+      <RefrescarEnMedianoche />
+      <SincronizarTiempoReal perfilId={usuarioId} />
     </main>
   );
 }

@@ -24,7 +24,10 @@ export async function crearClienteServidor() {
         setAll(cookiesParaSetear) {
           try {
             cookiesParaSetear.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
+              cookieStore.set(name, value, {
+                ...options,
+                maxAge: 60 * 60 * 24 * 365,
+              })
             );
           } catch {
             // Se llama desde el Server Component; es seguro ignorar

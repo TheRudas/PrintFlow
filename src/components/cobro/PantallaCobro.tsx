@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
 import { crearRegistro } from "@/lib/repos/registros";
 import type { Servicio } from "@/lib/types";
 import SelectorServicio from "./SelectorServicio";
@@ -8,11 +9,15 @@ import SelectorPrecio from "./SelectorPrecio";
 import ContadorCantidad from "./ContadorCantidad";
 import ResumenTotal from "./ResumenTotal";
 import TituloSeccion from "./TituloSeccion";
+import ConfirmarVenta from "./ConfirmarVenta";
+import RefrescarEnMedianoche from "@/components/ui/RefrescarEnMedianoche";
+import SincronizarTiempoReal from "@/components/ui/SincronizarTiempoReal";
 import Toast, { type TipoToast } from "@/components/ui/Toast";
 
 interface Props {
   servicios: Servicio[];
   servicioInicialId: string | null;
+  usuarioId: string | null;
 }
 
 type EstadoToast = { tipo: TipoToast; mensaje: string } | null;
@@ -29,6 +34,7 @@ function servicioInicial(servicios: Servicio[], servicioInicialId: string | null
 export default function PantallaCobro({
   servicios,
   servicioInicialId,
+  usuarioId,
 }: Props) {
   const [servicio, setServicio] = useState<Servicio | null>(() =>
     servicioInicial(servicios, servicioInicialId)
@@ -42,7 +48,9 @@ export default function PantallaCobro({
   });
   const [cantidad, setCantidad] = useState(1);
   const [guardando, setGuardando] = useState(false);
+  const [mostrandoConfirmacion, setMostrandoConfirmacion] = useState(false);
   const [toast, setToast] = useState<EstadoToast>(null);
+  const router = useRouter();
 
   const esUsoDeCasa = useCallback((candidato: Servicio): boolean => {
     return candidato.slug === SLUG_USO_CASA;
@@ -100,6 +108,7 @@ export default function PantallaCobro({
       setToast({ tipo: "exito", mensaje: esCasa ? "Uso de la casa registrado" : "Venta registrada" });
       setPrecioUnitario(esCasa ? 0 : servicio.precio_por_defecto);
       setCantidad(1);
+      router.refresh();
     } catch (error) {
       setToast({
         tipo: "error",
@@ -148,9 +157,23 @@ export default function PantallaCobro({
             cantidad={cantidad}
             guardando={guardando}
             esCasa={servicio ? esUsoDeCasa(servicio) : false}
-            onGuardar={guardarVenta}
+            onGuardar={() => setMostrandoConfirmacion(true)}
           />
         </>
+      )}
+
+      {mostrandoConfirmacion && servicio && (
+        <ConfirmarVenta
+          nombreServicio={servicio.nombre}
+          precioUnitario={precioUnitario}
+          cantidad={cantidad}
+          esCasa={esUsoDeCasa(servicio)}
+          onConfirmar={() => {
+            setMostrandoConfirmacion(false);
+            guardarVenta();
+          }}
+          onCancelar={() => setMostrandoConfirmacion(false)}
+        />
       )}
 
       {toast && (
@@ -160,6 +183,8 @@ export default function PantallaCobro({
           onCerrar={() => setToast(null)}
         />
       )}
+      <RefrescarEnMedianoche />
+      <SincronizarTiempoReal perfilId={usuarioId} />
     </div>
   );
 }
