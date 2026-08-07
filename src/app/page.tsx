@@ -57,17 +57,17 @@ export default async function Inicio(props: PageProps<"/">) {
             PrintFlow
           </h1>
         </div>
-        <div className="flex flex-wrap items-center justify-end gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-1.5">
           {sesionAdmin && (
             <Link
               href="/admin"
-              className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 dark:text-marca-300"
+              className="btn-feedback rounded-full border border-marca-200 bg-superficie px-3 py-1.5 text-xs font-medium text-marca-700 hover:bg-marca-50 dark:text-marca-300"
             >
               Panel
             </Link>
           )}
           {nombreMostrado && (
-            <span className="rounded-full border border-borde bg-superficie px-3 py-1.5 text-sm font-semibold text-texto-suave">
+            <span className="max-w-[6rem] truncate rounded-full border border-borde bg-superficie px-2 py-1 text-xs font-semibold text-texto-suave">
               {nombreMostrado}
             </span>
           )}
