@@ -42,7 +42,7 @@ export default function AgregarAlCarrito({
         className="absolute inset-0 bg-zinc-950/50 backdrop-blur-[2px]"
         onClick={onCancelar}
       />
-      <div className="relative flex w-full max-w-xs flex-col gap-4 rounded-3xl border border-borde bg-superficie p-5 shadow-2xl animate-[toast-entrar_0.2s_cubic-bezier(0.16,1,0.3,1)]">
+      <div className="relative flex w-full max-w-sm flex-col gap-4 rounded-3xl border border-borde bg-superficie p-5 shadow-2xl animate-[toast-entrar_0.2s_cubic-bezier(0.16,1,0.3,1)]">
         <p className="text-center text-xs font-medium uppercase tracking-wide text-texto-suave">
           Agregar al paquete
         </p>
