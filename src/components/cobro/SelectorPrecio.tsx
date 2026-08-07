@@ -1,4 +1,7 @@
-﻿import { formatearMoneda } from "@/lib/formatear";
+﻿"use client";
+
+import { useCallback, useEffect, useRef } from "react";
+import { formatearMoneda } from "@/lib/formatear";
 import type { Servicio } from "@/lib/types";
 
 interface Props {
@@ -8,12 +11,65 @@ interface Props {
   onEscribirPrecio: (precio: number | null) => void;
 }
 
+const RETARDO_INICIAL_MS = 400;
+const INTERVALO_MS = 80;
+
 export default function SelectorPrecio({
   servicio,
   precioSeleccionado,
   onSeleccionarPrecio,
   onEscribirPrecio,
 }: Props) {
+  const precioRef = useRef(precioSeleccionado);
+  const temporizadorRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const intervaloRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    precioRef.current = precioSeleccionado;
+  }, [precioSeleccionado]);
+
+  useEffect(() => {
+    return () => {
+      if (temporizadorRef.current !== null) {
+        clearTimeout(temporizadorRef.current);
+      }
+      if (intervaloRef.current !== null) {
+        clearInterval(intervaloRef.current);
+      }
+    };
+  }, []);
+
+  function detenerRepeticion(): void {
+    if (temporizadorRef.current !== null) {
+      clearTimeout(temporizadorRef.current);
+      temporizadorRef.current = null;
+    }
+    if (intervaloRef.current !== null) {
+      clearInterval(intervaloRef.current);
+      intervaloRef.current = null;
+    }
+  }
+
+  const iniciarRepeticion = useCallback(
+    (paso: number) => {
+      detenerRepeticion();
+
+      const aplicar = () => {
+        const base = precioRef.current ?? 0;
+        const siguiente = Math.max(0, Math.trunc(base) + paso);
+        onEscribirPrecio(siguiente);
+        precioRef.current = siguiente;
+      };
+
+      aplicar();
+
+      temporizadorRef.current = setTimeout(() => {
+        intervaloRef.current = setInterval(aplicar, INTERVALO_MS);
+      }, RETARDO_INICIAL_MS);
+    },
+    [onEscribirPrecio]
+  );
+
   const tienePresets = servicio.presets.length > 0;
 
   function esSeleccionado(precio: number): boolean {
@@ -30,12 +86,6 @@ export default function SelectorPrecio({
     if (Number.isFinite(monto)) {
       onEscribirPrecio(monto);
     }
-  }
-
-  function ajustarValor(desplazamiento: number): void {
-    const base = precioSeleccionado ?? 0;
-    const nuevo = Math.max(0, Math.trunc(base) + desplazamiento);
-    onEscribirPrecio(nuevo);
   }
 
   return (
@@ -66,9 +116,18 @@ export default function SelectorPrecio({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => ajustarValor(-50)}
+            onPointerDown={(evento) => {
+              evento.preventDefault();
+              if (precioSeleccionado !== null && precioSeleccionado > 0) {
+                iniciarRepeticion(-50);
+              }
+            }}
+            onPointerUp={detenerRepeticion}
+            onPointerLeave={detenerRepeticion}
+            onPointerCancel={detenerRepeticion}
+            onContextMenu={(evento) => evento.preventDefault()}
             disabled={precioSeleccionado === null || precioSeleccionado <= 0}
-            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-transparent hover:bg-gradient-to-br hover:from-marca-600 hover:to-marca-800 hover:text-white disabled:opacity-40"
+            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-marca-500 hover:bg-marca-50 hover:text-marca-700 dark:hover:bg-marca-100 dark:hover:text-marca-300 disabled:opacity-40"
           >
             −
           </button>
@@ -83,8 +142,15 @@ export default function SelectorPrecio({
           />
           <button
             type="button"
-            onClick={() => ajustarValor(50)}
-            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-transparent hover:bg-gradient-to-br hover:from-marca-600 hover:to-marca-800 hover:text-white"
+            onPointerDown={(evento) => {
+              evento.preventDefault();
+              iniciarRepeticion(50);
+            }}
+            onPointerUp={detenerRepeticion}
+            onPointerLeave={detenerRepeticion}
+            onPointerCancel={detenerRepeticion}
+            onContextMenu={(evento) => evento.preventDefault()}
+            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-marca-500 hover:bg-marca-50 hover:text-marca-700 dark:hover:bg-marca-100 dark:hover:text-marca-300"
           >
             +
           </button>
