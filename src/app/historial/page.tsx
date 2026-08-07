@@ -31,16 +31,16 @@ export default async function PaginaHistorial() {
         <h1 className="gradiente-marca bg-clip-text text-2xl font-bold tracking-tight text-transparent">
           Historial completo
         </h1>
-        <div className="flex gap-1.5">
+        <div className="flex gap-2">
           {nombreMostrado && (
-            <span className="max-w-[6rem] truncate rounded-full border border-borde bg-superficie px-2 py-1 text-xs font-semibold text-texto-suave">
+            <span className="rounded-full border border-borde bg-superficie px-3 py-1.5 text-sm font-semibold text-texto-suave">
               {nombreMostrado}
             </span>
           )}
           <MenuUsuario />
           <Link
             href="/"
-            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-3 py-1.5 text-xs font-medium text-marca-700 hover:bg-marca-50 dark:text-marca-300"
+            className="btn-feedback rounded-full border border-marca-200 bg-superficie px-4 py-2 text-sm font-medium text-marca-700 hover:bg-marca-50 dark:text-marca-300"
           >
             Volver
           </Link>
