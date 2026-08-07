@@ -30,12 +30,8 @@ export default function SelectorPrecio({
 
   useEffect(() => {
     return () => {
-      if (temporizadorRef.current !== null) {
-        clearTimeout(temporizadorRef.current);
-      }
-      if (intervaloRef.current !== null) {
-        clearInterval(intervaloRef.current);
-      }
+      if (temporizadorRef.current !== null) clearTimeout(temporizadorRef.current);
+      if (intervaloRef.current !== null) clearInterval(intervaloRef.current);
     };
   }, []);
 
@@ -53,16 +49,13 @@ export default function SelectorPrecio({
   const iniciarRepeticion = useCallback(
     (paso: number) => {
       detenerRepeticion();
-
       const aplicar = () => {
         const base = precioRef.current ?? 0;
         const siguiente = Math.max(0, Math.trunc(base) + paso);
         onEscribirPrecio(siguiente);
         precioRef.current = siguiente;
       };
-
       aplicar();
-
       temporizadorRef.current = setTimeout(() => {
         intervaloRef.current = setInterval(aplicar, INTERVALO_MS);
       }, RETARDO_INICIAL_MS);
@@ -81,7 +74,6 @@ export default function SelectorPrecio({
       onEscribirPrecio(null);
       return;
     }
-
     const monto = Math.trunc(Number(valor));
     if (Number.isFinite(monto)) {
       onEscribirPrecio(monto);
@@ -109,11 +101,12 @@ export default function SelectorPrecio({
         </div>
       )}
 
-      <label className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1.5">
         <span className="gradiente-marca bg-clip-text text-sm font-semibold uppercase tracking-wide text-transparent">
           Escribir valor personalizado
         </span>
-        <div className="flex items-center gap-2">
+
+        <div className="sombra-suave flex items-stretch rounded-2xl border border-borde bg-superficie overflow-hidden">
           <button
             type="button"
             onPointerDown={(evento) => {
@@ -127,10 +120,11 @@ export default function SelectorPrecio({
             onPointerCancel={detenerRepeticion}
             onContextMenu={(evento) => evento.preventDefault()}
             disabled={precioSeleccionado === null || precioSeleccionado <= 0}
-            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-marca-500 hover:bg-marca-50 hover:text-marca-700 dark:hover:bg-marca-100 dark:hover:text-marca-300 disabled:opacity-40"
+            className="btn-feedback flex w-14 shrink-0 items-center justify-center border-r border-borde text-2xl font-bold text-texto hover:bg-superficie-alta active:bg-marca-100 disabled:opacity-30"
           >
             −
           </button>
+
           <input
             type="text"
             inputMode="numeric"
@@ -138,8 +132,9 @@ export default function SelectorPrecio({
             placeholder="Monto libre..."
             value={precioSeleccionado === null ? "" : precioSeleccionado}
             onChange={(evento) => manejarMontoLibre(evento.target.value)}
-            className="w-full rounded-2xl border-2 border-borde bg-superficie px-4 py-3 text-center text-lg text-texto placeholder:text-texto-tenue focus:border-marca-500 focus:outline-none"
+            className="min-w-0 flex-1 bg-transparent px-4 py-3 text-center text-lg text-texto placeholder:text-texto-tenue focus:outline-none"
           />
+
           <button
             type="button"
             onPointerDown={(evento) => {
@@ -150,12 +145,12 @@ export default function SelectorPrecio({
             onPointerLeave={detenerRepeticion}
             onPointerCancel={detenerRepeticion}
             onContextMenu={(evento) => evento.preventDefault()}
-            className="btn-feedback flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border-2 border-borde bg-superficie text-2xl font-bold text-texto hover:border-marca-500 hover:bg-marca-50 hover:text-marca-700 dark:hover:bg-marca-100 dark:hover:text-marca-300"
+            className="btn-feedback flex w-14 shrink-0 items-center justify-center border-l border-borde text-2xl font-bold text-texto hover:bg-superficie-alta active:bg-marca-100"
           >
             +
           </button>
         </div>
-      </label>
+      </div>
     </div>
   );
 }
