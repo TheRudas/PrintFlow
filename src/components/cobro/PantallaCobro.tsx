@@ -10,6 +10,7 @@ import ContadorCantidad from "./ContadorCantidad";
 import ResumenTotal from "./ResumenTotal";
 import TituloSeccion from "./TituloSeccion";
 import ConfirmarVenta from "./ConfirmarVenta";
+import ConfirmarPaquete from "./ConfirmarPaquete";
 import CarritoPaquete from "./CarritoPaquete";
 import AgregarAlCarrito from "./AgregarAlCarrito";
 import RefrescarEnMedianoche from "@/components/ui/RefrescarEnMedianoche";
@@ -60,6 +61,7 @@ export default function PantallaCobro({
   const [modoPaquete, setModoPaquete] = useState(false);
   const [itemsCarrito, setItemsCarrito] = useState<ItemCarrito[]>([]);
   const [mostrandoAgregar, setMostrandoAgregar] = useState(false);
+  const [mostrandoConfPaquete, setMostrandoConfPaquete] = useState(false);
 
   const router = useRouter();
 
@@ -182,7 +184,7 @@ export default function PantallaCobro({
           guardando={guardando}
           onAgregar={() => setMostrandoAgregar(true)}
           onEliminar={eliminarDelCarrito}
-          onGuardar={guardarPaquete}
+          onGuardar={() => setMostrandoConfPaquete(true)}
           onCancelar={() => {
             setModoPaquete(false);
             setItemsCarrito([]);
@@ -194,6 +196,17 @@ export default function PantallaCobro({
             servicios={serviciosParaCarrito}
             onAgregar={agregarAlCarrito}
             onCancelar={() => setMostrandoAgregar(false)}
+          />
+        )}
+
+        {mostrandoConfPaquete && (
+          <ConfirmarPaquete
+            items={itemsCarrito}
+            onConfirmar={() => {
+              setMostrandoConfPaquete(false);
+              guardarPaquete();
+            }}
+            onCancelar={() => setMostrandoConfPaquete(false)}
           />
         )}
 
